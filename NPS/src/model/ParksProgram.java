@@ -66,7 +66,7 @@ private void urbanParksStaffMenu() {
     * @return 
     */
    private User login() {
-	   return new Volunteer();
+	   return new Manager();
    }
 
 }
