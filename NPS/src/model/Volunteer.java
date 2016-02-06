@@ -7,8 +7,8 @@ public final class Volunteer extends AbstractUser {
 	}
 	
 	protected Volunteer(String theFirstName, String theLastName,
-			String theEmail, String thePassword, UserType theType) {
-		super(theFirstName, theLastName, theEmail, thePassword, theType);
+			String theEmail, String thePassword) {
+		super(theFirstName, theLastName, theEmail, thePassword);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -31,8 +31,8 @@ public final class Volunteer extends AbstractUser {
 	}
 
 	@Override
-	public UserType getUserType() {
-		return UserType.VOLUNTEER;
+	public String getSimpleName() {
+		return "Volunteer";
 	}
     
 }

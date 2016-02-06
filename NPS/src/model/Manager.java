@@ -13,8 +13,8 @@ public final class Manager extends AbstractUser {
 	}
 	
 	protected Manager(String theFirstName, String theLastName, String theEmail,
-			String thePassword, UserType theType) {
-		super(theFirstName, theLastName, theEmail, thePassword, theType);
+			String thePassword) {
+		super(theFirstName, theLastName, theEmail, thePassword);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -37,8 +37,8 @@ public final class Manager extends AbstractUser {
 	}
 
 	@Override
-	public UserType getUserType() {
-		return UserType.MANAGER;
+	public String getSimpleName() {
+		return "Park Manager";
 	}
     
 }

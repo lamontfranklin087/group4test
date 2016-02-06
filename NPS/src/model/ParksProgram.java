@@ -15,15 +15,15 @@ public class ParksProgram {
     * @param theUser
     */
    private void run(User theUser) {
-	   UserType currentUserType = theUser.getUserType();
-	   switch (currentUserType.getVal()) {
-	   	   case 1://Urabn Parks Staff Menu
+	   String currentUserType = theUser.getSimpleName();
+	   switch (currentUserType) {
+	   	   case "Urban Parks Staff"://Urban Parks Staff Menu
         	   urbanParksStaffMenu();
                     break;
-           case 2://Manager Menu
+           case "Park Manager"://Manager Menu
         	   managerMenu();
                     break;
-           case 3://Volunteer Menu
+           case "Volunteer"://Volunteer Menu
         	   volunteerMenu();
                     break;
            default://Error Menu

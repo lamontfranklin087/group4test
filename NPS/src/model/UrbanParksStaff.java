@@ -8,8 +8,8 @@ public final class UrbanParksStaff extends AbstractUser {
 	}
 
 	protected UrbanParksStaff(String theFirstName, String theLastName,
-			String theEmail, String thePassword, UserType theType) {
-		super(theFirstName, theLastName, theEmail, thePassword, theType);
+			String theEmail, String thePassword) {
+		super(theFirstName, theLastName, theEmail, thePassword);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -32,8 +32,8 @@ public final class UrbanParksStaff extends AbstractUser {
 	}
 
 	@Override
-	public UserType getUserType() {
-		return UserType.URBAN_PARKS_STAFF;
+	public String getSimpleName() {
+		return "Urban Parks Staff";
 	}
     
 }

@@ -12,21 +12,18 @@ public abstract class AbstractUser implements User {
 	protected String lastName;
 	protected String email;
 	protected String password;
-	protected UserType type;
 	
 	protected AbstractUser() {
 		firstName = "Test";
 		lastName = "User";
 		email = "TestUser123@uw.edu";
 		password = "pass";
-		type = UserType.URBAN_PARKS_STAFF;
 	}
 	
-	protected AbstractUser(String theFirstName, String theLastName, String theEmail, String thePassword, UserType theType) {
+	protected AbstractUser(String theFirstName, String theLastName, String theEmail, String thePassword) {
 		firstName = theFirstName;
 		lastName = theLastName;
 		email = theEmail;
 		password = thePassword;
-		type = theType;
 	}
 }
