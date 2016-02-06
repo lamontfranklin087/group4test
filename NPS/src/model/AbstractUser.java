@@ -30,5 +30,5 @@ public abstract class AbstractUser implements User {
 	public abstract void viewSumAllJobs();
 	public abstract void viewJobDetails();
 	public abstract void printVolunteers();
-	public abstract String getSimpleName()
+	public abstract String getSimpleName();
 }
