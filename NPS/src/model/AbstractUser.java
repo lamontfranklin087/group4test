@@ -26,4 +26,9 @@ public abstract class AbstractUser implements User {
 		email = theEmail;
 		password = thePassword;
 	}
+	
+	public abstract void viewSumAllJobs();
+	public abstract void viewJobDetails();
+	public abstract void printVolunteers();
+	public abstract String getSimpleName()
 }
