@@ -31,4 +31,29 @@ public abstract class AbstractUser implements User {
 	public abstract void viewJobDetails();
 	public abstract void printVolunteers();
 	public abstract String getSimpleName();
+	
+	protected void setFirstName(String theFirstName) {
+		this.firstName = theFirstName;
+	}
+	protected void getFirstName() {
+		return firstName;
+	}
+	protected void setLastName(String theLastName) {
+		this.lastName = lastName;
+	}
+	protected void getLastName() {
+		return lastName;
+	}
+	protected void setEmail(String theEmail) {
+		this.email = theEmail;
+	}
+	protected void getEmail() {
+		return email;
+	}
+	protected void setPassword(String thePassword) {
+		this.password = thePassword;
+	}
+	protected void getPassword() {
+		return password;
+	}
 }
