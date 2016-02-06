@@ -27,10 +27,10 @@ public abstract class AbstractUser implements User {
 		password = thePassword;
 	}
 	
-	public abstract void viewSumAllJobs();
-	public abstract void viewJobDetails();
-	public abstract void printVolunteers();
-	public abstract String getSimpleName();
+	protected abstract void viewSumAllJobs();
+	protected abstract void viewJobDetails();
+	protected abstract void printVolunteers();
+	protected abstract String getSimpleName();
 	
 	protected void setFirstName(String theFirstName) {
 		this.firstName = theFirstName;
