@@ -13,25 +13,25 @@ public final class Volunteer extends AbstractUser {
 	}
 
 	@Override
-	public void viewSumAllJobs() {
+	protected void viewSumAllJobs() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void viewJobDetails() {
+	protected void viewJobDetails() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void printVolunteers() {
+	protected void printVolunteers() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public String getSimpleName() {
+	protected String getSimpleName() {
 		return "Volunteer";
 	}
     
