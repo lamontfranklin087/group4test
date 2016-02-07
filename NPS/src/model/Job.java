@@ -311,6 +311,10 @@ public class Job implements java.io.Serializable{
 		}	
 	}	
 	
+	/**
+	 * Append job's information to a string.
+	 * @return job's information as a string.
+	 */
 	public String toString() {	
 		StringBuilder jobSummary = new StringBuilder();
 		jobSummary.append("Job Date: ");

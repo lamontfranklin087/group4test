@@ -17,6 +17,10 @@ public final class Manager extends AbstractUser {
 		super(theFirstName, theLastName, theEmail, thePassword);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public void submitNewJob() {
+		
+	}
 
 	@Override
 	protected void viewSumAllJobs() {

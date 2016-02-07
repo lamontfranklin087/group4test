@@ -27,10 +27,10 @@ public abstract class AbstractUser{
 		password = thePassword;
 	}
 	
-	protected abstract void viewSumAllJobs();
-	protected abstract void viewJobDetails();
-	protected abstract void printVolunteers();
-	protected abstract String getSimpleName();
+	protected abstract void viewSumAllJobs(); // OK for all
+	protected abstract void viewJobDetails(); // OK for Volunteer and Staff only
+	protected abstract void printVolunteers();// OK for staff only (recomend to move in staff class)
+	protected abstract String getSimpleName();//probably get user's title...
 	
 	
 	/**
