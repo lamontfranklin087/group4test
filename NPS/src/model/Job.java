@@ -16,6 +16,8 @@ public class Job implements java.io.Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private String jobTitle;
+	
 	private String jobLocation;
 	
 	private Calendar jobDate;
@@ -34,12 +36,18 @@ public class Job implements java.io.Serializable{
 	
 	public void createJob() {
 		
+		enterJobTitle();
 		enterJobLocation();		
 		enterDate();
 		enterStartTime();
 		enterJobDuration();
 		enterJobSlot();		
 		enterJobDescription();
+	}
+	
+	private void enterJobTitle(){
+		System.out.println("Enter job title: ");
+		jobTitle= keyboard.nextLine();
 	}
 
 	private void enterJobLocation() {
@@ -167,7 +175,11 @@ public class Job implements java.io.Serializable{
 	public Calendar getDate(){
 		return jobDate;
 	}
-
+	
+	public String getJobTitle() {
+		return jobTitle;
+	}
+	
 	public String getTime(){
 		return startTime;
 	}
@@ -178,5 +190,33 @@ public class Job implements java.io.Serializable{
 		} else {
 			System.out.println("No more available slots.");
 		}	
-	}	
+	}
+	protected String toString(){	
+		StringBuilder jobSummary = new StringBuilder();
+		sb.append("Job Title: ")
+		sb.append(jobTitle);
+		sb.append("\n");
+		sb.append("Job Date: ");
+		sb.append(jobDate.toString());
+		sb.append("\n");
+		sb.append("Job Location: ");
+		sb.append(jobLocation);
+		sb.append("\n");
+		sb.append("Slots Avaliable: ");
+		sb.append(slotsAvaliable);
+		sb.append("\n");
+		sb.append("Job Description: ");
+		sb.append(jobDescription);
+		sb.append("\n");
+		sb.append("Start time: ");
+		sb.append(startTime);
+		sb.append("\n");
+		sb.append("Duration: ");
+		sb.append(jobDuration);
+		sb.append("\n");
+		sb.append("Registered Volunteers ");
+		sb.append(volunteers.toString());
+		sb.append("\n");
+		return jobSummary.toString();
+	}
 }
