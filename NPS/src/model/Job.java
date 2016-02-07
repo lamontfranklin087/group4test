@@ -309,5 +309,31 @@ public class Job implements java.io.Serializable{
 		} else {
 			System.out.print("No more available slots.\n");
 		}	
-	}		
+	}	
+	
+	public String toString() {	
+		StringBuilder jobSummary = new StringBuilder();
+		jobSummary.append("Job Date: ");
+		jobSummary.append(jobDate.toString());
+		jobSummary.append("\n");
+		jobSummary.append("Job Location: ");
+		jobSummary.append(jobLocation);
+		jobSummary.append("\n");
+		jobSummary.append("Slots Avaliable: ");
+		jobSummary.append(slotsAvailable);
+		jobSummary.append("\n");
+		jobSummary.append("Job Description: ");
+		jobSummary.append(jobDescription);
+		jobSummary.append("\n");
+		jobSummary.append("Start time: ");
+		jobSummary.append(startTime);
+		jobSummary.append("\n");
+		jobSummary.append("Duration: ");
+		jobSummary.append(jobDuration);
+		jobSummary.append("\n");
+		jobSummary.append("Registered Volunteers ");
+		jobSummary.append(volunteers.toString());
+		jobSummary.append("\n");
+		return jobSummary.toString();
+	}
 }
