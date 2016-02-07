@@ -25,7 +25,6 @@ public final class UrbanParksStaff extends AbstractUser {
 		
 	}
 
-	@Override
 	protected void printVolunteers() {
 		// TODO Auto-generated method stub
 		

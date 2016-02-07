@@ -35,12 +35,6 @@ public final class Manager extends AbstractUser {
 	}
 
 	@Override
-	protected void printVolunteers() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	protected String getSimpleName() {
 		return "Park Manager";
 	}
