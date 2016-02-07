@@ -1,15 +1,17 @@
 package model;
 
 import java.util.Collection;
+import java.util.Scanner;
 
 /**
- * An abstract class that is the basis for several subclasses of instantiatable vehicles.
- * (note: I get a spell check error for "instantiatable" but that is the correct spelling)
- *
+ * An abstract class that is the basis for several subclasses of instantiatable Users.
+ * 
  * @author dave1729
- * @version 305-3
+ * @version 360-1
  */
-public abstract class AbstractUser{
+public abstract class AbstractUser implements User{
+	
+	protected final Scanner scan = new Scanner(System.in);
 	protected String firstName;
 	protected String lastName;
 	protected String email;
@@ -18,7 +20,7 @@ public abstract class AbstractUser{
 	protected AbstractUser() {
 		firstName = "Test";
 		lastName = "User";
-		email = "TestUser123@uw.edu";
+		email = "TestUser@uw.edu";
 		password = "pass";
 	}
 	
@@ -29,10 +31,13 @@ public abstract class AbstractUser{
 		password = thePassword;
 	}
 	
-	protected abstract void viewSumAllJobs(Collection<Job> allJobs); // OK for all
-	protected abstract void viewJobDetails(); // OK for Volunteer and Staff only
+	public abstract void viewSumAllJobs(Collection<Job> allJobs); // OK for all
+	public abstract void viewJobDetails(); // OK for Volunteer and Staff only
 	//protected abstract void printVolunteers();// OK for staff only (recommend to move in staff class)
-	protected abstract String getSimpleName();
+	public abstract String getSimpleName();
+	
+	/** Print's the main menu for that user and starts their chain of menu's */
+	public abstract void mainMenu();
 	
 	
 	/**
@@ -41,7 +46,7 @@ public abstract class AbstractUser{
 	   * @param theFirstName The new first name the user would like.
 	   * @return Nothing.
 	   */
-	protected void setFirstName(String theFirstName) {
+	public void setFirstName(String theFirstName) {
 		this.firstName = theFirstName;
 	}
 	
@@ -52,7 +57,7 @@ public abstract class AbstractUser{
 	 * @return 
 	   * @return firstName The user's first name.
 	   */
-	protected String getFirstName() {
+	public String getFirstName() {
 		return firstName;
 	}
 	
@@ -62,7 +67,7 @@ public abstract class AbstractUser{
 	   * @param theLastName The new last name the user would like.
 	   * @return Nothing.
 	   */
-	protected void setLastName(String theLastName) {
+	public void setLastName(String theLastName) {
 		this.lastName = theLastName;
 	}
 	
@@ -73,7 +78,7 @@ public abstract class AbstractUser{
 	 * @return 
 	   * @return lastName The user's last name.
 	   */
-	protected String getLastName() {
+	public String getLastName() {
 		return lastName;
 	}
 	
@@ -83,7 +88,7 @@ public abstract class AbstractUser{
 	   * @param email The new email the user would like to be contacted at.
 	   * @return Nothing.
 	   */
-	protected void setEmail(String theEmail) {
+	public void setEmail(String theEmail) {
 		this.email = theEmail;
 	}
 	
@@ -95,7 +100,7 @@ public abstract class AbstractUser{
 	 * @return 
 	   * @return email The user's email.
 	   */
-	protected String getEmail() {
+	public String getEmail() {
 		return email;
 	}
 	
@@ -105,7 +110,7 @@ public abstract class AbstractUser{
 	   * @param thePassword The new password the user would like.
 	   * @return Nothing.
 	   */
-	protected void setPassword(String thePassword) {
+	public void setPassword(String thePassword) {
 		this.password = thePassword;
 	}
 	
@@ -116,7 +121,7 @@ public abstract class AbstractUser{
 	 * @return 
 	   * @return password The user's password.
 	   */
-	protected String getPassword() {
+	public String getPassword() {
 		return password;
 	}
 	

@@ -7,16 +7,16 @@ import java.util.Scanner;
 
 public class ParksProgram {
 	private Collection<Job> allJobs;
-	private Collection<Object> allUsers;		
+	private Collection<User> allUsers;		
 	private Scanner keyboard;	
 	
 	public ParksProgram() {
-		Manager testUser123 = new Manager();
+		User testUser123 = new Manager();
 		allJobs = new LinkedList<Job>();
-		allUsers = new LinkedList<Object>();
+		allUsers = new LinkedList<User>();
 		allUsers.add(testUser123);
 		
-		Object currentUser = login();
+		User currentUser = login();
 		if (currentUser != null) {
 			run(currentUser);
 		}
@@ -26,14 +26,18 @@ public class ParksProgram {
     * Runs the main menu of the program.
     * @param currentUser
     */
-   private void run(Object currentUser) {
-	   if (currentUser instanceof UrbanParksStaff) {
-		   urbanParksStaffMenu((UrbanParksStaff) currentUser);
-	   } else if (currentUser instanceof Manager) {
-		   managerMenu((Manager) currentUser);
-	   } else if (currentUser instanceof Volunteer) {
-		   volunteerMenu((Volunteer) currentUser);
-	   }	   		   
+   private void run(User currentUser) {
+	   currentUser.mainMenu();
+	   
+	   
+//	   Ihar's Version
+//	   if (currentUser instanceof UrbanParksStaff) {
+//		   urbanParksStaffMenu((UrbanParksStaff) currentUser);
+//	   } else if (currentUser instanceof Manager) {
+//		   managerMenu((Manager) currentUser);
+//	   } else if (currentUser instanceof Volunteer) {
+//		   volunteerMenu((Volunteer) currentUser);
+//	   }
    }
 
    /**
@@ -150,7 +154,7 @@ public class ParksProgram {
     * 
     * @return 
     */
-   private Object login() {
+   private User login() {
 	   System.out.println("-------------Urban Parks Collective!------------");
 	   System.out.println();
 	   System.out.println("1. Login");
@@ -165,9 +169,9 @@ public class ParksProgram {
 		   System.out.println("Enter your password:");
 		   String password = keyboard.nextLine();
 		   
-		   Iterator<Object> itr = allUsers.iterator();
+		   Iterator<User> itr = allUsers.iterator();
 		   while (itr.hasNext()) {
-			   Object temp = itr.next();
+			   User temp = itr.next();
 			   
 			   if (temp instanceof UrbanParksStaff) {
 				   if (((UrbanParksStaff) temp).getEmail().equals(email)

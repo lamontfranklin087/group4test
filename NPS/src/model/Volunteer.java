@@ -15,19 +15,19 @@ public final class Volunteer extends AbstractUser {
 	}
 
 	@Override
-	protected void viewSumAllJobs(Collection<Job> allJobs) {
+	public void viewSumAllJobs(Collection<Job> allJobs) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void viewJobDetails() {
+	public void viewJobDetails() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected String getSimpleName() {
+	public String getSimpleName() {
 		return "Volunteer";
 	}
 	
@@ -42,6 +42,13 @@ public final class Volunteer extends AbstractUser {
 		userSummary.append("\n");
 		userSummary.append(email);
 		return userSummary.toString();
+	}
+
+	
+	@Override
+	public void mainMenu() {
+		// TODO Auto-generated method stub
+		
 	}
     
 }

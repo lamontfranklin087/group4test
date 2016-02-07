@@ -3,6 +3,7 @@ package model;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -13,12 +14,16 @@ import java.util.Scanner;
  */
 public class Job implements java.io.Serializable{
 	
-	/**
-	 * 
-	 */
+	/* Serial number since job is Serializable.*/
 	private static final long serialVersionUID = 1L;
+	
+	/* The maximum id will be up to, and not including, MAX_ID_VAL*/
+	private static int totalJobs = 0;	
+	
+	/* The maximum id will be up to FIRST_ID_NUM*/
+	private static int FIRST_ID_NUM = 1000;
 
-	private static int jobID;
+	private int jobID;
 	
 	private String jobLocation;
 	
@@ -43,7 +48,7 @@ public class Job implements java.io.Serializable{
 	 * jobDescription = null, startTime = null, volunteers = null.
 	 */
 	public Job() {
-		jobID = 0;
+		jobID = FIRST_ID_NUM + (++totalJobs);
 		jobLocation = null;
 		jobDate = null;
 		jobDuration = -1;
@@ -58,7 +63,6 @@ public class Job implements java.io.Serializable{
 	 * slotsAvailable, jobDescription, startTime, volunteers.
 	 */
 	public void createJob() {
-		setJobID();
 		enterJobLocation();		
 		enterDate();
 		enterStartTime();
@@ -67,9 +71,10 @@ public class Job implements java.io.Serializable{
 		enterJobDescription();
 	}
 
-	private void setJobID() {
-		jobID = jobID + 1;		
-	}
+	/*Don't think we need this anymore -David 2/7/16 */
+//	private void setJobID() {
+//		jobID = jobID + 1;		
+//	}
 
 	/**
 	 * Set job's location.
@@ -87,7 +92,7 @@ public class Job implements java.io.Serializable{
 		keyboard = new Scanner(System.in);
 		do {								
 			try {				
-				System.out.println("Enter job date: (MM/dd/yyyy)");			
+				System.out.println("Enter job date: (MM/dd/yyyy)\n");			
 				String[] mystring = (keyboard.nextLine()).split("/");
 				Calendar currentDate = new GregorianCalendar();
 				Calendar mydate = new GregorianCalendar();

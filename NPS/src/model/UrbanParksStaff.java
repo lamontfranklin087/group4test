@@ -15,13 +15,13 @@ public final class UrbanParksStaff extends AbstractUser {
 	}
 
 	@Override
-	protected void viewSumAllJobs(Collection<Job> allJobs) {
+	public void viewSumAllJobs(Collection<Job> allJobs) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void viewJobDetails() {
+	public void viewJobDetails() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -32,8 +32,14 @@ public final class UrbanParksStaff extends AbstractUser {
 	}
 
 	@Override
-	protected String getSimpleName() {
+	public String getSimpleName() {
 		return "Urban Parks Staff";
+	}
+
+	@Override
+	public void mainMenu() {
+		// TODO Auto-generated method stub
+		
 	}
     
 }
