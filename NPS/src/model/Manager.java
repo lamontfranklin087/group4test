@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Creates a Manager object.
+ * Creates a Truck object for use in the Easy Street GUI.
  * 
  * @author dave1729
  * @version 305-3
@@ -19,25 +19,25 @@ public final class Manager extends AbstractUser {
 	}
 
 	@Override
-	public void viewSumAllJobs() {
+	protected void viewSumAllJobs() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void viewJobDetails() {
+	protected void viewJobDetails() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void printVolunteers() {
+	protected void printVolunteers() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public String getSimpleName() {
+	protected String getSimpleName() {
 		return "Park Manager";
 	}
     
