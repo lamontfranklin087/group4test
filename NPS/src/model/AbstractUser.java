@@ -117,4 +117,5 @@ public abstract class AbstractUser{
 	protected String getPassword() {
 		return password;
 	}
+	
 }

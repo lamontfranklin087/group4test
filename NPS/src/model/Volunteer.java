@@ -34,5 +34,18 @@ public final class Volunteer extends AbstractUser {
 	protected String getSimpleName() {
 		return "Volunteer";
 	}
+	
+	public String toString() {		
+		StringBuilder userSummary = new StringBuilder();
+		userSummary.append("Status: Volunteer");
+		userSummary.append("\n");
+		userSummary.append("Name: ");
+		userSummary.append(firstName);
+		userSummary.append(" ");
+		userSummary.append(lastName);
+		userSummary.append("\n");
+		userSummary.append(email);
+		return userSummary.toString();
+	}
     
 }

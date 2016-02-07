@@ -191,32 +191,32 @@ public class Job implements java.io.Serializable{
 			System.out.println("No more available slots.");
 		}	
 	}
-	protected String toString(){	
+	public String toString() {	
 		StringBuilder jobSummary = new StringBuilder();
-		sb.append("Job Title: ")
-		sb.append(jobTitle);
-		sb.append("\n");
-		sb.append("Job Date: ");
-		sb.append(jobDate.toString());
-		sb.append("\n");
-		sb.append("Job Location: ");
-		sb.append(jobLocation);
-		sb.append("\n");
-		sb.append("Slots Avaliable: ");
-		sb.append(slotsAvaliable);
-		sb.append("\n");
-		sb.append("Job Description: ");
-		sb.append(jobDescription);
-		sb.append("\n");
-		sb.append("Start time: ");
-		sb.append(startTime);
-		sb.append("\n");
-		sb.append("Duration: ");
-		sb.append(jobDuration);
-		sb.append("\n");
-		sb.append("Registered Volunteers ");
-		sb.append(volunteers.toString());
-		sb.append("\n");
+		jobSummary.append("Job Title: ");
+		jobSummary.append(jobTitle);
+		jobSummary.append("\n");
+		jobSummary.append("Job Date: ");
+		jobSummary.append(jobDate.toString());
+		jobSummary.append("\n");
+		jobSummary.append("Job Location: ");
+		jobSummary.append(jobLocation);
+		jobSummary.append("\n");
+		jobSummary.append("Slots Avaliable: ");
+		jobSummary.append(slotsAvailable);
+		jobSummary.append("\n");
+		jobSummary.append("Job Description: ");
+		jobSummary.append(jobDescription);
+		jobSummary.append("\n");
+		jobSummary.append("Start time: ");
+		jobSummary.append(startTime);
+		jobSummary.append("\n");
+		jobSummary.append("Duration: ");
+		jobSummary.append(jobDuration);
+		jobSummary.append("\n");
+		jobSummary.append("Registered Volunteers ");
+		jobSummary.append(volunteers.toString());
+		jobSummary.append("\n");
 		return jobSummary.toString();
 	}
 }
