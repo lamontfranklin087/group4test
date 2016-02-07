@@ -18,6 +18,8 @@ public class Job implements java.io.Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private static int jobID;
+	
 	private String jobLocation;
 	
 	private Calendar jobDate;
@@ -36,11 +38,12 @@ public class Job implements java.io.Serializable{
 	
 	/**
 	 * Default constructor.
-	 * Set job's fields: jobLocation = null, jobDate = null, 
+	 * Set job's fields: jobID = 0, jobLocation = null, jobDate = null, 
 	 * jobDuration = -1, slotsAvailable = -1, 
 	 * jobDescription = null, startTime = null, volunteers = null.
 	 */
 	public Job() {
+		jobID = 0;
 		jobLocation = null;
 		jobDate = null;
 		jobDuration = -1;
@@ -54,13 +57,18 @@ public class Job implements java.io.Serializable{
 	 * Set job's fields: jobLocation, jobDate, jobDuration,
 	 * slotsAvailable, jobDescription, startTime, volunteers.
 	 */
-	public void createJob() {		
+	public void createJob() {
+		setJobID();
 		enterJobLocation();		
 		enterDate();
 		enterStartTime();
 		enterJobDuration();
 		enterJobSlot();		
 		enterJobDescription();
+	}
+
+	private void setJobID() {
+		jobID = jobID + 1;		
 	}
 
 	/**
@@ -240,6 +248,13 @@ public class Job implements java.io.Serializable{
 		volunteers = null;
 	}
 
+	/**
+	 * Accessor.
+	 * @return job's ID number.
+	 */
+	public int getJobID() {
+		return jobID;
+	}
 	/**
 	 * Accessor.
 	 * @return job's location.

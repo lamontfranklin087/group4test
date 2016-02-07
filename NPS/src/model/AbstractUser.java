@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Collection;
+
 /**
  * An abstract class that is the basis for several subclasses of instantiatable vehicles.
  * (note: I get a spell check error for "instantiatable" but that is the correct spelling)
@@ -27,7 +29,7 @@ public abstract class AbstractUser{
 		password = thePassword;
 	}
 	
-	protected abstract void viewSumAllJobs(); // OK for all
+	protected abstract void viewSumAllJobs(Collection<Job> allJobs); // OK for all
 	protected abstract void viewJobDetails(); // OK for Volunteer and Staff only
 	//protected abstract void printVolunteers();// OK for staff only (recommend to move in staff class)
 	protected abstract String getSimpleName();

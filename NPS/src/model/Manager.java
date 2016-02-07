@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Collection;
+
 /**
  * Creates a Truck object for use in the Easy Street GUI.
  * 
@@ -18,12 +20,14 @@ public final class Manager extends AbstractUser {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void submitNewJob() {
-		
+	public Job submitNewJob() {
+		Job newJob = new Job();
+		newJob.createJob();
+		return newJob;
 	}
 
 	@Override
-	protected void viewSumAllJobs() {
+	protected void viewSumAllJobs(Collection<Job> allJobs) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -37,6 +41,10 @@ public final class Manager extends AbstractUser {
 	@Override
 	protected String getSimpleName() {
 		return "Park Manager";
+	}
+	
+	protected void viewVolunteers(Collection<Job> allJobs) {
+		
 	}
     
 }

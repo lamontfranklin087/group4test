@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Collection;
+
 public final class Volunteer extends AbstractUser {
 
 	public Volunteer() {
@@ -13,7 +15,7 @@ public final class Volunteer extends AbstractUser {
 	}
 
 	@Override
-	protected void viewSumAllJobs() {
+	protected void viewSumAllJobs(Collection<Job> allJobs) {
 		// TODO Auto-generated method stub
 		
 	}
