@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Creates a Truck object for use in the Easy Street GUI.
+ * Creates a Manager object.
  * 
  * @author dave1729
  * @version 305-3

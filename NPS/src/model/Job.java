@@ -1,14 +1,16 @@
 package model;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+/**
+ * Create a job object.
+ * @author Ihar Lavor
+ * @version 02/06/2016
+ *
+ */
 public class Job implements java.io.Serializable{
 	
 	/**
@@ -30,10 +32,29 @@ public class Job implements java.io.Serializable{
 	
 	private LinkedList<Volunteer> volunteers;
 	
-	Scanner keyboard = new Scanner(System.in);
+	private Scanner keyboard;
 	
-	public void createJob() {
-		
+	/**
+	 * Default constructor.
+	 * Set job's fields: jobLocation = null, jobDate = null, 
+	 * jobDuration = -1, slotsAvailable = -1, 
+	 * jobDescription = null, startTime = null, volunteers = null.
+	 */
+	public Job() {
+		jobLocation = null;
+		jobDate = null;
+		jobDuration = -1;
+		slotsAvailable = -1;
+		jobDescription = null;
+		startTime = null;
+		volunteers = null;
+	}
+			
+	/**
+	 * Set job's fields: jobLocation, jobDate, jobDuration,
+	 * slotsAvailable, jobDescription, startTime, volunteers.
+	 */
+	public void createJob() {		
 		enterJobLocation();		
 		enterDate();
 		enterStartTime();
@@ -42,141 +63,251 @@ public class Job implements java.io.Serializable{
 		enterJobDescription();
 	}
 
-	private void enterJobLocation() {
+	/**
+	 * Set job's location.
+	 */
+	protected void enterJobLocation() {
 		System.out.println("Enter job location:");
-		jobLocation = keyboard.nextLine();
+		keyboard = new Scanner(System.in);
+		jobLocation = keyboard.nextLine();		
 	}
 	
-	private void enterDate() {
-		
-		int diffDays = -1;
-		do {
-			System.out.println("Enter job date: (MM/dd/yyyy)");			
-			
-			Calendar mydate = new GregorianCalendar();
-			String mystring = keyboard.nextLine();//"January 2, 2010";
-			Date thedate;
-			try {
-				thedate = new SimpleDateFormat("MM/dd/yyyy").parse(mystring);
-			
-				mydate.setTime(thedate);
+	/**
+	 * Set job's date MM/DD/YYYY.
+	 */
+	protected void enterDate() {		
+		keyboard = new Scanner(System.in);
+		do {								
+			try {				
+				System.out.println("Enter job date: (MM/dd/yyyy)");			
+				String[] mystring = (keyboard.nextLine()).split("/");
+				Calendar currentDate = new GregorianCalendar();
+				Calendar mydate = new GregorianCalendar();
 				
-				DateFormat df = new SimpleDateFormat("MM/dd/yyyy");		
-				Calendar calobj = Calendar.getInstance();
+				int myDate = Integer.parseInt(mystring[1]);
+				int myYear = Integer.parseInt(mystring[2]);
+				int myMonth = Integer.parseInt(mystring[0]) - 1;
+								
+				mydate.set(Calendar.YEAR, myYear);
+				mydate.set(Calendar.MONTH, myMonth);
+				mydate.set(Calendar.DAY_OF_MONTH, myDate);	
 				
-				Date thedate2 = new SimpleDateFormat("MM/dd/yyyy").parse(df.format(calobj.getTime()));
-				mydate.setTime(thedate);
-				calobj.setTime(thedate2);
-				
-				long diff = thedate.getTime() - thedate2.getTime();
-				diffDays = (int) diff / (24 * 60 * 60 * 1000);			
-				
-				if (diffDays < 0) {
-					System.out.println("You can't create past Jobs");
+				int curDate = currentDate.get(Calendar.DAY_OF_MONTH);
+				int curMonth = currentDate.get(Calendar.MONTH);
+				int curYear = currentDate.get(Calendar.YEAR);
+								
+				if (myYear < curYear || myMonth > 11 || myDate > 31 || myDate <= 0) {
+					System.out.println("You can't enter past date.");
+				} else if (myYear == curYear && myMonth < curMonth) {
+					System.out.println("You can't enter past date.");
+				} else if (myYear == curYear && myMonth == curMonth && myDate < curDate) {
+					System.out.println("You can't enter past date.");
+				} else {
+					jobDate = mydate;
+					break;
 				}
-			
-			} catch (ParseException e) {
+			} catch (NumberFormatException e) {
+				System.out.println("Wrong Date Format");
+			} catch (ArrayIndexOutOfBoundsException e) {
 				System.out.println("Wrong Date Format");
 			}
-		} while (diffDays < 0);
+		} while (true);
+		
 	}
 	
-	private void enterJobDuration() {
-		System.out.println("Enter job duration: (Number of days, for example 2)");
-		
-		String temp = keyboard.next();
-		keyboard.nextLine();
-		
+	/**
+	 * Set job's duration time in days.
+	 */
+	protected void enterJobDuration() {
 		while (true) {
-			if (temp.compareTo("1") == 0 || temp.compareTo("2") == 0) {
-				jobDuration = Integer.parseInt(temp);
+			System.out.println("Enter job duration: (Number of days, for example 2)");
+			
+			int temp = getNumber();
+			
+			if (temp == 1 || temp == 2) {
+				jobDuration = temp;
 				break;
+			} else {
+				System.out.println("Job duration can't be 0 or exceed 2 days.");	
 			}
-			System.out.println("Job duration can't exceed 2 days. ");
-			System.out.println("Enter job duration:");
-			temp = keyboard.next();
-			keyboard.nextLine();
 		}
 	}
 	
-	private void enterJobSlot() {
-		System.out.println("Enter job slots: (Only integers allowed)");
-		String temp = keyboard.next();
-		keyboard.nextLine();
-		
+	/**
+	 * Set the number of available slots.
+	 */
+	protected void enterJobSlot() {						
 		while(true){
-	        try {	        	
-	        	if (Integer.parseInt(temp) > 0) {
-	        		slotsAvailable = Integer.parseInt(temp);
-	        		break;
-	        	} else {
-	        		System.out.println("Job slots can't be 0.");
-	        	}	            
-	        } catch(NumberFormatException ne) {
-	            System.out.println("That's not a whole number.");	            
-	        }	    	
-			System.out.println("Enter job slots:");
-	        temp = keyboard.next();
-			keyboard.nextLine();
+			System.out.println("Enter job slots: (For example 7)");
+			
+			int temp = getNumber();
+			
+        	if (temp > 0) {
+        		slotsAvailable = temp;
+        		break;
+        	} else {
+        		System.out.println("Job slots can't be 0.");
+        	}
 		}
 	}
 	
-	private void enterJobDescription() {
+	/**
+	 * Set job's description.
+	 */
+	protected void enterJobDescription() {
 		System.out.println("Enter short job description:");
+		keyboard = new Scanner(System.in);
 		jobDescription = keyboard.nextLine();
 	}
 	
-	private void enterStartTime() {
+	/**
+	 * Set job's start time.
+	 */
+	protected void enterStartTime() {
 		System.out.println("Enter time when job starts: (for example 8:00 AM)");
-		startTime = keyboard.nextLine();
+		keyboard = new Scanner(System.in);
+		startTime = keyboard.nextLine();		
 	}
-	public void editJob(){
-		System.out.println("Select one of the folowing options:");
-		System.out.println("1. Change Job's Location");
-		System.out.println("2. Change Job's Date");
-		System.out.println("3. Change Job's Duration");
-		System.out.println("4. Change Job's Slots");
-		System.out.println("5. Change Job's Description");
-		System.out.println("6. Change Job's Start Time");
-		System.out.println("7. Exit ");
-		
-		int userTyped = keyboard.nextInt();
-		switch (userTyped) {
-	   	   case 1: enterJobLocation(); break;
-	   	   case 2: enterDate(); break;
-	   	   case 3: enterJobDuration(); break;
-	   	   case 4: enterJobSlot(); break; 
-		   case 5: enterJobDescription(); break;
-		   case 6: enterStartTime(); break;
-		   default: break;	   	   
+	
+	/**
+	 * To edit job's fields.
+	 */
+	public void editJob() {			
+		while (true) {
+			System.out.println("Select one of the folowing options:");
+			System.out.println("1. Change Job's Location");
+			System.out.println("2. Change Job's Date");
+			System.out.println("3. Change Job's Duration");
+			System.out.println("4. Change Job's Slots");
+			System.out.println("5. Change Job's Description");
+			System.out.println("6. Change Job's Start Time");
+			System.out.println("7. Exit ");
+			
+	    	int userTyped = getNumber();
+	    	
+	    	if (userTyped == 1) {
+	    		enterJobLocation();
+	    	} else if (userTyped == 2) {
+	    		enterDate();
+	    	} else if (userTyped == 3) {
+	    		enterJobDuration();
+	    	} else if (userTyped == 4) {
+	    		enterJobSlot();
+	    	} else if (userTyped == 5) {
+	    		enterJobDescription();
+	    	} else if (userTyped == 6) {
+	    		enterStartTime();
+	    	} else if (userTyped == 7) {	    		
+	    		break;
+	    	} 
 		}
 	}
 
-	public void deleteJob(){
+	/**
+	 * Parse string to integer.
+	 * @return an integer number from 1 to ...
+	 */
+	private int getNumber() {
+		int result = -1;
+		keyboard = new Scanner(System.in);
 		
+		while(true){
+	        try {	        	
+	        	String temp = keyboard.nextLine();
+	        	if (Integer.parseInt(temp) > 0 || Integer.parseInt(temp) <= 0) {
+	        		result = Integer.parseInt(temp);
+	        		break;
+	        	}
+	        } catch(NumberFormatException ne) {
+	            System.out.println("That's not a whole number.");	            
+	        }	
+		}
+		return result;
+	}
+	
+	/**
+	 * Delete job by setting: jobLocation, jobDate, jobDescription, 
+	 * startTime, volunteers fields to NULL 
+	 * and jobDuration, slotsAvailable fields to -1.
+	 */
+	public void deleteJob(){
+		jobLocation = null;
+		jobDate = null;
+		jobDuration = -1;
+		slotsAvailable = -1;
+		jobDescription = null;		
+		startTime = null;
+		volunteers = null;
 	}
 
+	/**
+	 * Accessor.
+	 * @return job's location.
+	 */
 	public String getJobLocation() {
 		return jobLocation;
 	}
 	
+	/**
+	 * Accessor.
+	 * @return job's date (MM/DD/YYYY where 0..11/1..31
+	 */
+	public Calendar getDate(){
+		return jobDate;
+	}
+	
+	/**
+	 * Accessor.
+	 * @return job's duration time (number of days).
+	 */
+	public int getJobDuration(){
+		return jobDuration;		
+	}
+
+	/**
+	 * Accessor.
+	 * @return number of available sots for a job.
+	 */
+	public int getAvailableSlots(){
+		return slotsAvailable;
+	}
+	
+	/**
+	 * Accessor.
+	 * @return job's description.
+	 */
 	public String getDescription(){
 		return jobDescription;		
 	}
 
-	public Calendar getDate(){
-		return jobDate;
-	}
-
-	public String getTime(){
+	/**
+	 * Accessor.
+	 * @return job's start time.
+	 */
+	public String getStartTime(){
 		return startTime;
 	}
+	
+	/**
+	 * Accessor.
+	 * @return a list of volunteers for a job.
+	 */
+	public LinkedList<Volunteer> getVolunteers() {
+		return volunteers;
+	}
 
+	/**
+	 * Add volunteer to a job.
+	 * @param newVolunteer must be Volunteer type.
+	 */
 	public void addVolunteer(Volunteer newVolunteer){
-		if (volunteers.size() < slotsAvailable) {
+		if (volunteers == null) {
+			volunteers = new LinkedList<Volunteer>();
+		} 
+		if (volunteers.size() <= slotsAvailable) {
 			volunteers.add(newVolunteer);
 		} else {
-			System.out.println("No more available slots.");
+			System.out.print("No more available slots.\n");
 		}	
 	}	
 }
