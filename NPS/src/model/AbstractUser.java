@@ -7,7 +7,7 @@ package model;
  * @author dave1729
  * @version 305-3
  */
-public abstract class AbstractUser implements User {
+public abstract class AbstractUser{
 	protected String firstName;
 	protected String lastName;
 	protected String email;
@@ -47,9 +47,10 @@ public abstract class AbstractUser implements User {
 	   * Gets the user's first name.
 	   * This allows for displaying of the user's first name.
 	   * @param None.
+	 * @return 
 	   * @return firstName The user's first name.
 	   */
-	protected void getFirstName() {
+	protected String getFirstName() {
 		return firstName;
 	}
 	
@@ -60,16 +61,17 @@ public abstract class AbstractUser implements User {
 	   * @return Nothing.
 	   */
 	protected void setLastName(String theLastName) {
-		this.lastName = lastName;
+		this.lastName = theLastName;
 	}
 	
 	/**
 	   * Gets the user's last name.
 	   * This allows for displaying of the user's last name.
 	   * @param None.
+	 * @return 
 	   * @return lastName The user's last name.
 	   */
-	protected void getLastName() {
+	protected String getLastName() {
 		return lastName;
 	}
 	
@@ -88,9 +90,10 @@ public abstract class AbstractUser implements User {
 	   * Gets the user's email.
 	   * This allows for displaying of the user's email.
 	   * @param None.
+	 * @return 
 	   * @return email The user's email.
 	   */
-	protected void getEmail() {
+	protected String getEmail() {
 		return email;
 	}
 	
@@ -108,9 +111,10 @@ public abstract class AbstractUser implements User {
 	   * Gets the user's password name.
 	   * This allows for comparing of the user's password.
 	   * @param None.
+	 * @return 
 	   * @return password The user's password.
 	   */
-	protected void getPassword() {
+	protected String getPassword() {
 		return password;
 	}
 }
