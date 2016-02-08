@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Scanner;
 
 /**
@@ -12,10 +13,10 @@ import java.util.Scanner;
 public abstract class AbstractUser implements User{
 	
 	protected final Scanner scan = new Scanner(System.in);
-	protected String firstName;
-	protected String lastName;
-	protected String email;
-	protected String password;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String password;
 	private Scanner keyboard;	
 	
 	protected AbstractUser() {
@@ -38,7 +39,7 @@ public abstract class AbstractUser implements User{
 	public abstract String getSimpleName();
 	
 	/** Print's the main menu for that user and starts their chain of menu's */
-	public abstract void mainMenu();
+	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);
 	
 	
 	/**
@@ -148,5 +149,16 @@ public abstract class AbstractUser implements User{
 		}
 		return result;
 	}
+	
+	protected Job findJob(int jobID, Collection<Job> allJobs) {
+	   Iterator<Job> itr = allJobs.iterator();	  
+	   while (itr.hasNext()) {
+		   Job temp = itr.next();
+		   if (temp.getJobID() == jobID) {
+			   return temp;
+		   }
+	   }
+	   return null;
+   }	
 	
 }

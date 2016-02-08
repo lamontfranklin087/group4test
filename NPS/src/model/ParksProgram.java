@@ -16,10 +16,13 @@ public class ParksProgram {
 		allUsers = new LinkedList<User>();
 		allUsers.add(testUser123);
 		
+		
 		User currentUser = login();
 		if (currentUser != null) {
 			run(currentUser);
 		}
+		
+		
 	}
 
    /** 
@@ -27,17 +30,7 @@ public class ParksProgram {
     * @param currentUser
     */
    private void run(User currentUser) {
-	   currentUser.mainMenu();
-	   
-	   
-//	   Ihar's Version
-//	   if (currentUser instanceof UrbanParksStaff) {
-//		   urbanParksStaffMenu((UrbanParksStaff) currentUser);
-//	   } else if (currentUser instanceof Manager) {
-//		   managerMenu((Manager) currentUser);
-//	   } else if (currentUser instanceof Volunteer) {
-//		   volunteerMenu((Volunteer) currentUser);
-//	   }
+	   currentUser.mainMenu(allJobs, allUsers);
    }
 
    /**
@@ -73,58 +66,7 @@ public class ParksProgram {
 	   }
    }
 
-   private void managerMenu(Manager theUser) {
-	   while(true) {	   
-		   System.out.println("-------------Urban Parks Collective!------------");
-		   System.out.println("You are logged in as...");
-		   System.out.println(theUser.getSimpleName() + ", " + theUser.getFirstName()
-		   					  + " " + theUser.getLastName());
-		   System.out.println();
-		   System.out.println("            ___Menu___");
-		   System.out.println("1. Submit a new job");
-		   System.out.println("2. Delete a job");
-		   System.out.println("3. Edit the details of a job");
-		   System.out.println("4. View a summary of all upcoming jobs");
-		   System.out.println("5. View the Volunteers for a job");
-		   System.out.println("6. Exit");
-		   	   
-		   int temp = getNumber();
-		   if (temp == 1) {
-			   allJobs.add(theUser.submitNewJob());
-		   } else if (temp == 2) {
-			   System.out.println("Enter Job's ID number or 0 to exit:");
-			   int jobIDTemp = getNumber();
-			   if (jobIDTemp > 0) {
-				   Job foundJob = findJob(jobIDTemp);
-				   if (foundJob == null) {
-					   System.out.println("No job with ID " + jobIDTemp);
-				   } else {
-					   allJobs.remove(foundJob);
-					   System.out.println("Job with ID " + jobIDTemp + " was deleted.");
-				   }
-			   }
-		   } else if (temp == 3) {
-			   System.out.println("Enter Job's ID number or 0 to exit:");
-			   int jobIDTemp = getNumber();
-			   if (jobIDTemp > 0) {
-				   Job foundJob = findJob(jobIDTemp);
-				   if (foundJob == null) {
-					   System.out.println("No job with ID " + jobIDTemp);
-				   } else {
-					   foundJob.editJob();
-				   }
-			   }
-		   } else if (temp == 4) {
-			   theUser.viewSumAllJobs(allJobs);
-		   } else if (temp == 5) {
-			   theUser.viewVolunteers(allJobs);
-		   } else {
-			   break;
-		   }
-	   }
-   }
-
-   private void urbanParksStaffMenu(UrbanParksStaff theUser) {
+     private void urbanParksStaffMenu(UrbanParksStaff theUser) {
 	   while(true) {	   
 		   System.out.println("-------------Urban Parks Collective!------------");
 		   System.out.println("You are logged in as...");
@@ -193,18 +135,7 @@ public class ParksProgram {
 	   }    
 	   return null;
    }
-   
-   private Job findJob(int jobID) {
-	   Iterator<Job> itr = allJobs.iterator();	  
-	   while (itr.hasNext()) {
-		   Job temp = itr.next();
-		   if (temp.getJobID() == jobID) {
-			   return temp;
-		   }
-	   }
-	   return null;
-   }
-   
+     
    /**
 	 * Parse string to integer.
 	 * @return an integer number from 1 to ...

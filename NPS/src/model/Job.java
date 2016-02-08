@@ -24,6 +24,8 @@ public class Job implements java.io.Serializable{
 
 	private int jobID;
 	
+	private String jobManager;
+	
 	private String jobLocation;
 	
 	private Calendar jobDate;
@@ -48,6 +50,7 @@ public class Job implements java.io.Serializable{
 	 */
 	public Job() {
 		jobID = FIRST_ID_NUM + (++totalJobs);
+		jobManager = null;
 		jobLocation = null;
 		jobDate = null;
 		jobDuration = -1;
@@ -60,8 +63,11 @@ public class Job implements java.io.Serializable{
 	/**
 	 * Set job's fields: jobLocation, jobDate, jobDuration,
 	 * slotsAvailable, jobDescription, startTime, volunteers.
+	 * @param lastName 
+	 * @param firstName 
 	 */
-	public void createJob() {
+	public void createJob(String firstName, String lastName) {
+		jobManager = firstName + " " + lastName;
 		enterJobLocation();		
 		enterDate();
 		enterStartTime();
@@ -70,16 +76,11 @@ public class Job implements java.io.Serializable{
 		enterJobDescription();
 	}
 
-	/*Don't think we need this anymore -David 2/7/16 */
-//	private void setJobID() {
-//		jobID = jobID + 1;		
-//	}
-
 	/**
 	 * Set job's location.
 	 */
 	protected void enterJobLocation() {
-		System.out.println("Enter job location:");
+		System.out.print("\nEnter job location: ");
 		keyboard = new Scanner(System.in);
 		jobLocation = keyboard.nextLine();		
 	}
@@ -91,7 +92,7 @@ public class Job implements java.io.Serializable{
 		keyboard = new Scanner(System.in);
 		do {								
 			try {				
-				System.out.println("Enter job date: (MM/dd/yyyy)\n");			
+				System.out.print("\nEnter job date: (MM/dd/yyyy) ");			
 				String[] mystring = (keyboard.nextLine()).split("/");
 				Calendar currentDate = new GregorianCalendar();
 				Calendar mydate = new GregorianCalendar();
@@ -109,19 +110,19 @@ public class Job implements java.io.Serializable{
 				int curYear = currentDate.get(Calendar.YEAR);
 								
 				if (myYear < curYear || myMonth > 11 || myDate > 31 || myDate <= 0) {
-					System.out.println("You can't enter past date.");
+					System.out.print("\nYou can't enter past date. ");
 				} else if (myYear == curYear && myMonth < curMonth) {
-					System.out.println("You can't enter past date.");
+					System.out.print("\nYou can't enter past date. ");
 				} else if (myYear == curYear && myMonth == curMonth && myDate < curDate) {
-					System.out.println("You can't enter past date.");
+					System.out.print("\nYou can't enter past date. ");
 				} else {
 					jobDate = mydate;
 					break;
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("Wrong Date Format");
+				System.out.print("\nWrong Date Format ");
 			} catch (ArrayIndexOutOfBoundsException e) {
-				System.out.println("Wrong Date Format");
+				System.out.print("\nWrong Date Format ");
 			}
 		} while (true);
 		
@@ -132,7 +133,7 @@ public class Job implements java.io.Serializable{
 	 */
 	protected void enterJobDuration() {
 		while (true) {
-			System.out.println("Enter job duration: (Number of days, for example 2)");
+			System.out.print("\nEnter job duration: (Number of days, for example 2) ");
 			
 			int temp = getNumber();
 			
@@ -140,7 +141,7 @@ public class Job implements java.io.Serializable{
 				jobDuration = temp;
 				break;
 			} else {
-				System.out.println("Job duration can't be 0 or exceed 2 days.");	
+				System.out.print("\nJob duration can't be 0 or exceed 2 days. ");	
 			}
 		}
 	}
@@ -150,7 +151,7 @@ public class Job implements java.io.Serializable{
 	 */
 	protected void enterJobSlot() {						
 		while(true){
-			System.out.println("Enter job slots: (For example 7)");
+			System.out.print("\nEnter job slots: (For example 7) ");
 			
 			int temp = getNumber();
 			
@@ -158,7 +159,7 @@ public class Job implements java.io.Serializable{
         		slotsAvailable = temp;
         		break;
         	} else {
-        		System.out.println("Job slots can't be 0.");
+        		System.out.print("\nJob slots can't be 0.  ");
         	}
 		}
 	}
@@ -167,16 +168,17 @@ public class Job implements java.io.Serializable{
 	 * Set job's description.
 	 */
 	protected void enterJobDescription() {
-		System.out.println("Enter short job description:");
+		System.out.print("\nEnter short job description: ");
 		keyboard = new Scanner(System.in);
 		jobDescription = keyboard.nextLine();
+		System.out.print("\n");
 	}
 	
 	/**
 	 * Set job's start time.
 	 */
 	protected void enterStartTime() {
-		System.out.println("Enter time when job starts: (for example 8:00 AM)");
+		System.out.print("\nEnter time when job starts: (for example 8:00 AM)  ");
 		keyboard = new Scanner(System.in);
 		startTime = keyboard.nextLine();		
 	}
@@ -186,20 +188,23 @@ public class Job implements java.io.Serializable{
 	 */
 	public void editJob() {			
 		while (true) {
-			System.out.println("Select one of the folowing options:");
-			System.out.println("1. Change Job's Location");
-			System.out.println("2. Change Job's Date");
-			System.out.println("3. Change Job's Duration");
-			System.out.println("4. Change Job's Slots");
-			System.out.println("5. Change Job's Description");
-			System.out.println("6. Change Job's Start Time");
+			System.out.println("\nSelect one of the folowing options:");
+			System.out.println("1. Change Job's Location:   " + jobLocation);
+			System.out.println("2. Change Job's Date:        " 
+								+ jobDate.get(Calendar.MONTH) + "/"
+								+ jobDate.get(Calendar.DATE) + "/"
+								+ jobDate.get(Calendar.YEAR));
+			System.out.println("3. Change Job's Duration:    " + jobDuration + " days");
+			System.out.println("4. Change Job's Slots:       " + slotsAvailable);
+			System.out.println("5. Change Job's Description: " + jobDescription);
+			System.out.println("6. Change Job's Start Time:  " + startTime);
 			System.out.println("7. Exit ");
 			
 	    	int userTyped = getNumber();
 	    	
 	    	if (userTyped == 1) {
 	    		enterJobLocation();
-	    	} else if (userTyped == 2) {
+	    	} else if (userTyped == 2) {	    		
 	    		enterDate();
 	    	} else if (userTyped == 3) {
 	    		enterJobDuration();
@@ -226,12 +231,12 @@ public class Job implements java.io.Serializable{
 		while(true){
 	        try {	        	
 	        	String temp = keyboard.nextLine();
-	        	if (Integer.parseInt(temp) > 0 || Integer.parseInt(temp) <= 0) {
+	        	if (Integer.parseInt(temp) >= 0) {
 	        		result = Integer.parseInt(temp);
 	        		break;
 	        	}
 	        } catch(NumberFormatException ne) {
-	            System.out.println("That's not a whole number.");	            
+	            System.out.print("\nThat's not a whole number. Try again. ");	            
 	        }	
 		}
 		return result;
@@ -243,6 +248,7 @@ public class Job implements java.io.Serializable{
 	 * and jobDuration, slotsAvailable fields to -1.
 	 */
 	public void deleteJob(){
+		jobManager = null;
 		jobLocation = null;
 		jobDate = null;
 		jobDuration = -1;
@@ -252,6 +258,14 @@ public class Job implements java.io.Serializable{
 		volunteers = null;
 	}
 
+	/**
+	 * Accessor.
+	 * @return job's ID number.
+	 */
+	public String getJobManager() {
+		return jobManager;
+	}
+	
 	/**
 	 * Accessor.
 	 * @return job's ID number.
@@ -326,7 +340,7 @@ public class Job implements java.io.Serializable{
 		if (volunteers.size() <= slotsAvailable) {
 			volunteers.add(newVolunteer);
 		} else {
-			System.out.print("No more available slots.\n");
+			System.out.print("\nNo more available slots.\n");
 		}	
 	}	
 	
@@ -335,11 +349,15 @@ public class Job implements java.io.Serializable{
 	 * @return job's information as a string.
 	 */
 	public String toString() {	
-		StringBuilder jobSummary = new StringBuilder();
-		jobSummary.append("Job Date: ");
-		jobSummary.append(jobDate.toString());
+		StringBuilder jobSummary = new StringBuilder(140);
+		jobSummary.append("Job ID:          " + jobID + "\n");
+		jobSummary.append("Park Manager:    " + jobManager + "\n");
+		jobSummary.append("Job Date:        ");
+		jobSummary.append(jobDate.get(Calendar.MONTH) + 1 + "/" +
+						  jobDate.get(Calendar.DAY_OF_MONTH) + "/" +
+						  jobDate.get(Calendar.YEAR));
 		jobSummary.append("\n");
-		jobSummary.append("Job Location: ");
+		jobSummary.append("Job Location:    ");
 		jobSummary.append(jobLocation);
 		jobSummary.append("\n");
 		jobSummary.append("Slots Avaliable: ");
@@ -348,15 +366,32 @@ public class Job implements java.io.Serializable{
 		jobSummary.append("Job Description: ");
 		jobSummary.append(jobDescription);
 		jobSummary.append("\n");
-		jobSummary.append("Start time: ");
+		jobSummary.append("Start time:      ");
 		jobSummary.append(startTime);
 		jobSummary.append("\n");
-		jobSummary.append("Duration: ");
-		jobSummary.append(jobDuration);
+		jobSummary.append("Duration:        ");
+		jobSummary.append(jobDuration + " days");
 		jobSummary.append("\n");
 		jobSummary.append("Registered Volunteers ");
-		jobSummary.append(volunteers.toString());
+		jobSummary.append(volunteers == null ? 0 : volunteers.size());
 		jobSummary.append("\n");
+		return jobSummary.toString();
+	}
+
+	public String toStringTable() {
+		StringBuilder jobSummary = new StringBuilder(140);
+				
+		jobSummary.append(jobID + "   ");
+		jobSummary.append(jobDate.get(Calendar.MONTH) + 1 + "/" +
+						  jobDate.get(Calendar.DAY_OF_MONTH) + "/" +
+						  jobDate.get(Calendar.YEAR) + "    ");
+		jobSummary.append(startTime + "   ");
+		jobSummary.append(jobDuration + " days\t");
+		jobSummary.append(slotsAvailable + "\t");
+		jobSummary.append((volunteers == null ? 0 : volunteers.size()) + "\t");
+		jobSummary.append(jobLocation + "\t\t");		
+		jobSummary.append(jobManager + "\t");		
+		jobSummary.append(jobDescription + "\t");
 		return jobSummary.toString();
 	}
 }

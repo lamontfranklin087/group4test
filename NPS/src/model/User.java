@@ -10,8 +10,10 @@ public interface User {
 	public abstract void viewJobDetails(); // OK for Volunteer and Staff only
 	//protected abstract void printVolunteers();// OK for staff only (recommend to move in staff class)
 	public abstract String getSimpleName();
-	/** Print's the main menu for that user and starts their chain of menu's */
-	public abstract void mainMenu();
+	/** Print's the main menu for that user and starts their chain of menu's 
+	 * @param allUsers 
+	 * @param allJobs */
+	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);
 	
 	
 	/**

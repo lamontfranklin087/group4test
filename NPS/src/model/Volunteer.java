@@ -36,17 +36,17 @@ public final class Volunteer extends AbstractUser {
 		userSummary.append("Status: Volunteer");
 		userSummary.append("\n");
 		userSummary.append("Name: ");
-		userSummary.append(firstName);
+		userSummary.append(getFirstName());
 		userSummary.append(" ");
-		userSummary.append(lastName);
+		userSummary.append(getLastName());
 		userSummary.append("\n");
-		userSummary.append(email);
+		userSummary.append(getEmail());
 		return userSummary.toString();
 	}
 
 	
 	@Override
-	public void mainMenu() {
+	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
 		// TODO Auto-generated method stub
 		
 	}

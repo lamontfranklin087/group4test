@@ -37,7 +37,7 @@ public final class UrbanParksStaff extends AbstractUser {
 	}
 
 	@Override
-	public void mainMenu() {
+	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
 		// TODO Auto-generated method stub
 		
 	}

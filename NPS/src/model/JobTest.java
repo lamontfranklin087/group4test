@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Calendar;
@@ -116,46 +117,56 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#deleteJob()}.
+	 * @throws IOException 
 	 */
 	@Test
-	public void testDeleteJob() {
+	public void testDeleteJob() throws IOException {
+		
 		Job testJob = new Job();
+		String input = "6";
 		
-		String input = "Tacoma Park";
-		
-	    InputStream in = new ByteArrayInputStream(input.getBytes());
+		InputStream in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.enterJobLocation();
-	    
-	    input = "3/16/2016";
-	    in = new ByteArrayInputStream(input.getBytes());
+	    testJob.enterJobSlot();
+	    		
+	    input = "3/16/2016";		
+		in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.getDate();
-	    
-	    input = "2";
-	    in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.getJobDuration();
-	    
-	    input = "6";
-	    in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.getAvailableSlots();
-	    
-	    input = "Build Walk Path";
-	    in = new ByteArrayInputStream(input.getBytes());
+	    testJob.enterDate();
+	    	    
+	    input = "Build Walk Path";		
+		in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
 	    testJob.enterJobDescription();
 	    
-	    input = "8:00 AM";
+	    input = "2";		
+		in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    testJob.enterJobDuration();
+	    
+	    input = "Tacoma Park";		
 	    in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    testJob.enterJobLocation();
+	    	    
+	    input = "8:00 AM";		
+		in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
 	    testJob.enterStartTime();
 	    
 	    Volunteer vol = new Volunteer(null, null, null, null);
 	    testJob.addVolunteer(vol);
+	    	    
+	    assertTrue(testJob.getAvailableSlots() == 6);
+	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 16);
+	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
+	    assertTrue(testJob.getDate().get(Calendar.YEAR) == 2016);
+	    assertTrue(testJob.getDescription().equals("Build Walk Path"));
+	    assertTrue(testJob.getJobDuration() == 2);
+	    assertTrue(testJob.getJobLocation().equals("Tacoma Park"));
+	    assertTrue(testJob.getStartTime().equals("8:00 AM"));
+	    assertTrue(testJob.getVolunteers().size() == 1);
 	    
-	    assertTrue(testJob != null);
 	    testJob.deleteJob();
 	    
 	    assertTrue(testJob.getAvailableSlots() == -1);
@@ -208,5 +219,67 @@ public class JobTest {
 	    System.setOut(old);
 	    
 	    assertTrue(baos.toString().equals("No more available slots.\n"));
+	}
+	
+	/**
+	 * Test method for {@link model.Job#deleteJob()}.
+	 */
+	@Test
+	public void testToString() {
+		
+		Job testJob = new Job();
+		String input = "6";
+		
+		InputStream in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    testJob.enterJobSlot();
+	    		
+	    input = "3/16/2016";		
+		in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    testJob.enterDate();
+	    	    
+	    input = "Build Walk Path";		
+		in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    testJob.enterJobDescription();
+	    
+	    input = "2";		
+		in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    testJob.enterJobDuration();
+	    
+	    input = "Tacoma Park";		
+	    in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    testJob.enterJobLocation();
+	    	    
+	    input = "8:00 AM";		
+		in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    testJob.enterStartTime();
+	    
+	    Volunteer vol = new Volunteer(null, null, null, null);
+	    testJob.addVolunteer(vol);
+	    	    	    
+	    assertTrue(testJob.getAvailableSlots() == 6);
+	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 16);
+	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
+	    assertTrue(testJob.getDate().get(Calendar.YEAR) == 2016);
+	    assertTrue(testJob.getDescription().equals("Build Walk Path"));
+	    assertTrue(testJob.getJobDuration() == 2);
+	    assertTrue(testJob.getJobLocation().equals("Tacoma Park"));
+	    assertTrue(testJob.getStartTime().equals("8:00 AM"));
+	    assertTrue(testJob.getVolunteers().size() == 1);
+	    
+	    System.out.println("++++++++++++++++++++++++++++++++\n" + 
+	    					testJob.toString() + 
+	    				   "++++++++++++++++++++++++++++++\n");
+	    System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
+                + "Slots\t" + "Volun.\t"+ "Locaton\t\t" + "Manager\t\t" 
+				 + "Description");
+	    System.out.println(testJob.toStringTable() + 
+	    					"\n\n++++++++++++++++++++++++++++++");
+	    
 	}
 }
