@@ -3,7 +3,6 @@ package model;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.Scanner;
 
 /**

@@ -16,6 +16,7 @@ public abstract class AbstractUser implements User{
 	protected String lastName;
 	protected String email;
 	protected String password;
+	private Scanner keyboard;	
 	
 	protected AbstractUser() {
 		firstName = "Test";
@@ -123,6 +124,29 @@ public abstract class AbstractUser implements User{
 	   */
 	public String getPassword() {
 		return password;
+	}
+	
+	
+	/**
+	 * Parse string to integer.
+	 * @return an integer number from 1 to ...
+	 */
+	protected int getNumber() {
+		int result = -1;
+		keyboard = new Scanner(System.in);
+		
+		while(true){
+	        try {	        	
+	        	String temp = keyboard.nextLine();
+	        	if (Integer.parseInt(temp) >= 0) {
+	        		result = Integer.parseInt(temp);
+	        		break;
+	        	}
+	        } catch(NumberFormatException ne) {
+	            System.out.println("That's not a write number.");	            
+	        }	
+		}
+		return result;
 	}
 	
 }
