@@ -158,7 +158,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	}
 	public String toString() {		
 		StringBuilder userSummary = new StringBuilder();
-		userSummary.append("Status: Volunteer");
+		userSummary.append("Status: Park Manager");
 		userSummary.append("\n");
 		userSummary.append("Name: ");
 		userSummary.append(getFirstName());

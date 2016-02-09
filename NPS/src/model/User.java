@@ -6,6 +6,7 @@ public interface User {
 
 
 	
+	
 	public abstract void viewSumAllJobs(Collection<Job> allJobs); // OK for all
 	public abstract void viewJobDetails(); // OK for Volunteer and Staff only
 	//protected abstract void printVolunteers();// OK for staff only (recommend to move in staff class)
@@ -15,7 +16,8 @@ public interface User {
 	 * @param allJobs */
 	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);
 	
-	
+	public void setUserType(int theUserType);
+	public int getUserType();
 	/**
 	   * This method sets the user's first name.
 	   * This allows for users to update or change their first name.

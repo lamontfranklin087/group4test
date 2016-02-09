@@ -18,7 +18,7 @@ public abstract class AbstractUser implements User,Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	protected final transient Scanner scan = new Scanner(System.in);
-	private int userType;
+	public int userType;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -49,6 +49,12 @@ public abstract class AbstractUser implements User,Serializable{
 	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);
 	
 	
+	public void setUserType(int theUserType){
+		this.userType = theUserType;
+	}
+	public int getUserType(){
+		return userType;
+	}
 	/**
 	   * This method sets the user's first name.
 	   * This allows for users to update or change their first name.
