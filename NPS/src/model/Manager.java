@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,17 +11,21 @@ import java.util.LinkedList;
  * @author dave1729
  * @version 305-3
  */
-public final class Manager extends AbstractUser {
+public final class Manager extends AbstractUser implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public final int MAIN_MENU_OPTIONS = 6;
 
 	public Manager() {
 		super();
 	}
 	
-	protected Manager(String theFirstName, String theLastName, String theEmail,
+	protected Manager(int theUserType,String theFirstName, String theLastName, String theEmail,
 			String thePassword) {
-		super(theFirstName, theLastName, theEmail, thePassword);
+		super(theUserType,theFirstName, theLastName, theEmail, thePassword);
 	}
 	
 	@Override
@@ -150,5 +155,17 @@ public final class Manager extends AbstractUser {
 	
 	@Override
 	public void viewJobDetails() {		
+	}
+	public String toString() {		
+		StringBuilder userSummary = new StringBuilder();
+		userSummary.append("Status: Volunteer");
+		userSummary.append("\n");
+		userSummary.append("Name: ");
+		userSummary.append(getFirstName());
+		userSummary.append(" ");
+		userSummary.append(getLastName());
+		userSummary.append("\n");
+		userSummary.append(getEmail());
+		return userSummary.toString();
 	}
 }

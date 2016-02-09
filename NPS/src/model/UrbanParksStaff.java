@@ -1,16 +1,22 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public final class UrbanParksStaff extends AbstractUser {
+public final class UrbanParksStaff extends AbstractUser implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public UrbanParksStaff() {
 		super();
 	}
 
-	protected UrbanParksStaff(String theFirstName, String theLastName,
+	protected UrbanParksStaff(int theUserType,String theFirstName, String theLastName,
 			String theEmail, String thePassword) {
-		super(theFirstName, theLastName, theEmail, thePassword);
+		super(theUserType,theFirstName, theLastName, theEmail, thePassword);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -35,7 +41,18 @@ public final class UrbanParksStaff extends AbstractUser {
 	public String getSimpleName() {
 		return "Urban Parks Staff";
 	}
-
+	public String toString() {		
+		StringBuilder userSummary = new StringBuilder();
+		userSummary.append("Status: Volunteer");
+		userSummary.append("\n");
+		userSummary.append("Name: ");
+		userSummary.append(getFirstName());
+		userSummary.append(" ");
+		userSummary.append(getLastName());
+		userSummary.append("\n");
+		userSummary.append(getEmail());
+		return userSummary.toString();
+	}
 	@Override
 	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
 		// TODO Auto-generated method stub

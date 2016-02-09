@@ -154,7 +154,7 @@ public class JobTest {
 	    System.setIn(in);
 	    testJob.enterStartTime();
 	    
-	    Volunteer vol = new Volunteer(null, null, null, null);
+	    Volunteer vol = new Volunteer(3, null, null, null, null);
 	    testJob.addVolunteer(vol);
 	    	    
 	    assertTrue(testJob.getAvailableSlots() == 6);
@@ -185,7 +185,7 @@ public class JobTest {
 	public void testAddVolunteer() {
 		Job testJob = new Job();
 		
-		Volunteer vol = new Volunteer(null, null, null, null);
+		Volunteer vol = new Volunteer(3, null, null, null, null);
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    PrintStream ps = new PrintStream(baos);
@@ -259,7 +259,7 @@ public class JobTest {
 	    System.setIn(in);
 	    testJob.enterStartTime();
 	    
-	    Volunteer vol = new Volunteer(null, null, null, null);
+	    Volunteer vol = new Volunteer(3, null, null, null, null);
 	    testJob.addVolunteer(vol);
 	    	    	    
 	    assertTrue(testJob.getAvailableSlots() == 6);

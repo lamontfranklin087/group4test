@@ -1,16 +1,23 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public final class Volunteer extends AbstractUser {
+public final class Volunteer extends AbstractUser implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	public Volunteer() {
 		super();
 	}
 	
-	protected Volunteer(String theFirstName, String theLastName,
+	protected Volunteer(int theUserType,String theFirstName, String theLastName,
 			String theEmail, String thePassword) {
-		super(theFirstName, theLastName, theEmail, thePassword);
+		super(theUserType,theFirstName, theLastName, theEmail, thePassword);
 		// TODO Auto-generated constructor stub
 	}
 

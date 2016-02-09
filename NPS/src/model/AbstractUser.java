@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -10,14 +11,19 @@ import java.util.Scanner;
  * @author dave1729
  * @version 360-1
  */
-public abstract class AbstractUser implements User{
+public abstract class AbstractUser implements User,Serializable{
 	
-	protected final Scanner scan = new Scanner(System.in);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	protected final transient Scanner scan = new Scanner(System.in);
+	private int userType;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
-	private Scanner keyboard;	
+	private transient Scanner keyboard;	
 	
 	protected AbstractUser() {
 		firstName = "Test";
@@ -26,7 +32,8 @@ public abstract class AbstractUser implements User{
 		password = "pass";
 	}
 	
-	protected AbstractUser(String theFirstName, String theLastName, String theEmail, String thePassword) {
+	protected AbstractUser(int theUserType,String theFirstName, String theLastName, String theEmail, String thePassword) {
+		userType = theUserType;
 		firstName = theFirstName;
 		lastName = theLastName;
 		email = theEmail;
