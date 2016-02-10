@@ -16,8 +16,7 @@ public interface User {
 	 * @param allJobs */
 	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);
 	
-	public void setUserType(int theUserType);
-	public int getUserType();
+	
 	/**
 	   * This method sets the user's first name.
 	   * This allows for users to update or change their first name.

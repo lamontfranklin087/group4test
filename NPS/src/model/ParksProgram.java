@@ -144,21 +144,21 @@ public class ParksProgram {
 			String password = keyboard.nextLine();
 
 			Iterator<User> itr = allUsers.iterator();
-			// userType 1 staff 2 manager 3 volunteer
+			
 			while (itr.hasNext()) {
 				User temp = itr.next();
 
-				if (temp.getUserType()==1){					//(temp instanceof UrbanParksStaff) {
+				if (temp instanceof UrbanParksStaff) {
 					if (((UrbanParksStaff) temp).getEmail().equals(email)
 							&& ((UrbanParksStaff) temp).getPassword().equals(password)) {
 						return temp;
 					}
-				} else if (temp.getUserType()==2){			//(temp instanceof Manager) {
+				} else if (temp instanceof Manager) {
 					if (((Manager) temp).getEmail().equals(email)
 							&& ((Manager) temp).getPassword().equals(password)) {
 						return temp;
 					}
-				} else if (temp.getUserType()==3){			//(temp instanceof Volunteer) {
+				} else if (temp instanceof Volunteer) {
 					if (((Volunteer) temp).getEmail().equals(email)
 							&& ((Volunteer) temp).getPassword().equals(password)) {
 						return temp;
