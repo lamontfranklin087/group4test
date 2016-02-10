@@ -14,9 +14,9 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 		super();
 	}
 
-	protected UrbanParksStaff(int theUserType,String theFirstName, String theLastName,
+	protected UrbanParksStaff(String theFirstName, String theLastName,
 			String theEmail, String thePassword) {
-		super(theUserType,theFirstName, theLastName, theEmail, thePassword);
+		super(theFirstName, theLastName, theEmail, thePassword);
 		// TODO Auto-generated constructor stub
 	}
 

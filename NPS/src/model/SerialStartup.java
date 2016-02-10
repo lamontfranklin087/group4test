@@ -113,13 +113,13 @@ public class SerialStartup {
 		while (scanner.hasNext()){
 			
 			int userType = Integer.parseInt(scanner.next());
-			String fName = scanner.next();
-			String lName = scanner.next();
+			String theFirstName = scanner.next();
+			String theLastName = scanner.next();
 			String email = scanner.next();
 			String password = scanner.next();
-			if (userType==1) readUser = new UrbanParksStaff(userType,fName,lName,email,password);
-			else if (userType==2) readUser = new Manager(userType,fName,lName,email,password);
-			else if (userType==3) readUser = new Volunteer(userType,fName,lName,email,password);
+			if (userType==1) readUser = new UrbanParksStaff(theFirstName,theLastName,email,password);
+			else if (userType==2) readUser = new Manager(theFirstName,theLastName,email,password);
+			else if (userType==3) readUser = new Volunteer(theFirstName,theLastName,email,password);
 			else readUser=null;
 			if (readUser!=null) allUsers.add(readUser);
 			else scanner.close();

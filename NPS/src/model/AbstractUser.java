@@ -18,7 +18,7 @@ public abstract class AbstractUser implements User,Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	protected final transient Scanner scan = new Scanner(System.in);
-	public int userType;
+	
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -32,15 +32,28 @@ public abstract class AbstractUser implements User,Serializable{
 		password = "pass";
 	}
 	
-	protected AbstractUser(int theUserType,String theFirstName, String theLastName, String theEmail, String thePassword) {
-		userType = theUserType;
+	protected AbstractUser(String theFirstName, String theLastName, String theEmail, String thePassword) {
+		
 		firstName = theFirstName;
 		lastName = theLastName;
 		email = theEmail;
 		password = thePassword;
 	}
 	
-	public abstract void viewSumAllJobs(Collection<Job> allJobs); // OK for all
+	public void viewSumAllJobs(Collection<Job> allJobs){ // Used for staff and volunteer, overridden for manager
+		Iterator<Job> itr = allJobs.iterator();
+		
+		while (itr.hasNext()) {
+			Job temp = itr.next();
+			System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
+		                + "Slots\t" + "Volun.\t"+ "Locaton\t\t" + "Manager\t\t" 
+						 + "Description");
+			System.out.println(temp.toStringTable());
+						
+		}
+	}
+	
+	
 	public abstract void viewJobDetails(); // OK for Volunteer and Staff only
 	//protected abstract void printVolunteers();// OK for staff only (recommend to move in staff class)
 	public abstract String getSimpleName();
@@ -49,12 +62,8 @@ public abstract class AbstractUser implements User,Serializable{
 	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);
 	
 	
-	public void setUserType(int theUserType){
-		this.userType = theUserType;
-	}
-	public int getUserType(){
-		return userType;
-	}
+	
+	
 	/**
 	   * This method sets the user's first name.
 	   * This allows for users to update or change their first name.

@@ -23,9 +23,9 @@ public final class Manager extends AbstractUser implements Serializable {
 		super();
 	}
 	
-	protected Manager(int theUserType,String theFirstName, String theLastName, String theEmail,
+	protected Manager(String theFirstName, String theLastName, String theEmail,
 			String thePassword) {
-		super(theUserType,theFirstName, theLastName, theEmail, thePassword);
+		super(theFirstName, theLastName, theEmail, thePassword);
 	}
 	
 	@Override
