@@ -65,64 +65,74 @@ public class ParksProgram {
 		currentUser.mainMenu(allJobs, allUsers);
 	}
 
+	/*
+	 * Alternative menu option for easier consistency
+	 */
+	public static void menuHeader(User theUser){
+		System.out.println("-------------Urban Parks Collective!------------");
+		System.out.println("You are logged in as...");
+		System.out.println(theUser.getSimpleName() + ", " + theUser.getFirstName()
+		+ " " + theUser.getLastName());
+		System.out.println();
+	}
 	/**
 	 * Volunteer MENU!
 	 * @param theUser 
 	 */
-	private void volunteerMenu(Volunteer theUser) {
-		while(true) {	   
-			System.out.println("-------------Urban Parks Collective!------------");
-			System.out.println("You are logged in as...");
-			System.out.println(theUser.getSimpleName() + ", " + theUser.getFirstName()
-			+ " " + theUser.getLastName());
-			System.out.println();
-			System.out.println("            ___Menu___");
-			System.out.println("1. View the jobs I am signed up for");
-			System.out.println("2. View a summary of all upcoming jobs");
-			System.out.println("3. View details of a selected upcoming job");
-			System.out.println("4. Volunteer for a job");
-			System.out.println("5. Exit");
-
-			int temp = getNumber();
-			if (temp == 1) {
-
-			} else if (temp == 2) {
-
-			} else if (temp == 3) {
-
-			} else if (temp == 4) {
-
-			} else {
-				break;
-			}
-		}
-	}
-
-	private void urbanParksStaffMenu(UrbanParksStaff theUser) {
-		while(true) {	   
-			System.out.println("-------------Urban Parks Collective!------------");
-			System.out.println("You are logged in as...");
-			System.out.println(theUser.getSimpleName() + ", " + theUser.getFirstName()
-			+ " " + theUser.getLastName());
-			System.out.println();
-			System.out.println("            ___Menu___");
-			System.out.println("1. Search volunteers by last name");
-			System.out.println("2. View a summary of all upcoming jobs");
-			System.out.println("3. View details of a selected upcoming job");
-			System.out.println("4. Exit");
-
-			int temp = getNumber();
-			if (temp == 1) {
-
-			} else if (temp == 2) {
-
-			} else if (temp == 3) {
-
-			} else {
-				break;
-			}
-		}
-	}
+//	private void volunteerMenu(Volunteer theUser) {
+//		while(true) {	   
+//			System.out.println("-------------Urban Parks Collective!------------");
+//			System.out.println("You are logged in as...");
+//			System.out.println(theUser.getSimpleName() + ", " + theUser.getFirstName()
+//			+ " " + theUser.getLastName());
+//			System.out.println();
+//			System.out.println("            ___Menu___");
+//			System.out.println("1. View the jobs I am signed up for");
+//			System.out.println("2. View a summary of all upcoming jobs");
+//			System.out.println("3. View details of a selected upcoming job");
+//			System.out.println("4. Volunteer for a job");
+//			System.out.println("5. Exit");
+//
+//			int temp = getNumber();
+//			if (temp == 1) {
+//
+//			} else if (temp == 2) {
+//
+//			} else if (temp == 3) {
+//
+//			} else if (temp == 4) {
+//
+//			} else {
+//				break;
+//			}
+//		}
+//	}
+//
+//	private void urbanParksStaffMenu(UrbanParksStaff theUser) {
+//		while(true) {	   
+//			System.out.println("-------------Urban Parks Collective!------------");
+//			System.out.println("You are logged in as...");
+//			System.out.println(theUser.getSimpleName() + ", " + theUser.getFirstName()
+//			+ " " + theUser.getLastName());
+//			System.out.println();
+//			System.out.println("            ___Menu___");
+//			System.out.println("1. Search volunteers by last name");
+//			System.out.println("2. View a summary of all upcoming jobs");
+//			System.out.println("3. View details of a selected upcoming job");
+//			System.out.println("4. Exit");
+//
+//			int temp = getNumber();
+//			if (temp == 1) {
+//
+//			} else if (temp == 2) {
+//
+//			} else if (temp == 3) {
+//
+//			} else {
+//				break;
+//			}
+//		}
+//	}
 
 	/**This class logs the user in and returns the resulting user information.
 	 * 

@@ -40,7 +40,7 @@ public abstract class AbstractUser implements User,Serializable{
 		password = thePassword;
 	}
 	
-	public void viewSumAllJobs(Collection<Job> allJobs){ // Used for staff and volunteer, overridden for manager
+	public void viewSumAllJobs(Collection<Job> allJobs){ // Used for staff and volunteer
 		Iterator<Job> itr = allJobs.iterator();
 		
 		while (itr.hasNext()) {
@@ -53,8 +53,8 @@ public abstract class AbstractUser implements User,Serializable{
 		}
 	}
 	
-	
-	public abstract void viewJobDetails(); // OK for Volunteer and Staff only
+	public abstract void viewMyJobs(Collection<Job> allJobs); // OK for Volunteer and Manager
+	public abstract void viewJobDetails(Collection<Job> allJobs); // OK for Volunteer and Staff only
 	//protected abstract void printVolunteers();// OK for staff only (recommend to move in staff class)
 	public abstract String getSimpleName();
 	

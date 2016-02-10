@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+// Author Lamont Franklin 2/8/16
+
 public class SerialStartup {
 	private Collection<Job> allJobs;
 	private Collection<User> allUsers;	

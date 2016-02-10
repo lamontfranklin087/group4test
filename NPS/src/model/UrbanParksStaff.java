@@ -25,9 +25,11 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	public void viewMyJobs(Collection<Job> allJobs){}
+	
 	@Override
-	public void viewJobDetails() {
+	public void viewJobDetails(Collection<Job> allJobs) {
 		// TODO Auto-generated method stub
 		
 	}

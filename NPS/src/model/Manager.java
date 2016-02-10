@@ -28,8 +28,8 @@ public final class Manager extends AbstractUser implements Serializable {
 		super(theFirstName, theLastName, theEmail, thePassword);
 	}
 	
-	@Override
-	public void viewSumAllJobs(Collection<Job> allJobs) {
+	
+	public void viewMyJobs(Collection<Job> allJobs) {
 		Iterator<Job> itr = allJobs.iterator();
 		
 		while (itr.hasNext()) {
@@ -80,11 +80,12 @@ public final class Manager extends AbstractUser implements Serializable {
 		boolean exit = false;
 		while (!exit) {
 			int menuChoice = 0;
-			System.out.println("\n-------------Urban Parks Collective!------------");
-			System.out.println("You are logged in as...");
-			System.out.println(getSimpleName() + ", " + getFirstName()
-		   					  + " " + getLastName());
-			System.out.println();
+			ParksProgram.menuHeader(this);
+//			System.out.println("\n-------------Urban Parks Collective!------------");
+//			System.out.println("You are logged in as...");
+//			System.out.println(getSimpleName() + ", " + getFirstName()
+//		   					  + " " + getLastName());
+//			System.out.println();
 			System.out.println("            ___Menu___");
 	   		System.out.println("1. Submit a new job");
 	   		System.out.println("2. Delete a job");
@@ -154,7 +155,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	}
 	
 	@Override
-	public void viewJobDetails() {		
+	public void viewJobDetails(Collection<Job> allJobs) {		
 	}
 	public String toString() {		
 		StringBuilder userSummary = new StringBuilder();
