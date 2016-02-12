@@ -17,7 +17,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public final int MAIN_MENU_OPTIONS = 6;
+	private final int MAIN_MENU_OPTIONS = 6;
 
 	public Manager() {
 		super();
@@ -26,8 +26,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	protected Manager(String theFirstName, String theLastName, String theEmail,
 			String thePassword) {
 		super(theFirstName, theLastName, theEmail, thePassword);
-	}
-	
+	}	
 	
 	public void viewMyJobs(Collection<Job> allJobs) {
 		Iterator<Job> itr = allJobs.iterator();
@@ -41,8 +40,7 @@ public final class Manager extends AbstractUser implements Serializable {
 				System.out.println(temp.toStringTable());
 			}			
 		}
-	}
-	
+	}	
 
 	@Override
 	public String getSimpleName() {
@@ -50,23 +48,25 @@ public final class Manager extends AbstractUser implements Serializable {
 	}
 	
 	public void viewVolunteers(Collection<Job> allJobs) {
-		viewSumAllJobs(allJobs);
-		System.out.println("Enter Job's ID to view volunteers or 1 to exit");
-		int temp = getNumber();
-		if (temp != 1) {
-			Job foundJob = findJob(temp, allJobs);
-			LinkedList<Volunteer> volunteer = foundJob.getVolunteers();
-			
-			if (volunteer != null) {
-				Iterator<Volunteer> itr = volunteer.iterator();
-				System.out.println("First Name\tLastName\tEmail address");			
-				while (itr.hasNext()) {
-					System.out.println(itr.next().getFirstName() + "\t" +
-										itr.next().getLastName() + "\t" +
-										itr.next().getEmail());
+		if (allJobs != null) {
+			viewSumAllJobs(allJobs);
+			System.out.println("Enter Job's ID to view volunteers or 1 to exit");
+			int temp = getNumber();
+			if (temp != 1) {
+				Job foundJob = findJob(temp, allJobs);
+				LinkedList<Volunteer> volunteer = foundJob.getVolunteers();
+				
+				if (volunteer != null) {
+					Iterator<Volunteer> itr = volunteer.iterator();
+					System.out.println("First Name\tLastName\tEmail address");			
+					while (itr.hasNext()) {
+						System.out.println(itr.next().getFirstName() + "\t" +
+											itr.next().getLastName() + "\t" +
+											itr.next().getEmail());
+					}
+				} else {
+					System.out.println("No volunteers for this job");
 				}
-			} else {
-				System.out.println("No volunteers for this job");
 			}
 		}
 	}
@@ -81,11 +81,6 @@ public final class Manager extends AbstractUser implements Serializable {
 		while (!exit) {
 			int menuChoice = 0;
 			ParksProgram.menuHeader(this);
-//			System.out.println("\n-------------Urban Parks Collective!------------");
-//			System.out.println("You are logged in as...");
-//			System.out.println(getSimpleName() + ", " + getFirstName()
-//		   					  + " " + getLastName());
-//			System.out.println();
 			System.out.println("            ___Menu___");
 	   		System.out.println("1. Submit a new job");
 	   		System.out.println("2. Delete a job");
@@ -94,10 +89,10 @@ public final class Manager extends AbstractUser implements Serializable {
 	   		System.out.println("5. View the Volunteers for a job");
 	   		System.out.println("6. Exit");
 			
-			menuChoice = getNumber();//scan.nextInt();
+			menuChoice = getNumber();
 			while(menuChoice < 1 || menuChoice > MAIN_MENU_OPTIONS) {
 				System.out.print("Must select a menu option between 1 and " + MAIN_MENU_OPTIONS + "\nSelection: ");
-				menuChoice = getNumber();//scan.nextInt();
+				menuChoice = getNumber();
 			}
 			switch(menuChoice){
 				case 1: submitNewJob(allJobs);
@@ -114,6 +109,7 @@ public final class Manager extends AbstractUser implements Serializable {
 					exit = true;
 					break;
 			}
+			
 		}
 	}
 	
@@ -153,10 +149,7 @@ public final class Manager extends AbstractUser implements Serializable {
 			allJobs.add(newJob);
 		}
 	}
-	
-	@Override
-	public void viewJobDetails(Collection<Job> allJobs) {		
-	}
+		
 	public String toString() {		
 		StringBuilder userSummary = new StringBuilder();
 		userSummary.append("Status: Park Manager");

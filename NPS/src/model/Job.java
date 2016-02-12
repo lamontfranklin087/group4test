@@ -50,7 +50,7 @@ public class Job implements java.io.Serializable{
 	private LinkedList<Volunteer> mediumVolunteers;
 	private LinkedList<Volunteer> heavyVolunteers;
 	
-	private Scanner keyboard;
+	private transient Scanner keyboard;
 	
 	
 	public Job() {
@@ -86,7 +86,7 @@ public class Job implements java.io.Serializable{
 	 * Set job's location.
 	 */
 	protected void enterJobLocation() {
-		System.out.print("\nEnter job location: ");
+		System.out.print("\nEnter job location: ");	
 		keyboard = new Scanner(System.in);
 		jobLocation = keyboard.nextLine();		
 	}
@@ -94,7 +94,7 @@ public class Job implements java.io.Serializable{
 	/**
 	 * Set job's date MM/DD/YYYY.
 	 */
-	protected void enterDate() {		
+	protected void enterDate() {	
 		keyboard = new Scanner(System.in);
 		do {								
 			try {				
@@ -359,8 +359,8 @@ public class Job implements java.io.Serializable{
 	 */
 	public void addVolunteer(Volunteer newVolunteer){
 		
-		int menuChoice=0;
-		boolean exit=false;
+		int menuChoice = 0;
+		boolean exit = false;
 		while(!exit){
 			if (totalVolunteers <= totalSlotsAvailable) {
 				ParksProgram.menuHeader(newVolunteer);
@@ -380,11 +380,11 @@ public class Job implements java.io.Serializable{
 					menuChoice = getNumber();//scan.nextInt();
 				}
 				switch(menuChoice){
-					case 1: exit=addToSlot(newVolunteer,lightVolunteers,lightSlotsAvailable);
+					case 1: exit = addToSlot(newVolunteer,lightVolunteers,lightSlotsAvailable);
 						break;
-					case 2: exit=addToSlot(newVolunteer,mediumVolunteers,mediumSlotsAvailable);
+					case 2: exit = addToSlot(newVolunteer,mediumVolunteers,mediumSlotsAvailable);
 						break;
-					case 3: exit=addToSlot(newVolunteer,heavyVolunteers,heavySlotsAvailable);
+					case 3: exit = addToSlot(newVolunteer,heavyVolunteers,heavySlotsAvailable);
 						break;
 					case 4: System.out.println("Exiting...");
 						exit = true;
@@ -397,13 +397,15 @@ public class Job implements java.io.Serializable{
 	}	
 	
 	public boolean addToSlot(Volunteer newVolunteer, LinkedList<Volunteer> volunteers, int max){
-		if(max==0){
+		if(max == 0){
 			System.out.println("No slots available for this duty level.");
 			return false;
 		}
 		else{
-				if(volunteers==null) volunteers=new LinkedList<Volunteer>();
-				if(volunteers.size()>=max){
+				if(volunteers == null) {
+					volunteers = new LinkedList<Volunteer>();
+				}
+				if(volunteers.size() >= max){
 					System.out.println("No slots available for this duty level.");
 					return false;
 				}
@@ -460,8 +462,8 @@ public class Job implements java.io.Serializable{
 		jobSummary.append(jobDuration + " days\t");
 		jobSummary.append(totalSlotsAvailable + "\t");
 		jobSummary.append(totalVolunteers + "\t");
-		jobSummary.append(jobLocation + "\t\t");		
 		jobSummary.append(jobManager + "\t");		
+		jobSummary.append(jobLocation + "\t\t");		
 		jobSummary.append(jobDescription + "\t");
 		return jobSummary.toString();
 	}

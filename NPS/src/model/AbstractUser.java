@@ -41,21 +41,23 @@ public abstract class AbstractUser implements User,Serializable{
 	}
 	
 	public void viewSumAllJobs(Collection<Job> allJobs){ // Used for staff and volunteer
-		Iterator<Job> itr = allJobs.iterator();
-		
-		while (itr.hasNext()) {
-			Job temp = itr.next();
+		if (allJobs != null) {
+			Iterator<Job> itr = allJobs.iterator();
 			System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
-		                + "Slots\t" + "Volun.\t"+ "Locaton\t\t" + "Manager\t\t" 
-						 + "Description");
-			System.out.println(temp.toStringTable());
-						
+	                + "Slots\t" + "Volun.\t"+ "Manager\t\t" + "Locaton\t\t\t\t"
+					 + "Description");
+			
+			while (itr.hasNext()) {
+				Job temp = itr.next();				
+				System.out.println(temp.toStringTable());
+				System.out.println();
+							
+			}
 		}
 	}
 	
-	public abstract void viewMyJobs(Collection<Job> allJobs); // OK for Volunteer and Manager
-	public abstract void viewJobDetails(Collection<Job> allJobs); // OK for Volunteer and Staff only
-	//protected abstract void printVolunteers();// OK for staff only (recommend to move in staff class)
+	//public abstract void viewJobDetails(Collection<Job> allJobs); 
+	// OK for Volunteer and Staff only
 	public abstract String getSimpleName();
 	
 	/** Print's the main menu for that user and starts their chain of menu's */
@@ -172,14 +174,21 @@ public abstract class AbstractUser implements User,Serializable{
 		return result;
 	}
 	
+	protected String getString() {
+		keyboard = new Scanner(System.in);		
+		return keyboard.nextLine();
+	}
+	
 	protected Job findJob(int jobID, Collection<Job> allJobs) {
-	   Iterator<Job> itr = allJobs.iterator();	  
-	   while (itr.hasNext()) {
-		   Job temp = itr.next();
-		   if (temp.getJobID() == jobID) {
-			   return temp;
+		if (allJobs != null) {
+		   Iterator<Job> itr = allJobs.iterator();	  
+		   while (itr.hasNext()) {
+			   Job temp = itr.next();
+			   if (temp.getJobID() == jobID) {
+				   return temp;
+			   }
 		   }
-	   }
+		}
 	   return null;
    }	
 	

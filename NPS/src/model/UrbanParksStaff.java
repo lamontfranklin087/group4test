@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Iterator;
 
 public final class UrbanParksStaff extends AbstractUser implements Serializable {
 
@@ -9,6 +10,7 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private final int MAIN_MENU_OPTIONS = 4;
 
 	public UrbanParksStaff() {
 		super();
@@ -17,7 +19,6 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 	protected UrbanParksStaff(String theFirstName, String theLastName,
 			String theEmail, String thePassword) {
 		super(theFirstName, theLastName, theEmail, thePassword);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -26,17 +27,31 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 		
 	}
 	
-	public void viewMyJobs(Collection<Job> allJobs){}
-	
-	@Override
 	public void viewJobDetails(Collection<Job> allJobs) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	protected void printVolunteers() {
-		// TODO Auto-generated method stub
-		
+	protected void searchVolunteer(Collection<User> allUsers) {
+		System.out.println("Enter Volunteer's last name:");
+		String volunt = getString();
+		if (allUsers != null) {
+			Iterator<User> itr = allUsers.iterator();
+			User user;
+			System.out.println("Last & First Name      Email");
+			while (itr.hasNext()) {
+				user = itr.next();
+				if (user.getLastName().equals(volunt) 
+						&& user.getSimpleName().equalsIgnoreCase("Volunteer")) {
+					System.out.print(user.getLastName() + " ");
+					System.out.print(user.getFirstName() + "    ");
+					System.out.println(user.getEmail());									
+				}				
+			}
+		} else {
+			System.out.println("There is no " + volunt + " volunteer.");
+		}
+		System.out.println();
 	}
 
 	@Override
@@ -55,10 +70,39 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 		userSummary.append(getEmail());
 		return userSummary.toString();
 	}
+	/** Print's the main menu and returns the current menu choice.
+	 * 
+	 * @return menuChoice	the next menu to be entered.
+	 * */
 	@Override
 	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
-		// TODO Auto-generated method stub
-		
+		boolean exit = false;
+		while (!exit) {
+			int menuChoice = 0;
+			ParksProgram.menuHeader(this);
+			System.out.println("            ___Menu___");
+	   		System.out.println("1. View a summary of all upcoming jobs");
+	   		System.out.println("2. View details of a selected upcoming job");
+	   		System.out.println("3. Search volunteers by last name");
+	   		System.out.println("4. Exit");
+			
+			menuChoice = getNumber();
+			while(menuChoice < 1 || menuChoice > MAIN_MENU_OPTIONS) {
+				System.out.print("Must select a menu option between 1 and " + MAIN_MENU_OPTIONS + "\nSelection: ");
+				menuChoice = getNumber();
+			}
+			switch(menuChoice){
+				case 1: viewSumAllJobs(allJobs);
+					break;
+				case 2: viewJobDetails(allJobs);
+					break;
+				case 3: searchVolunteer(allUsers);
+					break;				
+				case 4: System.out.println("Exiting...");
+					exit = true;
+					break;
+			}
+			
+		}
 	}
-    
 }

@@ -8,8 +8,6 @@ public interface User {
 	
 	
 	public abstract void viewSumAllJobs(Collection<Job> allJobs); // OK for all
-	public abstract void viewJobDetails(Collection<Job> allJobs); // OK for Volunteer and Staff only
-	//protected abstract void printVolunteers();// OK for staff only (recommend to move in staff class)
 	public abstract String getSimpleName();
 	/** Print's the main menu for that user and starts their chain of menu's 
 	 * @param allUsers 

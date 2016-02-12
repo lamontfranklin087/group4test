@@ -20,7 +20,6 @@ public final class Volunteer extends AbstractUser implements Serializable {
 	protected Volunteer(String theFirstName, String theLastName,
 			String theEmail, String thePassword) {
 		super(theFirstName, theLastName, theEmail, thePassword);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void viewMyJobs(Collection<Job> allJobs) {
