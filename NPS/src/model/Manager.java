@@ -18,6 +18,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final int MAIN_MENU_OPTIONS = 6;
+	private final int MAX_NUMBER_JOBS = 30;
 
 	public Manager() {
 		super();
@@ -141,13 +142,17 @@ public final class Manager extends AbstractUser implements Serializable {
 	}
 
 	public void submitNewJob(Collection<Job> allJobs) {
-		Job newJob = new Job();
-		newJob.createJob(getFirstName(), getLastName());		
-		System.out.println(newJob.toString());
-		System.out.println("1. To confirm job\n2. To exit without saving job");
-		if (getNumber() == 1) {
-			allJobs.add(newJob);
-		}
+		if (allJobs.size() < MAX_NUMBER_JOBS) {
+			Job newJob = new Job();
+			newJob.createJob(getFirstName(), getLastName());		
+			System.out.println(newJob.toString());
+			System.out.println("1. To confirm job\n2. To exit without saving job");
+			if (getNumber() == 1) {
+				allJobs.add(newJob);
+			}
+		} else {
+			System.out.println("A job can't be added because the total number of pending jobs is currently 30.");
+		}		
 	}
 		
 	public String toString() {		

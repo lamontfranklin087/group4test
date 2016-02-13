@@ -140,15 +140,12 @@ public abstract class AbstractUser implements User,Serializable{
 	public void viewSumAllJobs(Collection<Job> allJobs){ 
 		if (allJobs != null) {
 			Iterator<Job> itr = allJobs.iterator();
-			System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
-	                + "Slots\t" + "Volun.\t"+ "Manager\t\t" + "Locaton\t\t\t\t"
-					 + "Description");
-			
+			System.out.println("ID     " + "Date\t    " + "Duration\t" 
+	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t\t\t\t\t" + "Description");
+			Job temp;
 			while (itr.hasNext()) {
-				Job temp = itr.next();				
-				System.out.println(temp.toStringTable());
-				System.out.println();
-							
+				temp = itr.next();				
+				System.out.println(temp.toStringTable());										
 			}
 		}
 	}
@@ -156,12 +153,12 @@ public abstract class AbstractUser implements User,Serializable{
 	public void viewJobDetails(Collection<Job> allJobs) {
 		System.out.println("Please enter Job ID to view job details or 0 to quit: ");
 		int id = getNumber();
-		if(id!=0){
+		if(id != 0){
 			allJobs.forEach(job->{
-				if(job.getJobID()==id){
+				if(job.getJobID() == id){
 				ParksProgram.menuHeader(this);
 				System.out.println("            ___Job Details___");
-				job.toString();
+				System.out.println(job.toString());
 				}
 			});
 		}

@@ -98,7 +98,7 @@ public final class Volunteer extends AbstractUser implements Serializable {
 					}
 				}
 			});
-		}		
+		}
 	}
 	
 	public boolean dateAvailable(Collection<Job> allJobs, Job theJob) {
