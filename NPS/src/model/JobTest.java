@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.junit.Test;
@@ -27,15 +28,16 @@ public class JobTest {
 	 */
 	@Test
 	public void testEnterJobLocation() {
-		Job testJob = new Job();
-		
-		String input = "Tacoma Park";
+		Job testJob = new Job();		
+		String input = "1";
 		
 	    InputStream in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    //testJob.enterJobLocation();
+	    ArrayList<String> parks = new ArrayList<String>();
+	    parks.add("Dash Point Park in Federal Way");
+	    testJob.enterJobLocation(parks);
 	    
-	    assertTrue(testJob.getJobLocation().equals("Tacoma Park"));
+	    assertTrue(testJob.getJobLocation().equals("Dash Point Park in Federal Way"));
 	}
 
 	/**
@@ -53,6 +55,34 @@ public class JobTest {
 	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 16);
 	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
 	    assertTrue(testJob.getDate().get(Calendar.YEAR) == 2016);
+	    
+	    
+	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    PrintStream ps = new PrintStream(baos);
+	    PrintStream old = System.out;
+	    System.setOut(ps);    
+	    
+	    input = "1/16/2016";		
+		in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    testJob.enterDate();
+	    
+	    assertTrue(baos.toString().equals("You can't enter past date. "));
+	    
+	    System.out.flush();
+	    System.setOut(old);
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+//	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 16);
+//	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
+//	    assertTrue(testJob.getDate().get(Calendar.YEAR) == 2016);
+	    
+	    
 	}
 
 	/**

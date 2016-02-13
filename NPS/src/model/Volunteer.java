@@ -36,10 +36,10 @@ public final class Volunteer extends AbstractUser implements Serializable {
 			System.out.println("4. Volunteer for a job");
 			System.out.println("5. Exit");
 
-			menuChoice = getNumber();//scan.nextInt();
+			menuChoice = getNumber();
 			while(menuChoice < 1 || menuChoice > MAIN_MENU_OPTIONS) {
 				System.out.print("Must select a menu option between 1 and " + MAIN_MENU_OPTIONS + "\nSelection: ");
-				menuChoice = getNumber();//scan.nextInt();
+				menuChoice = getNumber();
 			}
 			switch(menuChoice){
 				case 1: viewMyJobs(allJobs);

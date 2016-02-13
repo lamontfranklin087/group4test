@@ -109,7 +109,8 @@ public class Job implements java.io.Serializable{
 	}
 	
 	/**
-	 * Set job's date MM/DD/YYYY.
+	 * Set job's date MM/DD/YYYY. 
+	 * Doesn't  allow to enter past dates and dates more them 90 days in future .
 	 */
 	protected void enterDate() {	
 		keyboard = new Scanner(System.in);
@@ -177,7 +178,7 @@ public class Job implements java.io.Serializable{
 	
 	/**
 	 * Set the number of available slots.
-	 * edited 2/10/16 LF slit method to add job duty levels
+	 * edited 2/10/16 LF slot method to add job duty levels
 	 */
 	protected int fillJobSlot(String duty) {	
 

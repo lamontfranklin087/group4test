@@ -42,21 +42,15 @@ public abstract class AbstractUser implements User,Serializable{
 		password = thePassword;
 	}
 		
-	//public abstract void viewJobDetails(Collection<Job> allJobs); 
-	// OK for Volunteer and Staff only
 	public abstract String getSimpleName();
 	
 	/** Print's the main menu for that user and starts their chain of menu's */
 	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);
 	
-	
-	
-	
 	/**
 	   * This method sets the user's first name.
 	   * This allows for users to update or change their first name.
 	   * @param theFirstName The new first name the user would like.
-	   * @return Nothing.
 	   */
 	public void setFirstName(String theFirstName) {
 		this.firstName = theFirstName;
@@ -65,8 +59,6 @@ public abstract class AbstractUser implements User,Serializable{
 	/**
 	   * Gets the user's first name.
 	   * This allows for displaying of the user's first name.
-	   * @param None.
-	 * @return 
 	   * @return firstName The user's first name.
 	   */
 	public String getFirstName() {
@@ -77,7 +69,6 @@ public abstract class AbstractUser implements User,Serializable{
 	   * This method sets the user's last name.
 	   * This allows for users to update or change their last name.
 	   * @param theLastName The new last name the user would like.
-	   * @return Nothing.
 	   */
 	public void setLastName(String theLastName) {
 		this.lastName = theLastName;
@@ -86,8 +77,6 @@ public abstract class AbstractUser implements User,Serializable{
 	/**
 	   * Gets the user's last name.
 	   * This allows for displaying of the user's last name.
-	   * @param None.
-	 * @return 
 	   * @return lastName The user's last name.
 	   */
 	public String getLastName() {
@@ -98,18 +87,14 @@ public abstract class AbstractUser implements User,Serializable{
 	   * This method sets the user's email.
 	   * This allows for users to update or change their email.
 	   * @param email The new email the user would like to be contacted at.
-	   * @return Nothing.
 	   */
 	public void setEmail(String theEmail) {
 		this.email = theEmail;
-	}
-	
+	}	
 	
 	/**
 	   * Gets the user's email.
 	   * This allows for displaying of the user's email.
-	   * @param None.
-	 * @return 
 	   * @return email The user's email.
 	   */
 	public String getEmail() {
@@ -120,7 +105,6 @@ public abstract class AbstractUser implements User,Serializable{
 	   * This method sets the user's password.
 	   * This allows for users to update or change their password.
 	   * @param thePassword The new password the user would like.
-	   * @return Nothing.
 	   */
 	public void setPassword(String thePassword) {
 		this.password = thePassword;
@@ -129,8 +113,6 @@ public abstract class AbstractUser implements User,Serializable{
 	/**
 	   * Gets the user's password name.
 	   * This allows for comparing of the user's password.
-	   * @param None.
-	 * @return 
 	   * @return password The user's password.
 	   */
 	public String getPassword() {
@@ -215,5 +197,4 @@ public abstract class AbstractUser implements User,Serializable{
 		}
 	   return null;
    }	
-	
 }
