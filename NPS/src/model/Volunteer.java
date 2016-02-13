@@ -2,16 +2,17 @@ package model;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 
+/**
+ * Create a volunteer object.
+ * @author Ihar Lavor
+ * @version 02/12/2016 
+ */
 public final class Volunteer extends AbstractUser implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	public final int MAIN_MENU_OPTIONS = 5;
+	private final int MAIN_MENU_OPTIONS = 5;
 
 	public Volunteer() {
 		super();
@@ -21,118 +22,6 @@ public final class Volunteer extends AbstractUser implements Serializable {
 			String theEmail, String thePassword) {
 		super(theFirstName, theLastName, theEmail, thePassword);
 	}
-
-	public void viewMyJobs(Collection<Job> allJobs) {
-		
-		ParksProgram.menuHeader(this);
-		System.out.println("            ___MyJobs___");
-		
-		
-		LinkedList<Job> myJobs = new LinkedList<Job>();
-		
-		allJobs.forEach(job->{
-				LinkedList<Volunteer> volunteers = job.getVolunteers();
-				if (volunteers!=null){
-					volunteers.forEach(member->{
-						if(member.getEmail().equals(this.getEmail()))
-							myJobs.add(job);
-						
-						});
-					}
-				});
-			
-		if(myJobs.isEmpty()) System.out.println("You are not currently signed up for any jobs.");
-		else{
-		System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
-                + "Slots\t" + "Volun.\t"+ "Locaton\t\t" + "Manager\t\t" 
-				 + "Description");
-		myJobs.forEach(job->System.out.println(job.toStringTable()));
-		}
-	}
-
-	
-	public void viewJobDetails(Collection<Job> allJobs) {
-		//ParksProgram.menuHeader(this);
-		//System.out.println("            ___Job Details___");
-		//viewSumAllJobs(allJobs);
-		System.out.println("Please enter Job ID to view job details or 0 to quit: ");
-		int id = getNumber();
-		if(id!=0){
-			allJobs.forEach(job->{
-				if(job.getJobID()==id){
-				ParksProgram.menuHeader(this);
-				System.out.println("            ___Job Details___");
-				job.toString();
-				}
-			});
-		}
-		
-	}
-	
-	public void jobSignUp(Collection<Job> allJobs) {
-		//ParksProgram.menuHeader(this);
-		//System.out.println("            ___Job Details___");
-		//viewSumAllJobs(allJobs);
-		System.out.println("Please enter Job ID to sign-up or 0 to quit: ");
-		int id = getNumber();
-		if(id!=0){
-			allJobs.forEach(job->{
-				if(job.getJobID()==id){
-					if(dateAvailable(allJobs,job))	job.addVolunteer(this);
-					else System.out.println("You are already committed on that day.");
-				}
-			});
-		}
-		
-	}
-	
-public boolean dateAvailable(Collection<Job> allJobs,Job theJob) {
-				
-		LinkedList<Job> myJobs = new LinkedList<Job>();
-		
-		allJobs.forEach(job->{
-				LinkedList<Volunteer> volunteers = job.getVolunteers();
-				if (volunteers!=null){
-					volunteers.forEach(member->{
-						if(member.getEmail().equals(this.getEmail()))
-							myJobs.add(job);
-						
-						});
-					}
-				});
-			
-		if(myJobs.isEmpty()) return true;
-		else{
-		boolean scheduled=false;
-		for (Job job:myJobs){
-			if(job.getDate().equals(theJob.getDate())) {
-				scheduled=true;
-			}
-		}
-		if(scheduled)return false;
-		else return true;
-		
-		}
-	}
-	
-	@Override
-	public String getSimpleName() {
-		return "Volunteer";
-	}
-
-	public String toString() {		
-		StringBuilder userSummary = new StringBuilder();
-		userSummary.append("Status: Volunteer");
-		userSummary.append("\n");
-		userSummary.append("Name: ");
-		userSummary.append(getFirstName());
-		userSummary.append(" ");
-		userSummary.append(getLastName());
-		userSummary.append("\n");
-		userSummary.append(getEmail());
-		return userSummary.toString();
-	}
-
 
 	@Override
 	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
@@ -167,5 +56,98 @@ public boolean dateAvailable(Collection<Job> allJobs,Job theJob) {
 			}
 		}
 	}
+	
+	private void viewMyJobs(Collection<Job> allJobs) {
+		
+		ParksProgram.menuHeader(this);
+		System.out.println("            ___MyJobs___");		
+		
+		LinkedList<Job> myJobs = new LinkedList<Job>();
+		
+		allJobs.forEach(job->{
+				LinkedList<Volunteer> volunteers = job.getVolunteers();
+				if (volunteers!=null){
+					volunteers.forEach(member->{
+						if(member.getEmail().equals(this.getEmail()))
+							myJobs.add(job);
+						
+						});
+					}
+				});
+			
+		if (myJobs.isEmpty()) {
+			System.out.println("You are not currently signed up for any jobs.");
+		} else {
+			System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
+					+ "Slots\t" + "Volun.\t"+ "Locaton\t\t" + "Manager\t\t" 
+					+ "Description");
+			myJobs.forEach(job->System.out.println(job.toStringTable()));
+		}
+	}
+	
+	private void jobSignUp(Collection<Job> allJobs) {
+		System.out.println("Please enter Job ID to sign-up or 0 to quit: ");
+		int id = getNumber();
+		if (id != 0) {
+			allJobs.forEach(job->{
+				if (job.getJobID() == id){
+					if (dateAvailable(allJobs, job)) {
+						job.addVolunteer(this);
+					} else {
+						System.out.println("You are already committed on that day.");
+					}
+				}
+			});
+		}		
+	}
+	
+	public boolean dateAvailable(Collection<Job> allJobs, Job theJob) {
+				
+		LinkedList<Job> myJobs = new LinkedList<Job>();
+		
+		allJobs.forEach(job->{
+			LinkedList<Volunteer> volunteers = job.getVolunteers();
+			if (volunteers != null){
+				volunteers.forEach(member->{
+				if (member.getEmail().equals(this.getEmail())) {						
+					myJobs.add(job);
+				}
+			});
+			}
+		});
+			
+		if (myJobs.isEmpty()) {
+			return true;
+		} else {
+			boolean scheduled = false;
+			for (Job job:myJobs) {
+				if(job.getDate().equals(theJob.getDate())) {
+					scheduled = true;
+				}
+			}
+			if (scheduled){
+				return false;
+			} else {
+				return true;
+			}			
+		}
+	}
+	
+	@Override
+	public String getSimpleName() {
+		return "Volunteer";
+	}
 
+	public String toString() {		
+		StringBuilder userSummary = new StringBuilder();
+		userSummary.append("Status: Volunteer");
+		userSummary.append("\n");
+		userSummary.append("Name: ");
+		userSummary.append(getFirstName());
+		userSummary.append(" ");
+		userSummary.append(getLastName());
+		userSummary.append("\n");
+		userSummary.append(getEmail());
+		return userSummary.toString();
+	}
 }

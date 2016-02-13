@@ -15,65 +15,23 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 	public UrbanParksStaff() {
 		super();
 	}
-
+	
+	/**
+	 * Parameterized constructor
+	 * @param theFirstName
+	 * @param theLastName
+	 * @param theEmail
+	 * @param thePassword
+	 */
 	protected UrbanParksStaff(String theFirstName, String theLastName,
 			String theEmail, String thePassword) {
 		super(theFirstName, theLastName, theEmail, thePassword);
 	}
 
-	@Override
-	public void viewSumAllJobs(Collection<Job> allJobs) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public void viewJobDetails(Collection<Job> allJobs) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	protected void searchVolunteer(Collection<User> allUsers) {
-		System.out.println("Enter Volunteer's last name:");
-		String volunt = getString();
-		if (allUsers != null) {
-			Iterator<User> itr = allUsers.iterator();
-			User user;
-			System.out.println("Last & First Name      Email");
-			while (itr.hasNext()) {
-				user = itr.next();
-				if (user.getLastName().equals(volunt) 
-						&& user.getSimpleName().equalsIgnoreCase("Volunteer")) {
-					System.out.print(user.getLastName() + " ");
-					System.out.print(user.getFirstName() + "    ");
-					System.out.println(user.getEmail());									
-				}				
-			}
-		} else {
-			System.out.println("There is no " + volunt + " volunteer.");
-		}
-		System.out.println();
-	}
-
-	@Override
-	public String getSimpleName() {
-		return "Urban Parks Staff";
-	}
-	public String toString() {		
-		StringBuilder userSummary = new StringBuilder();
-		userSummary.append("Status: Urban Parks Staff");
-		userSummary.append("\n");
-		userSummary.append("Name: ");
-		userSummary.append(getFirstName());
-		userSummary.append(" ");
-		userSummary.append(getLastName());
-		userSummary.append("\n");
-		userSummary.append(getEmail());
-		return userSummary.toString();
-	}
-	/** Print's the main menu and returns the current menu choice.
-	 * 
+	/** 
+	 * Print's the main menu and returns the current menu choice.
 	 * @return menuChoice	the next menu to be entered.
-	 * */
+	 **/
 	@Override
 	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
 		boolean exit = false;
@@ -105,4 +63,51 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 			
 		}
 	}
+	
+	/**
+	 * Search volunteer by Last Name
+	 * @param allUsers
+	 */
+	protected void searchVolunteer(Collection<User> allUsers) {
+		System.out.println("Enter Volunteer's last name:");
+		String volunt = getString();
+		if (allUsers != null) {
+			Iterator<User> itr = allUsers.iterator();
+			User user;
+			System.out.println("Last & First Name      Email");
+			while (itr.hasNext()) {
+				user = itr.next();
+				if (user.getLastName().equals(volunt) 
+						&& user.getSimpleName().equalsIgnoreCase("Volunteer")) {
+					System.out.print(user.getLastName() + " ");
+					System.out.print(user.getFirstName() + "    ");
+					System.out.println(user.getEmail());									
+				}				
+			}
+		} else {
+			System.out.println("There is no " + volunt + " volunteer.");
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * Return the type of user (Staff, Manager or Volunteer)
+	 */
+	@Override
+	public String getSimpleName() {
+		return "Urban Parks Staff";
+	}
+	
+	public String toString() {		
+		StringBuilder userSummary = new StringBuilder();
+		userSummary.append("Status: Urban Parks Staff");
+		userSummary.append("\n");
+		userSummary.append("Name: ");
+		userSummary.append(getFirstName());
+		userSummary.append(" ");
+		userSummary.append(getLastName());
+		userSummary.append("\n");
+		userSummary.append(getEmail());
+		return userSummary.toString();
+	}	
 }

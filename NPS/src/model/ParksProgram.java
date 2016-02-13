@@ -6,6 +6,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+/**
+ * Login menu, read and write from/to text files.
+ * @author Ihar Lavor
+ * @author Lamont Franklin
+ * @version 02/06/2016
+ * 
+ * revision Lamont Franklin 2/10/2016 added duty level functionality
+ * revision Ihar Lavor 2/12/2016 
+ */
 public class ParksProgram {
 	private Collection<Job> allJobs;
 	private Collection<User> allUsers;		
@@ -15,33 +24,28 @@ public class ParksProgram {
 		try {
 			allUsers = SerialStartup.serialReadUsers();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			allUsers = new LinkedList<User>();
 		}
 		try {
 			allJobs = SerialStartup.serialReadJobs();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			allJobs = new LinkedList<Job>();
 		}
-
-		User currentUser = login();
 		
-		while (currentUser != null) {
+		User currentUser;
+		do {
 			currentUser = login();
 			if (currentUser != null) {
 				currentUser.mainMenu(allJobs, allUsers);
 			}
-		}
-		System.out.println("done 100%");
+		} while (currentUser != null);
 		
 		if (allUsers != null) {
 			try {
 				SerialStartup.serialWriteUsers(allUsers);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();			
 			}
 		}
@@ -49,14 +53,14 @@ public class ParksProgram {
 			try {
 				SerialStartup.serialWriteJobs(allJobs);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();			
 			}
 		}
 	}
 
-	/*
-	 * Alternative menu option for easier consistency
+	/**
+	 * Header for all menus
+	 * @param theUser
 	 */
 	public static void menuHeader(User theUser){
 		System.out.println();

@@ -10,6 +10,8 @@ import java.util.Scanner;
  * 
  * @author dave1729
  * @version 360-1
+ * @author Ihar Lavor
+ * @version 02/12/2016 added findJob(), getNumber() functions and modified other functions.
  */
 public abstract class AbstractUser implements User,Serializable{
 	
@@ -39,23 +41,7 @@ public abstract class AbstractUser implements User,Serializable{
 		email = theEmail;
 		password = thePassword;
 	}
-	
-	public void viewSumAllJobs(Collection<Job> allJobs){ // Used for staff and volunteer
-		if (allJobs != null) {
-			Iterator<Job> itr = allJobs.iterator();
-			System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
-	                + "Slots\t" + "Volun.\t"+ "Manager\t\t" + "Locaton\t\t\t\t"
-					 + "Description");
-			
-			while (itr.hasNext()) {
-				Job temp = itr.next();				
-				System.out.println(temp.toStringTable());
-				System.out.println();
-							
-			}
-		}
-	}
-	
+		
 	//public abstract void viewJobDetails(Collection<Job> allJobs); 
 	// OK for Volunteer and Staff only
 	public abstract String getSimpleName();
@@ -151,6 +137,36 @@ public abstract class AbstractUser implements User,Serializable{
 		return password;
 	}
 	
+	public void viewSumAllJobs(Collection<Job> allJobs){ 
+		if (allJobs != null) {
+			Iterator<Job> itr = allJobs.iterator();
+			System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
+	                + "Slots\t" + "Volun.\t"+ "Manager\t\t" + "Locaton\t\t\t\t"
+					 + "Description");
+			
+			while (itr.hasNext()) {
+				Job temp = itr.next();				
+				System.out.println(temp.toStringTable());
+				System.out.println();
+							
+			}
+		}
+	}
+	
+	public void viewJobDetails(Collection<Job> allJobs) {
+		System.out.println("Please enter Job ID to view job details or 0 to quit: ");
+		int id = getNumber();
+		if(id!=0){
+			allJobs.forEach(job->{
+				if(job.getJobID()==id){
+				ParksProgram.menuHeader(this);
+				System.out.println("            ___Job Details___");
+				job.toString();
+				}
+			});
+		}
+		
+	}
 	
 	/**
 	 * Parse string to integer.
@@ -173,12 +189,21 @@ public abstract class AbstractUser implements User,Serializable{
 		}
 		return result;
 	}
-	
+	/**
+	 * Reads user's input in console.
+	 * @return String
+	 */
 	protected String getString() {
 		keyboard = new Scanner(System.in);		
 		return keyboard.nextLine();
 	}
 	
+	/**
+	 * Iterator for a job list.
+	 * @param jobID
+	 * @param allJobs
+	 * @return
+	 */
 	protected Job findJob(int jobID, Collection<Job> allJobs) {
 		if (allJobs != null) {
 		   Iterator<Job> itr = allJobs.iterator();	  
