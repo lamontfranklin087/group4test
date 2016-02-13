@@ -33,7 +33,7 @@ public class JobTest {
 		
 	    InputStream in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.enterJobLocation();
+	    //testJob.enterJobLocation();
 	    
 	    assertTrue(testJob.getJobLocation().equals("Tacoma Park"));
 	}
@@ -147,7 +147,7 @@ public class JobTest {
 	    input = "Tacoma Park";		
 	    in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.enterJobLocation();
+//testJob.enterJobLocation();
 	    	    
 	    input = "8:00 AM";		
 		in = new ByteArrayInputStream(input.getBytes());
@@ -252,7 +252,7 @@ public class JobTest {
 	    input = "Tacoma Park";		
 	    in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.enterJobLocation();
+//testJob.enterJobLocation();
 	    	    
 	    input = "8:00 AM";		
 		in = new ByteArrayInputStream(input.getBytes());

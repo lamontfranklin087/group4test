@@ -138,15 +138,17 @@ public abstract class AbstractUser implements User,Serializable{
 	}
 	
 	public void viewSumAllJobs(Collection<Job> allJobs){ 
-		if (allJobs != null) {
+		if (allJobs != null && allJobs.size() > 0) {
 			Iterator<Job> itr = allJobs.iterator();
 			System.out.println("ID     " + "Date\t    " + "Duration\t" 
-	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t\t\t\t\t" + "Description");
+	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t" + "Description");
 			Job temp;
 			while (itr.hasNext()) {
 				temp = itr.next();				
 				System.out.println(temp.toStringTable());										
 			}
+		} else {
+			System.out.println("No jibs available at this time.");
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
@@ -75,9 +76,9 @@ public class Job implements java.io.Serializable{
 	}
 			
 	
-	public void createJob(String firstName, String lastName) {
+	public void createJob(String firstName, String lastName, ArrayList<String> parksManage) {
 		jobManager = firstName + " " + lastName;
-		enterJobLocation();		
+		enterJobLocation(parksManage);		
 		enterDate();
 		enterStartTime();
 		enterJobDuration();
@@ -90,11 +91,21 @@ public class Job implements java.io.Serializable{
 	}
 	/**
 	 * Set job's location.
+	 * @param parksManage 
 	 */
-	protected void enterJobLocation() {
-		System.out.print("\nEnter job location: ");	
-		keyboard = new Scanner(System.in);
-		jobLocation = keyboard.nextLine();		
+	protected void enterJobLocation(ArrayList<String> parksManage) {
+		if (parksManage != null && parksManage.size() > 0) {
+			System.out.println("\nSelect Park: ");	
+			
+			for (int i = 0; i < parksManage.size(); i++) {
+				System.out.println((i + 1) + ". " + parksManage.get(i));
+			}
+			int responce = getNumber();
+			while (responce < 1 || responce > parksManage.size()) {
+				responce = getNumber();
+			}			
+			jobLocation = parksManage.get(responce - 1);	
+		}
 	}
 	
 	/**
@@ -218,7 +229,7 @@ public class Job implements java.io.Serializable{
 	/**
 	 * To edit job's fields.
 	 */
-	public void editJob() {			
+	public void editJob(ArrayList<String> parksManage) {			
 		while (true) {
 			System.out.println("\nSelect one of the folowing options:");
 			System.out.println("1. Change Job's Location:   " + jobLocation);
@@ -235,7 +246,7 @@ public class Job implements java.io.Serializable{
 	    	int userTyped = getNumber();
 	    	
 	    	if (userTyped == 1) {
-	    		enterJobLocation();
+	    		enterJobLocation(parksManage);
 	    	} else if (userTyped == 2) {	    		
 	    		enterDate();
 	    	} else if (userTyped == 3) {
@@ -511,7 +522,7 @@ public class Job implements java.io.Serializable{
 		jobSummary.append(jobDuration + " days\t");
 		jobSummary.append(totalSlotsAvailable + "\t");
 		jobSummary.append(jobManager + "\t");
-		jobSummary.append(jobLocation + "\t\t");		
+		jobSummary.append(jobLocation + "\t   ");		
 		jobSummary.append(jobDescription + "\t");
 		return jobSummary.toString();
 	}

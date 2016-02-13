@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -100,18 +101,21 @@ public class SerialStartup {
 		setPassword(String thePassword);
 		*/
 		User readUser;
-		while (scanner.hasNext()) {			
-			String userType = scanner.next();
-			String theFirstName = scanner.next();
-			String theLastName = scanner.next();
-			String email = scanner.next();
-			String password = scanner.next();
-			if (userType.equalsIgnoreCase("UrbanParksStaff")) {
-				readUser = new UrbanParksStaff(theFirstName,theLastName,email,password);
-			} else if (userType.equalsIgnoreCase("Manager")) {
-				readUser = new Manager(theFirstName,theLastName,email,password);
-			} else if (userType.equalsIgnoreCase("Volunteer")) {
-				readUser = new Volunteer(theFirstName,theLastName,email,password);
+		while (scanner.hasNext()) {	
+			String userData = scanner.nextLine();
+			String[] parts = userData.split(", ");
+		
+			if (parts[0].equalsIgnoreCase("UrbanParksStaff")) {
+				readUser = new UrbanParksStaff(parts[1],parts[2],parts[3],parts[4]);
+			} else if (parts[0].equalsIgnoreCase("Manager")) {				
+				ArrayList<String> parksList = new ArrayList<String>();
+				for (int i = 5; i < parts.length; i++) {
+					System.out.println(parts[i]);
+					parksList.add(parts[i]);
+				}				
+				readUser = new Manager(parts[1],parts[2],parts[3],parts[4], parksList);
+			} else if (parts[0].equalsIgnoreCase("Volunteer")) {
+				readUser = new Volunteer(parts[1],parts[2],parts[3],parts[4]);
 			} else {
 				readUser = null;
 			}

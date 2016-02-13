@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,14 +21,16 @@ public final class Manager extends AbstractUser implements Serializable {
 	private final int MAIN_MENU_OPTIONS = 6;
 	private final int MAX_NUMBER_JOBS = 30;
 	private LinkedList<Job> jobsAtMyParks = new LinkedList<Job>();
+	ArrayList<String> parksManage;
 
-	public Manager() {
+	public Manager(String parts, String parts2, String parts3, String parts4) {
 		super();
 	}
 	
 	protected Manager(String theFirstName, String theLastName, String theEmail,
-			String thePassword) {
+			String thePassword, ArrayList<String> parksList) {
 		super(theFirstName, theLastName, theEmail, thePassword);
+		parksManage = parksList;
 	}	
 	
 //	public void viewMyJobs(Collection<Job> allJobs) {
@@ -82,7 +85,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * */
 	@Override
 	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
-		if (allJobs != null) {
+		if (allJobs != null && allJobs.size() > 0) {
 			jobsAtMyParks = new LinkedList<Job>();
 			Job temp = allJobs.iterator().next();
 			int maxNumber = 0;
@@ -96,7 +99,7 @@ public final class Manager extends AbstractUser implements Serializable {
 					jobsAtMyParks.add(temp);
 				}
 			}
-			temp.setJobID(maxNumber + 1);
+			temp.setJobID(maxNumber);
 		}
 		
 		boolean exit = false;
@@ -139,7 +142,7 @@ public final class Manager extends AbstractUser implements Serializable {
 		if (jobsAtMyParks != null && jobsAtMyParks.size() > 0) {
 			Iterator<Job> itr = jobsAtMyParks.iterator();
 			System.out.println("ID     " + "Date\t    " + "Duration\t" 
-	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t\t\t\t\t" + "Description");
+	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t\t" + "Description");
 			Job temp;
 			while (itr.hasNext()) {
 				temp = itr.next();				
@@ -156,7 +159,7 @@ public final class Manager extends AbstractUser implements Serializable {
 			if (foundJob == null) {
 				System.out.println("No job with ID " + jobIDTemp);
 			} else {
-				foundJob.editJob();
+				foundJob.editJob(parksManage);
 			}
 		}		
 	}
@@ -179,7 +182,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	private void submitNewJob(Collection<Job> allJobs) {
 		if (allJobs.size() < MAX_NUMBER_JOBS) {
 			Job newJob = new Job();
-			newJob.createJob(getFirstName(), getLastName());		
+			newJob.createJob(getFirstName(), getLastName(), parksManage);		
 			System.out.println(newJob.toString());
 			System.out.println("1. To confirm job\n2. To exit without saving job");
 			if (getNumber() == 1) {
@@ -195,7 +198,7 @@ public final class Manager extends AbstractUser implements Serializable {
 		jobsAtMyParks = new LinkedList<Job>();
 		boolean iHaveJobs = false;
 		if (allJobs != null) {			
-			Job temp = allJobs.iterator().next();
+			Job temp;
 			Iterator<Job> itr = allJobs.iterator();
 			while (itr.hasNext()) {
 				temp = itr.next();				

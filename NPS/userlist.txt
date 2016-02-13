@@ -1,21 +1,20 @@
-Manager Test User TestUser123@uw.edu pass
-UrbanParksStaff Shauna Deakins ShaunaDeakins@mail.com pass
-UrbanParksStaff Shelton Reams SheltonReams@mail.com pass
-UrbanParksStaff Bianca Go BiancaGo@mail.com pass
-UrbanParksStaff Sherilyn Pohlmann SherilynPohlmann@mail.com pass
-UrbanParksStaff Wally Pooler WallyPooler@mail.com pass
-Manager Burton Deas BurtonDeas@mail.com pass
-Manager Caleb Callejas CalebCallejas@mail.com pass
-Manager Hiroko Denny HirokoDenny@mail.com pass
-Manager Enda Wireman EndaWireman@mail.com pass
-Manager Nena Mentzer NenaMentzer@mail.com pass
-Volunteer Raylene Depew RayleneDepew@mail.com pass
-Volunteer Jesusa Bohman JesusaBohman@mail.com pass
-Volunteer Anjanette Whittlesey AnjanetteWhittlesey@mail.com pass
-Volunteer Linn Wisdom LinnWisdom@mail.com pass
-Volunteer Hisako Tillis HisakoTillis@mail.com pass
-Volunteer Debby Nettles DebbyNttles@mail.com pass
-Volunteer Karon Tavernia KaronTavernia@mail.com pass
-Volunteer Rudolf Albright RudolfAlbright@mail.com pass
-Volunteer Betty Stangl BettyStangl@mail.com pass
-Volunteer Keila Bondy KeilaBondy@mail.com pass
+Manager, Test, User, TestUser123@uw.edu, pass
+UrbanParksStaff, Shauna, Deakins, ShaunaDeakins@mail.com, pass
+UrbanParksStaff, Shelton, Reams, SheltonReams@mail.com, pass
+UrbanParksStaff, Bianca, Go, BiancaGo@mail.com, pass
+UrbanParksStaff, Sherilyn, Pohlmann, SherilynPohlmann@mail.com, pass
+UrbanParksStaff, Wally, Pooler, WallyPooler@mail.com, pass
+Manager, Burton, Deas, BurtonDeas@mail.com, pass, Dash Point Park in Federal Way, Sacajawea Park in Federal Way, Celebration Park in Federal Way
+Manager, Caleb, Callejas, CalebCallejas@mail.com, pass, Mirror Lake Park in Federal Way, Steel Lake Park in Federal Way
+Manager, Hiroko, Denny, HirokoDenny@mail.com, pass, Point Defiance Park in Tacoma, Kandle Park in Tacoma, Delong Park in Tacoma, China Lake Park in Tacoma
+Manager, Enda, Wireman, EndaWireman@mail.com, pass, Heidelberg-Davis Park in Tacoma, Snake Lake Park in Tacoma, Wapato Park in Tacoma
+Volunteer, Raylene, Depew, RayleneDepew@mail.com, pass
+Volunteer, Jesusa, Bohman, JesusaBohman@mail.com, pass
+Volunteer, Anjanette, Whittlesey, AnjanetteWhittlesey@mail.com, pass
+Volunteer, Linn, Wisdom, LinnWisdom@mail.com, pass
+Volunteer, Hisako, Tillis, HisakoTillis@mail.com, pass
+Volunteer, Debby, Nettles, DebbyNttles@mail.com, pass
+Volunteer, Karon, Tavernia, KaronTavernia@mail.com, pass
+Volunteer, Rudolf, Albright, RudolfAlbright@mail.com, pass
+Volunteer, Betty, Stangl, BettyStangl@mail.com, pass
+Volunteer, Keila, Bondy, KeilaBondy@mail.com, pass

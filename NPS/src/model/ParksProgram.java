@@ -1,7 +1,9 @@
 package model;
 
 import java.io.FileNotFoundException;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -33,7 +35,8 @@ public class ParksProgram {
 			e.printStackTrace();
 			allJobs = new LinkedList<Job>();
 		}
-				
+		
+		checkForPastJobs();
 		User currentUser;
 		do {
 			currentUser = login();
@@ -56,6 +59,40 @@ public class ParksProgram {
 				e.printStackTrace();			
 			}
 		}
+	}
+
+	/**
+	 * Check for past jobs and remove them from list before user see them.
+	 */
+	private void checkForPastJobs() {
+		Calendar currentDate = new GregorianCalendar();
+		int curMonth = currentDate.get(Calendar.MONTH) + 1;
+		int curDate = currentDate.get(Calendar.DATE);
+		int curYear = currentDate.get(Calendar.YEAR);
+		
+		Calendar jobDate;
+		int jobDay;
+		int jobYear;
+		int jobMonth;
+		
+		if (allJobs != null && allJobs.size() > 0) {
+			Iterator<Job> itr = allJobs.iterator();
+			while (itr.hasNext()) {
+				Job temp = itr.next();
+				jobDate = temp.getDate();
+				
+				jobMonth = jobDate.get(Calendar.MONTH) + 1;
+				jobDay = jobDate.get(Calendar.DATE);
+				jobYear = jobDate.get(Calendar.YEAR);
+				
+				int resultDays = (jobYear - curYear) * 12 * 30 
+						+ (jobMonth - curMonth) * 30
+						+ (jobDay - curDate);
+				if (resultDays < 0) {
+					//add code here.....
+				}
+			}
+		}	
 	}
 
 	/**
