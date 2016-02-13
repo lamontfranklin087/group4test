@@ -11,6 +11,7 @@ import java.util.Scanner;
  * @author Ihar Lavor
  * @version 02/06/2016
  * revision Lamont Franklin 2/10/2016 added duty level functionality
+ * @version 02/13/2016
  */
 public class Job implements java.io.Serializable{
 	
@@ -22,7 +23,7 @@ public class Job implements java.io.Serializable{
 	private static int totalJobs;	
 	
 	/* The maximum id will be up to FIRST_ID_NUM*/
-	private static int FIRST_ID_NUM = 1000;
+	private static int FIRST_ID_NUM = 0;
 
 	private int jobID;
 	
@@ -87,7 +88,7 @@ public class Job implements java.io.Serializable{
 	}
 
 	protected void setJobID(int nextID) {
-		totalJobs = nextID - 1000;
+		totalJobs = nextID;
 	}
 	/**
 	 * Set job's location.
@@ -287,25 +288,6 @@ public class Job implements java.io.Serializable{
 	}
 	
 	/**
-	 * Delete job by setting: jobLocation, jobDate, jobDescription, 
-	 * startTime, volunteers fields to NULL 
-	 * and jobDuration, slotsAvailable fields to -1.
-	 */
-	public void deleteJob(){
-		jobManager = null;
-		jobLocation = null;
-		jobDate = null;
-		jobDuration = 0;
-		totalSlotsAvailable = 0;
-		jobDescription = null;		
-		startTime = null;
-		totalVolunteers = 0;
-		lightVolunteers = null;
-		mediumVolunteers = null;
-		heavyVolunteers = null;
-	}
-
-	/**
 	 * Accessor.
 	 * @return job's ID number.
 	 */
@@ -330,7 +312,7 @@ public class Job implements java.io.Serializable{
 	
 	/**
 	 * Accessor.
-	 * @return job's date (MM/DD/YYYY where 0..11/1..31
+	 * @return job's date (MM/DD/YYYY where 0..11/1..31/2016
 	 */
 	public Calendar getDate(){
 		return jobDate;
@@ -432,7 +414,7 @@ public class Job implements java.io.Serializable{
 		}	
 	}	
 	
-	public boolean addToSlot(Volunteer newVolunteer, int dutyType, int max){
+	protected boolean addToSlot(Volunteer newVolunteer, int dutyType, int max){
 		if (max == 0){
 			System.out.println("No slots available for this duty level.");
 			return false;

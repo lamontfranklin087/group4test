@@ -15,7 +15,7 @@ import java.util.LinkedList;
  * 
  * @author Ihar Lavor
  * @version 02/13/2016 
- * Added Business rule number 1, 2
+ * Added Business rules number 1, 2
  */
 public final class Manager extends AbstractUser implements Serializable {
 	
