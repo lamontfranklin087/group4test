@@ -19,6 +19,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final int MAIN_MENU_OPTIONS = 6;
 	private final int MAX_NUMBER_JOBS = 30;
+	private LinkedList<Job> jobsAtMyParks = new LinkedList<Job>();
 
 	public Manager() {
 		super();
@@ -29,44 +30,47 @@ public final class Manager extends AbstractUser implements Serializable {
 		super(theFirstName, theLastName, theEmail, thePassword);
 	}	
 	
-	public void viewMyJobs(Collection<Job> allJobs) {
-		Iterator<Job> itr = allJobs.iterator();
-		
-		while (itr.hasNext()) {
-			Job temp = itr.next();
-			if (temp.getJobManager().equals(getFirstName() + " " + getLastName())) {
-				System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
-		                + "Slots\t" + "Volun.\t"+ "Locaton\t\t" + "Manager\t\t" 
-						 + "Description");
-				System.out.println(temp.toStringTable());
-			}			
-		}
-	}	
+//	public void viewMyJobs(Collection<Job> allJobs) {
+//		Iterator<Job> itr = allJobs.iterator();
+//		
+//		while (itr.hasNext()) {
+//			Job temp = itr.next();
+//			if (temp.getJobManager().equals(getFirstName() + " " + getLastName())) {
+//				System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
+//		                + "Slots\t" + "Volun.\t"+ "Locaton\t\t" + "Manager\t\t" 
+//						 + "Description");
+//				System.out.println(temp.toStringTable());
+//			}			
+//		}
+//	}	
 
 	@Override
 	public String getSimpleName() {
 		return "Park Manager";
 	}
 	
-	public void viewVolunteers(Collection<Job> allJobs) {
+	public void viewVolunteers(LinkedList<Job> allJobs) {
 		if (allJobs != null) {
 			viewSumAllJobs(allJobs);
 			System.out.println("Enter Job's ID to view volunteers or 1 to exit");
 			int temp = getNumber();
 			if (temp != 1) {
 				Job foundJob = findJob(temp, allJobs);
-				LinkedList<Volunteer> volunteer = foundJob.getVolunteers();
-				
-				if (volunteer != null) {
-					Iterator<Volunteer> itr = volunteer.iterator();
-					System.out.println("First Name\tLastName\tEmail address");			
-					while (itr.hasNext()) {
-						System.out.println(itr.next().getFirstName() + "\t" +
-											itr.next().getLastName() + "\t" +
-											itr.next().getEmail());
+				if (foundJob != null) {
+					LinkedList<Volunteer> volunteer = foundJob.getVolunteers();
+					
+					if (volunteer != null) {
+						Iterator<Volunteer> itr = volunteer.iterator();
+						System.out.println("First Name\tLastName\tEmail address");			
+						while (itr.hasNext()) {
+							Volunteer tempVol = itr.next();
+							System.out.println(tempVol.getFirstName() + "\t" +
+											   tempVol.getLastName() + "\t" +
+											   tempVol.getEmail());
+						}
+					} else {
+						System.out.println("No volunteers for this job");
 					}
-				} else {
-					System.out.println("No volunteers for this job");
 				}
 			}
 		}
@@ -78,6 +82,23 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * */
 	@Override
 	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
+		if (allJobs != null) {
+			jobsAtMyParks = new LinkedList<Job>();
+			Job temp = allJobs.iterator().next();
+			int maxNumber = 0;
+			Iterator<Job> itr = allJobs.iterator();
+			while (itr.hasNext()) {
+				temp = itr.next();
+				if (temp.getJobID() > maxNumber) {
+					maxNumber = temp.getJobID();
+				}
+				if (temp.getJobManager().equalsIgnoreCase(this.getFirstName() + " " + this.getLastName())) {
+					jobsAtMyParks.add(temp);
+				}
+			}
+			temp.setJobID(maxNumber + 1);
+		}
+		
 		boolean exit = false;
 		while (!exit) {
 			int menuChoice = 0;
@@ -104,13 +125,26 @@ public final class Manager extends AbstractUser implements Serializable {
 					break;
 				case 4: viewSumAllJobs(allJobs);
 					break;
-				case 5: viewVolunteers(allJobs);
+				case 5: viewVolunteers(jobsAtMyParks);
 					break;
 				case 6: System.out.println("Exiting...");
 					exit = true;
 					break;
+			}			
+		}
+	}
+	
+	@Override
+	public void viewSumAllJobs(Collection<Job> p){ 
+		if (jobsAtMyParks != null && jobsAtMyParks.size() > 0) {
+			Iterator<Job> itr = jobsAtMyParks.iterator();
+			System.out.println("ID     " + "Date\t    " + "Duration\t" 
+	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t\t\t\t\t" + "Description");
+			Job temp;
+			while (itr.hasNext()) {
+				temp = itr.next();				
+				System.out.println(temp.toStringTable());										
 			}
-			
 		}
 	}
 	
@@ -127,21 +161,22 @@ public final class Manager extends AbstractUser implements Serializable {
 		}		
 	}
 
-	public void deleteJob(Collection<Job> allJobs) {
+	private void deleteJob(Collection<Job> allJobs) {
 		System.out.println("Enter Job's ID number or 0 to exit:");
 		int jobIDTemp = getNumber();
 		if (jobIDTemp > 0) {
-			Job foundJob = findJob(jobIDTemp, allJobs);
-			if (foundJob == null) {
+			Job temp = findJob(jobIDTemp, allJobs);			
+			if (temp == null) {
 				System.out.println("No job with ID " + jobIDTemp);
 			} else {
-				allJobs.remove(foundJob);
+				allJobs.remove(temp);
+				update(allJobs);
 				System.out.println("Job with ID " + jobIDTemp + " was deleted.");
-			}			   
+			}
 		}
 	}
 
-	public void submitNewJob(Collection<Job> allJobs) {
+	private void submitNewJob(Collection<Job> allJobs) {
 		if (allJobs.size() < MAX_NUMBER_JOBS) {
 			Job newJob = new Job();
 			newJob.createJob(getFirstName(), getLastName());		
@@ -149,12 +184,33 @@ public final class Manager extends AbstractUser implements Serializable {
 			System.out.println("1. To confirm job\n2. To exit without saving job");
 			if (getNumber() == 1) {
 				allJobs.add(newJob);
+				update(allJobs);
 			}
 		} else {
 			System.out.println("A job can't be added because the total number of pending jobs is currently 30.");
 		}		
 	}
+	
+	private void update(Collection<Job> allJobs) {
+		jobsAtMyParks = new LinkedList<Job>();
+		boolean iHaveJobs = false;
+		if (allJobs != null) {			
+			Job temp = allJobs.iterator().next();
+			Iterator<Job> itr = allJobs.iterator();
+			while (itr.hasNext()) {
+				temp = itr.next();				
+				if (temp.getJobManager().equalsIgnoreCase(this.getFirstName() + " " + this.getLastName())) {
+					jobsAtMyParks.add(temp);
+					iHaveJobs = true;
+				}
+			}
+		}
+		if (!iHaveJobs) {
+			jobsAtMyParks = null;
+		}
+	}
 		
+	
 	public String toString() {		
 		StringBuilder userSummary = new StringBuilder();
 		userSummary.append("Status: Park Manager");

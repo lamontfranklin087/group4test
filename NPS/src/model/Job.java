@@ -18,7 +18,7 @@ public class Job implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	/* The maximum id will be up to, and not including, MAX_ID_VAL*/
-	private static int totalJobs = 0;	
+	private static int totalJobs;	
 	
 	/* The maximum id will be up to FIRST_ID_NUM*/
 	private static int FIRST_ID_NUM = 1000;
@@ -85,8 +85,8 @@ public class Job implements java.io.Serializable{
 		enterJobDescription();
 	}
 
-	protected void setTotalJobs(int total) {
-		totalJobs = total;
+	protected void setJobID(int nextID) {
+		totalJobs = nextID - 1000;
 	}
 	/**
 	 * Set job's location.
@@ -120,6 +120,10 @@ public class Job implements java.io.Serializable{
 				int curDate = currentDate.get(Calendar.DAY_OF_MONTH);
 				int curMonth = currentDate.get(Calendar.MONTH);
 				int curYear = currentDate.get(Calendar.YEAR);
+				
+				int resultDays = (myYear - currentDate.get(Calendar.YEAR)) * 12 * 30 
+						+ Math.abs(myMonth - currentDate.get(Calendar.MONTH) - 1) * 30
+						+ Math.abs(myDate - currentDate.get(Calendar.DATE));
 								
 				if (myYear < curYear || myMonth > 11 || myDate > 31 || myDate <= 0) {
 					System.out.print("\nYou can't enter past date. ");
@@ -127,6 +131,8 @@ public class Job implements java.io.Serializable{
 					System.out.print("\nYou can't enter past date. ");
 				} else if (myYear == curYear && myMonth == curMonth && myDate < curDate) {
 					System.out.print("\nYou can't enter past date. ");
+				} else if (resultDays > 90) {
+					System.out.print("\nYou can't enter date more then 90 days ahead. ");
 				} else {
 					jobDate = mydate;
 					break;

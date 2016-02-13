@@ -33,11 +33,7 @@ public class ParksProgram {
 			e.printStackTrace();
 			allJobs = new LinkedList<Job>();
 		}
-		
-		if (allJobs != null) {
-			Job temp = allJobs.iterator().next();
-			temp.setTotalJobs(allJobs.size());
-		}
+				
 		User currentUser;
 		do {
 			currentUser = login();

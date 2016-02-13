@@ -78,9 +78,9 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		if (myJobs.isEmpty()) {
 			System.out.println("You are not currently signed up for any jobs.");
 		} else {
-			System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
-					+ "Slots\t" + "Volun.\t"+ "Locaton\t\t" + "Manager\t\t" 
-					+ "Description");
+			System.out.println("ID     " + "Date\t    " + "Duration\t" 
+					+ "Slots\t" + "Manager\t\t" + "Locaton\t\t"  
+					+ "\t\tDescription");
 			myJobs.forEach(job->System.out.println(job.toStringTable()));
 		}
 	}
