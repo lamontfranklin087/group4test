@@ -7,18 +7,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Scanner;
+
+// Author Lamont Franklin 2/8/16
 
 public class SerialStartup {
 	private Collection<Job> allJobs;
 	private Collection<User> allUsers;	
 	
 	
-	public static void serialWriteUsers(Collection myUsers)throws FileNotFoundException{
-		try
-	      {
+	public static void serialWriteUsers(Collection<User> myUsers)throws FileNotFoundException{
+		try {
 	         FileOutputStream fileOut =
 	         new FileOutputStream("users.txt");
 	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -26,39 +28,33 @@ public class SerialStartup {
 	         out.close();
 	         fileOut.close();
 	         System.out.printf("Serialized user data is saved in users.txt\n");
-	      }catch(IOException i)
-	      {
+	      } catch(IOException i) {
 	          i.printStackTrace();
 	      }
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Collection<User> serialReadUsers()throws FileNotFoundException{	
-		try
-	    {
-	       FileInputStream fileIn = new FileInputStream("users.txt");
-	       ObjectInputStream in = new ObjectInputStream(fileIn);
-	       Collection<User> readColl = (Collection<User>) in.readObject();
-	      
-				
-	       in.close();
-	       fileIn.close();
-	       return readColl;
-	    }catch(IOException i)
-	    {
-	       i.printStackTrace();
-	       return null;
-	    }catch(ClassNotFoundException c)
-	    {
-	       System.out.println("Employee class not found");
-	       c.printStackTrace();
-	       return null;
+		try {
+			FileInputStream fileIn = new FileInputStream("users.txt");
+	        ObjectInputStream in = new ObjectInputStream(fileIn);
+	        Collection<User> readColl = (Collection<User>) in.readObject();
+	      			
+	        in.close();
+	        fileIn.close();
+	        return readColl;
+	    } catch(IOException i) {
+	        i.printStackTrace();
+	        return null;
+	    } catch(ClassNotFoundException c) {
+	        System.out.println("Employee class not found");
+	        c.printStackTrace();
+	        return null;
 	    }
-		}
+	}	
 	
-	
-	public static void serialWriteJobs(Collection myJobs)throws FileNotFoundException{
-		try
-	      {
+	public static void serialWriteJobs(Collection<Job> myJobs)throws FileNotFoundException{
+		try {
 	         FileOutputStream fileOut =
 	         new FileOutputStream("jobs.txt");
 	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -66,42 +62,37 @@ public class SerialStartup {
 	         out.close();
 	         fileOut.close();
 	         System.out.printf("Serialized job data is saved in jobs.txt\n");
-	      }catch(IOException i)
-	      {
+	      } catch(IOException i) {
 	          i.printStackTrace();
 	      }
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Collection<Job> serialReadJobs()throws FileNotFoundException{	
-	try
-    {
-       FileInputStream fileIn = new FileInputStream("jobs.txt");
-       ObjectInputStream in = new ObjectInputStream(fileIn);
-       Collection<Job> readColl = (Collection<Job>) in.readObject();
-      
-			
-       in.close();
-       fileIn.close();
-       return readColl;
-    }catch(IOException i)
-    {
-       i.printStackTrace();
-       return null;
-    }catch(ClassNotFoundException c)
-    {
-       System.out.println("Employee class not found");
-       c.printStackTrace();
-       return null;
-    }
+		try {
+			FileInputStream fileIn = new FileInputStream("jobs.txt");
+	        ObjectInputStream in = new ObjectInputStream(fileIn);
+	        Collection<Job> readColl = (Collection<Job>) in.readObject();
+	      
+	        in.close();
+	        fileIn.close();
+	        return readColl;
+	    } catch(IOException i) {
+	        i.printStackTrace();
+	        return null;
+	    } catch(ClassNotFoundException c) {
+	        System.out.println("Employee class not found");
+	        c.printStackTrace();
+	        return null;
+	    }
 	}
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	public SerialStartup() throws FileNotFoundException {
-		//User testUser123 = new Volunteer();
 		allJobs = new LinkedList<Job>();
 		allUsers = new LinkedList<User>();
-		//allUsers.add(testUser123);
 		
 		Scanner scanner = new Scanner(new File ("userlist.txt"));
 		/*setFirstName(String theFirstName);
@@ -109,26 +100,33 @@ public class SerialStartup {
 		setEmail(String theEmail);
 		setPassword(String thePassword);
 		*/
-		User readUser;
-		while (scanner.hasNext()){
-			
-			int userType = Integer.parseInt(scanner.next());
-			String theFirstName = scanner.next();
-			String theLastName = scanner.next();
-			String email = scanner.next();
-			String password = scanner.next();
-			if (userType==1) readUser = new UrbanParksStaff(theFirstName,theLastName,email,password);
-			else if (userType==2) readUser = new Manager(theFirstName,theLastName,email,password);
-			else if (userType==3) readUser = new Volunteer(theFirstName,theLastName,email,password);
-			else readUser=null;
-			if (readUser!=null) allUsers.add(readUser);
-			else scanner.close();
-			
+		User readUser;			
+		while (scanner.hasNext()) {	
+			String userData = scanner.nextLine();
+			String[] parts = userData.split(", ");
+		
+			if (parts[0].equalsIgnoreCase("UrbanParksStaff")) {
+				readUser = new UrbanParksStaff(parts[1],parts[2],parts[3],parts[4]);
+			} else if (parts[0].equalsIgnoreCase("Manager")) {				
+				ArrayList<String> parksList = new ArrayList<String>();
+				for (int i = 5; i < parts.length; i++) {
+					System.out.println(parts[i]);
+					parksList.add(parts[i]);
+				}				
+				readUser = new Manager(parts[1],parts[2],parts[3],parts[4], parksList);
+			} else if (parts[0].equalsIgnoreCase("Volunteer")) {
+				readUser = new Volunteer(parts[1],parts[2],parts[3],parts[4]);
+			} else {
+				readUser = null;
+			}
+			if (readUser != null) {
+				allUsers.add(readUser);
+			} else {
+				scanner.close();
+			}			
 		}
 		allUsers.forEach(user->System.out.println(user.toString()));
-		//User e = null;
-		try
-	      {
+		try {
 	         FileOutputStream fileOut =
 	         new FileOutputStream("users.txt");
 	         ObjectOutputStream out = new ObjectOutputStream(fileOut);

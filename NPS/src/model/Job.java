@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
@@ -9,18 +10,20 @@ import java.util.Scanner;
  * Create a job object.
  * @author Ihar Lavor
  * @version 02/06/2016
- *
+ * revision Lamont Franklin 2/10/2016 added duty level functionality
+ * @version 02/13/2016
  */
 public class Job implements java.io.Serializable{
 	
+	public final int DUTY_OPTIONS = 3;
 	/* Serial number since job is Serializable.*/
 	private static final long serialVersionUID = 1L;
 	
 	/* The maximum id will be up to, and not including, MAX_ID_VAL*/
-	private static int totalJobs = 0;	
+	private static int totalJobs;	
 	
 	/* The maximum id will be up to FIRST_ID_NUM*/
-	private static int FIRST_ID_NUM = 1000;
+	private static int FIRST_ID_NUM = 0;
 
 	private int jobID;
 	
@@ -32,43 +35,51 @@ public class Job implements java.io.Serializable{
 	
 	private int jobDuration;
 	
-	private int slotsAvailable;
+	private int totalSlotsAvailable;
+	
+	private int lightSlotsAvailable;
+	
+	private int mediumSlotsAvailable;
+	
+	private int heavySlotsAvailable;
 	
 	private String jobDescription;
 	
 	private String startTime;
 	
-	private LinkedList<Volunteer> volunteers;
+	private int totalVolunteers;
+		
+	private LinkedList<Volunteer> lightVolunteers;
 	
-	private Scanner keyboard;
+	private LinkedList<Volunteer> mediumVolunteers;
 	
-	/**
-	 * Default constructor.
-	 * Set job's fields: jobID = 0, jobLocation = null, jobDate = null, 
-	 * jobDuration = -1, slotsAvailable = -1, 
-	 * jobDescription = null, startTime = null, volunteers = null.
-	 */
+	private LinkedList<Volunteer> heavyVolunteers;
+	
+	private transient Scanner keyboard;
+	
+	
 	public Job() {
 		jobID = FIRST_ID_NUM + (++totalJobs);
 		jobManager = null;
 		jobLocation = null;
 		jobDate = null;
-		jobDuration = -1;
-		slotsAvailable = -1;
+		jobDuration = 0;
+		totalSlotsAvailable = 0;
+		lightSlotsAvailable = 0;
+		mediumSlotsAvailable = 0;
+		heavySlotsAvailable = 0;
 		jobDescription = null;
 		startTime = null;
-		volunteers = null;
+		totalVolunteers = 0;
+		lightVolunteers = null;
+		mediumVolunteers = null;
+		heavyVolunteers = null;
 	}
 			
-	/**
-	 * Set job's fields: jobLocation, jobDate, jobDuration,
-	 * slotsAvailable, jobDescription, startTime, volunteers.
-	 * @param lastName 
-	 * @param firstName 
-	 */
-	public void createJob(String firstName, String lastName) {
+	
+	public void createJob(String firstName, String lastName, ArrayList<String> parksManage) {
 		jobManager = firstName + " " + lastName;
-		enterJobLocation();		
+		enterJobLocation(parksManage);		
 		enterDate();
 		enterStartTime();
 		enterJobDuration();
@@ -76,19 +87,33 @@ public class Job implements java.io.Serializable{
 		enterJobDescription();
 	}
 
+	protected void setJobID(int nextID) {
+		totalJobs = nextID;
+	}
 	/**
 	 * Set job's location.
+	 * @param parksManage 
 	 */
-	protected void enterJobLocation() {
-		System.out.print("\nEnter job location: ");
-		keyboard = new Scanner(System.in);
-		jobLocation = keyboard.nextLine();		
+	protected void enterJobLocation(ArrayList<String> parksManage) {
+		if (parksManage != null && parksManage.size() > 0) {
+			System.out.println("\nSelect Park: ");	
+			
+			for (int i = 0; i < parksManage.size(); i++) {
+				System.out.println((i + 1) + ". " + parksManage.get(i));
+			}
+			int responce = getNumber();
+			while (responce < 1 || responce > parksManage.size()) {
+				responce = getNumber();
+			}			
+			jobLocation = parksManage.get(responce - 1);	
+		}
 	}
 	
 	/**
-	 * Set job's date MM/DD/YYYY.
+	 * Set job's date MM/DD/YYYY. 
+	 * Doesn't  allow to enter past dates and dates more them 90 days in future .
 	 */
-	protected void enterDate() {		
+	protected void enterDate() {	
 		keyboard = new Scanner(System.in);
 		do {								
 			try {				
@@ -108,6 +133,10 @@ public class Job implements java.io.Serializable{
 				int curDate = currentDate.get(Calendar.DAY_OF_MONTH);
 				int curMonth = currentDate.get(Calendar.MONTH);
 				int curYear = currentDate.get(Calendar.YEAR);
+				
+				int resultDays = (myYear - currentDate.get(Calendar.YEAR)) * 12 * 30 
+						+ Math.abs(myMonth - currentDate.get(Calendar.MONTH) - 1) * 30
+						+ Math.abs(myDate - currentDate.get(Calendar.DATE));
 								
 				if (myYear < curYear || myMonth > 11 || myDate > 31 || myDate <= 0) {
 					System.out.print("\nYou can't enter past date. ");
@@ -115,6 +144,8 @@ public class Job implements java.io.Serializable{
 					System.out.print("\nYou can't enter past date. ");
 				} else if (myYear == curYear && myMonth == curMonth && myDate < curDate) {
 					System.out.print("\nYou can't enter past date. ");
+				} else if (resultDays > 90) {
+					System.out.print("\nYou can't enter date more then 90 days ahead. ");
 				} else {
 					jobDate = mydate;
 					break;
@@ -148,19 +179,33 @@ public class Job implements java.io.Serializable{
 	
 	/**
 	 * Set the number of available slots.
+	 * edited 2/10/16 LF slot method to add job duty levels
 	 */
-	protected void enterJobSlot() {						
+	protected int fillJobSlot(String duty) {	
+
 		while(true){
-			System.out.print("\nEnter job slots: (For example 7) ");
-			
+			System.out.print("\nEnter " + duty + " duty job slots: (For example 7) ");
 			int temp = getNumber();
-			
-        	if (temp > 0) {
-        		slotsAvailable = temp;
-        		break;
-        	} else {
-        		System.out.print("\nJob slots can't be 0.  ");
-        	}
+			if (temp >= 0) {
+				return temp;
+			} else {
+				System.out.print("\nPlease input a valid number  ");
+			}
+		}
+	}
+	
+	protected void enterJobSlot() {	
+		totalSlotsAvailable = 0;
+		while (totalSlotsAvailable <= 0) {
+			lightSlotsAvailable = fillJobSlot("light");
+			mediumSlotsAvailable = fillJobSlot("medium");
+			heavySlotsAvailable = fillJobSlot("heavy");
+			totalSlotsAvailable = lightSlotsAvailable 
+								+ mediumSlotsAvailable
+								+ heavySlotsAvailable;
+			if(totalSlotsAvailable <= 0) {
+				System.out.print("\nJob can not have 0 volunteer slots, please try again");
+			}
 		}
 	}
 	
@@ -186,7 +231,7 @@ public class Job implements java.io.Serializable{
 	/**
 	 * To edit job's fields.
 	 */
-	public void editJob() {			
+	public void editJob(ArrayList<String> parksManage) {			
 		while (true) {
 			System.out.println("\nSelect one of the folowing options:");
 			System.out.println("1. Change Job's Location:   " + jobLocation);
@@ -195,7 +240,7 @@ public class Job implements java.io.Serializable{
 								+ jobDate.get(Calendar.DATE) + "/"
 								+ jobDate.get(Calendar.YEAR));
 			System.out.println("3. Change Job's Duration:    " + jobDuration + " days");
-			System.out.println("4. Change Job's Slots:       " + slotsAvailable);
+			System.out.println("4. Change Job's Slots:       " + totalSlotsAvailable);
 			System.out.println("5. Change Job's Description: " + jobDescription);
 			System.out.println("6. Change Job's Start Time:  " + startTime);
 			System.out.println("7. Exit ");
@@ -203,7 +248,7 @@ public class Job implements java.io.Serializable{
 	    	int userTyped = getNumber();
 	    	
 	    	if (userTyped == 1) {
-	    		enterJobLocation();
+	    		enterJobLocation(parksManage);
 	    	} else if (userTyped == 2) {	    		
 	    		enterDate();
 	    	} else if (userTyped == 3) {
@@ -243,22 +288,6 @@ public class Job implements java.io.Serializable{
 	}
 	
 	/**
-	 * Delete job by setting: jobLocation, jobDate, jobDescription, 
-	 * startTime, volunteers fields to NULL 
-	 * and jobDuration, slotsAvailable fields to -1.
-	 */
-	public void deleteJob(){
-		jobManager = null;
-		jobLocation = null;
-		jobDate = null;
-		jobDuration = -1;
-		slotsAvailable = -1;
-		jobDescription = null;		
-		startTime = null;
-		volunteers = null;
-	}
-
-	/**
 	 * Accessor.
 	 * @return job's ID number.
 	 */
@@ -283,7 +312,7 @@ public class Job implements java.io.Serializable{
 	
 	/**
 	 * Accessor.
-	 * @return job's date (MM/DD/YYYY where 0..11/1..31
+	 * @return job's date (MM/DD/YYYY where 0..11/1..31/2016
 	 */
 	public Calendar getDate(){
 		return jobDate;
@@ -302,7 +331,7 @@ public class Job implements java.io.Serializable{
 	 * @return number of available sots for a job.
 	 */
 	public int getAvailableSlots(){
-		return slotsAvailable;
+		return totalSlotsAvailable;
 	}
 	
 	/**
@@ -326,7 +355,21 @@ public class Job implements java.io.Serializable{
 	 * @return a list of volunteers for a job.
 	 */
 	public LinkedList<Volunteer> getVolunteers() {
-		return volunteers;
+		LinkedList<Volunteer> volunteers = new LinkedList<Volunteer>();
+		if (lightVolunteers != null) {
+			volunteers.addAll(lightVolunteers);
+		}
+		if (mediumVolunteers != null) {
+			volunteers.addAll(mediumVolunteers);
+		}
+		if (heavyVolunteers != null) {
+			volunteers.addAll(heavyVolunteers);
+		}
+		if (volunteers.size() != 0) {
+			return volunteers;
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -334,46 +377,120 @@ public class Job implements java.io.Serializable{
 	 * @param newVolunteer must be Volunteer type.
 	 */
 	public void addVolunteer(Volunteer newVolunteer){
-		if (volunteers == null) {
-			volunteers = new LinkedList<Volunteer>();
-		} 
-		if (volunteers.size() <= slotsAvailable) {
-			volunteers.add(newVolunteer);
-		} else {
-			System.out.print("\nNo more available slots.\n");
+		
+		int menuChoice = 0;
+		boolean exit = false;
+		while(!exit){
+			if (totalVolunteers <= totalSlotsAvailable) {
+				ParksProgram.menuHeader(newVolunteer);
+				System.out.println("            ___Sign-Up___");
+				System.out.println();
+				System.out.println("\t    Available Slots");
+				System.out.println("\tLight\tMedium\tHeavy");
+				System.out.println("\t"+lightSlotsAvailable+"\t"+mediumSlotsAvailable+"\t"+heavySlotsAvailable);
+				System.out.println("1. Volunteer for a light duty");
+				System.out.println("2. Volunteer for a medium duty");
+				System.out.println("3. Volunteer for a heavy duty");
+				System.out.println("4. Exit");
+
+				menuChoice = getNumber();
+				while(menuChoice < 1 || menuChoice > DUTY_OPTIONS) {
+					System.out.print("Must select a menu option between 1 and " + DUTY_OPTIONS + "\nSelection: ");
+					menuChoice = getNumber();
+				}
+				switch(menuChoice){
+					case 1: exit = addToSlot(newVolunteer, 1, lightSlotsAvailable);						
+						break;
+					case 2: exit = addToSlot(newVolunteer, 2, mediumSlotsAvailable);
+						break;
+					case 3: exit = addToSlot(newVolunteer, 3, heavySlotsAvailable);
+						break;
+					case 4: System.out.println("Exiting...");
+						exit = true;
+						break;
+				}			
+			} 
+			else System.out.print("\nNo more available slots.\n");
 		}	
 	}	
 	
+	protected boolean addToSlot(Volunteer newVolunteer, int dutyType, int max){
+		if (max == 0){
+			System.out.println("No slots available for this duty level.");
+			return false;
+		} else {
+			if (dutyType == 1) {
+				if (lightVolunteers == null) {
+					lightVolunteers = new LinkedList<Volunteer>();
+				} else {
+					lightVolunteers.add(newVolunteer);
+					totalVolunteers = totalVolunteers + 1;
+					totalSlotsAvailable = totalSlotsAvailable - 1;
+					lightSlotsAvailable = lightSlotsAvailable - 1;
+					System.out.println("Congratulation, you have successfully sign-up to volunteer!\n");				
+					return true;
+				}				
+			} else if (dutyType == 2) {
+				if (mediumVolunteers == null) {
+					mediumVolunteers = new LinkedList<Volunteer>();
+				} else {
+					mediumVolunteers.add(newVolunteer);
+					totalVolunteers = totalVolunteers + 1;
+					totalSlotsAvailable = totalSlotsAvailable - 1;
+					mediumSlotsAvailable = mediumSlotsAvailable - 1;
+					System.out.println("Congratulation, you have successfully sign-up to volunteer!\n");				
+					return true;
+				}				
+			} else if (dutyType == 3) {
+				if (heavyVolunteers == null) {
+					heavyVolunteers = new LinkedList<Volunteer>();
+				} else {
+					heavyVolunteers.add(newVolunteer);
+					totalVolunteers = totalVolunteers + 1;
+					totalSlotsAvailable = totalSlotsAvailable - 1;
+					heavySlotsAvailable = heavySlotsAvailable - 1;
+					System.out.println("Congratulation, you have successfully sign-up to volunteer!\n");				
+					return true;
+				}				
+			} 
+		}		
+		return false;
+	}
 	/**
 	 * Append job's information to a string.
 	 * @return job's information as a string.
 	 */
 	public String toString() {	
 		StringBuilder jobSummary = new StringBuilder(140);
-		jobSummary.append("Job ID:          " + jobID + "\n");
-		jobSummary.append("Park Manager:    " + jobManager + "\n");
-		jobSummary.append("Job Date:        ");
+		jobSummary.append("Job ID:                 " + jobID + "\n");
+		jobSummary.append("Park Manager:           " + jobManager + "\n");
+		jobSummary.append("Job Date:               ");
 		jobSummary.append(jobDate.get(Calendar.MONTH) + 1 + "/" +
 						  jobDate.get(Calendar.DAY_OF_MONTH) + "/" +
-						  jobDate.get(Calendar.YEAR));
-		jobSummary.append("\n");
-		jobSummary.append("Job Location:    ");
-		jobSummary.append(jobLocation);
-		jobSummary.append("\n");
-		jobSummary.append("Slots Avaliable: ");
-		jobSummary.append(slotsAvailable);
-		jobSummary.append("\n");
-		jobSummary.append("Job Description: ");
-		jobSummary.append(jobDescription);
-		jobSummary.append("\n");
-		jobSummary.append("Start time:      ");
+						  jobDate.get(Calendar.YEAR) + "\n");
+		jobSummary.append("Start time:             ");
 		jobSummary.append(startTime);
 		jobSummary.append("\n");
-		jobSummary.append("Duration:        ");
+		jobSummary.append("Job Location:           ");
+		jobSummary.append(jobLocation);
+		jobSummary.append("\n");
+		jobSummary.append("Light slots avaliable:  ");
+		jobSummary.append(lightSlotsAvailable);
+		jobSummary.append("\n");		
+		jobSummary.append("Medium slots avaliable: ");
+		jobSummary.append(mediumSlotsAvailable);
+		jobSummary.append("\n");		
+		jobSummary.append("Heavy slots avaliable:  ");
+		jobSummary.append(heavySlotsAvailable);
+		jobSummary.append("\n");		
+		jobSummary.append("Job Description:        ");
+		jobSummary.append(jobDescription);
+		jobSummary.append("\n");		
+		jobSummary.append("Duration:               ");
 		jobSummary.append(jobDuration + " days");
 		jobSummary.append("\n");
-		jobSummary.append("Registered Volunteers ");
-		jobSummary.append(volunteers == null ? 0 : volunteers.size());
+		jobSummary.append("Registered Volunteers:  ");
+		jobSummary.append(totalVolunteers);
 		jobSummary.append("\n");
 		return jobSummary.toString();
 	}
@@ -385,13 +502,16 @@ public class Job implements java.io.Serializable{
 		jobSummary.append(jobDate.get(Calendar.MONTH) + 1 + "/" +
 						  jobDate.get(Calendar.DAY_OF_MONTH) + "/" +
 						  jobDate.get(Calendar.YEAR) + "    ");
-		jobSummary.append(startTime + "   ");
 		jobSummary.append(jobDuration + " days\t");
-		jobSummary.append(slotsAvailable + "\t");
-		jobSummary.append((volunteers == null ? 0 : volunteers.size()) + "\t");
-		jobSummary.append(jobLocation + "\t\t");		
-		jobSummary.append(jobManager + "\t");		
+		jobSummary.append(totalSlotsAvailable + "\t");
+		jobSummary.append(jobManager + "\t");
+		jobSummary.append(jobLocation + "\t   ");		
 		jobSummary.append(jobDescription + "\t");
 		return jobSummary.toString();
+	}
+
+
+	public void deleteJob() {
+		// To Do
 	}
 }

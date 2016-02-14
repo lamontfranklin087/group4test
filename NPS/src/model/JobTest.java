@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.junit.Test;
@@ -27,19 +28,21 @@ public class JobTest {
 	 */
 	@Test
 	public void testEnterJobLocation() {
-		Job testJob = new Job();
-		
-		String input = "Tacoma Park";
+		Job testJob = new Job();		
+		String input = "1";
 		
 	    InputStream in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.enterJobLocation();
+	    ArrayList<String> parks = new ArrayList<String>();
+	    parks.add("Dash Point Park in Federal Way");
+	    testJob.enterJobLocation(parks);
 	    
-	    assertTrue(testJob.getJobLocation().equals("Tacoma Park"));
+	    assertTrue(testJob.getJobLocation().equals("Dash Point Park in Federal Way"));
 	}
 
 	/**
 	 * Test method for {@link model.Job#enterDate()}.
+	 * Test enterDate only if data is in range from today to 90 days ahead.
 	 */
 	@Test
 	public void testEnterDate() {
@@ -54,9 +57,27 @@ public class JobTest {
 	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
 	    assertTrue(testJob.getDate().get(Calendar.YEAR) == 2016);
 	}
+	
+	/**
+	 * Test method for {@link model.Job#setJobID()}.
+	 */
+	@Test
+	public void testSetJobID() {
+		//Setting up next ID happening once before login
+		Job testJob = new Job();				
+	    testJob.setJobID(1006);	
+	    
+	    //This is after login when manager tries to create new job
+	    Job testJob2 = new Job();
+	    System.out.println(testJob2.getJobID());
+	    assertTrue(testJob2.getJobID() == 1007);
+	}
+	
 
 	/**
 	 * Test method for {@link model.Job#enterJobDuration()}.
+	 * Test only if duration time is 1 or 2, 
+	 * otherwise method will loop until you enter correct number.
 	 */
 	@Test
 	public void testEnterJobDuration() {
@@ -68,21 +89,6 @@ public class JobTest {
 	    testJob.enterJobDuration();
 	    
 	    assertTrue(testJob.getJobDuration() == 2);	    
-	}
-
-	/**
-	 * Test method for {@link model.Job#enterJobSlot()}.
-	 */
-	@Test
-	public void testEnterJobSlot() {
-		Job testJob = new Job();
-		String input = "6";
-		
-		InputStream in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.enterJobSlot();
-	    
-	    assertTrue(testJob.getAvailableSlots() == 6);
 	}
 
 	/**
@@ -147,7 +153,6 @@ public class JobTest {
 	    input = "Tacoma Park";		
 	    in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.enterJobLocation();
 	    	    
 	    input = "8:00 AM";		
 		in = new ByteArrayInputStream(input.getBytes());
@@ -186,41 +191,8 @@ public class JobTest {
 		Job testJob = new Job();
 		
 		Volunteer vol = new Volunteer(null, null, null, null);
-		
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    PrintStream ps = new PrintStream(baos);
-	    PrintStream old = System.out;
-	    System.setOut(ps);    
-	    testJob.addVolunteer(vol);
-	    System.out.flush();
-	    System.setOut(old);
-	    
-	    assertTrue(baos.toString().equals("No more available slots.\n"));
-	    
-	    String input = "2";
-	    
-		InputStream in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.enterJobSlot();
-	    
-	    testJob.addVolunteer(vol);
-	    assertTrue(testJob.getVolunteers().size() == 1);
-	    
-	    testJob.addVolunteer(vol);
-	    assertTrue(testJob.getVolunteers().size() == 2);
-	    
-	    testJob.addVolunteer(vol);
-	    baos = new ByteArrayOutputStream();
-	    ps = new PrintStream(baos);
-	    old = System.out;
-	    System.setOut(ps);    
-	    testJob.addVolunteer(vol);
-	    System.out.flush();
-	    System.setOut(old);
-	    
-	    assertTrue(baos.toString().equals("No more available slots.\n"));
 	}
-	
+		
 	/**
 	 * Test method for {@link model.Job#deleteJob()}.
 	 */
@@ -228,13 +200,9 @@ public class JobTest {
 	public void testToString() {
 		
 		Job testJob = new Job();
-		String input = "6";
-		
-		InputStream in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.enterJobSlot();
-	    		
-	    input = "3/16/2016";		
+		String input = "3/16/2016";		
+		InputStream in = new ByteArrayInputStream(input.getBytes());	    
+	    				
 		in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
 	    testJob.enterDate();
@@ -249,10 +217,12 @@ public class JobTest {
 	    System.setIn(in);
 	    testJob.enterJobDuration();
 	    
-	    input = "Tacoma Park";		
+	    input = "1";		
 	    in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.enterJobLocation();
+	    System.setIn(in);	    
+	    ArrayList<String> parks = new ArrayList<String>();
+	    parks.add("Dash Point Park in Federal Way");
+        testJob.enterJobLocation(parks);
 	    	    
 	    input = "8:00 AM";		
 		in = new ByteArrayInputStream(input.getBytes());
@@ -263,14 +233,14 @@ public class JobTest {
 	    testJob.addVolunteer(vol);
 	    	    	    
 	    assertTrue(testJob.getAvailableSlots() == 6);
+	    	            
 	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 16);
 	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
 	    assertTrue(testJob.getDate().get(Calendar.YEAR) == 2016);
 	    assertTrue(testJob.getDescription().equals("Build Walk Path"));
 	    assertTrue(testJob.getJobDuration() == 2);
-	    assertTrue(testJob.getJobLocation().equals("Tacoma Park"));
+	    assertTrue(testJob.getJobLocation().equals("Dash Point Park in Federal Way"));
 	    assertTrue(testJob.getStartTime().equals("8:00 AM"));
-	    assertTrue(testJob.getVolunteers().size() == 1);
 	    
 	    System.out.println("++++++++++++++++++++++++++++++++\n" + 
 	    					testJob.toString() + 
