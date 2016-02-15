@@ -119,6 +119,7 @@ public class SerialStartup {
 			} else {
 				readUser = null;
 			}
+			
 			if (readUser != null) {
 				allUsers.add(readUser);
 			} else {

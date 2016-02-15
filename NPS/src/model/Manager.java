@@ -29,17 +29,45 @@ public final class Manager extends AbstractUser implements Serializable {
 	private LinkedList<Job> jobsAtMyParks = new LinkedList<Job>();
 	ArrayList<String> parksManage;
 
+//	/**
+//	 * Default constructor. David thinks we can delete this. 2/14
+//	 */
+//	public Manager() {
+//		super();
+//	}
+	
 	/**
-	 * Default constructor.
+	 * Parameterized constructor
+	 * @param theFirstName
+	 * @param theLastName
+	 * @param theEmail
+	 * @param thePassword
+	 * @param parksList
 	 */
-	public Manager() {
-		super();
+	public Manager(String theFirstName, String theLastName, String theEmail,
+			String thePassword, ArrayList<String> theParksList) {
+		super(theFirstName, theLastName, theEmail, thePassword);
+		parksManage = theParksList;
 	}
 	
-	protected Manager(String theFirstName, String theLastName, String theEmail,
-			String thePassword) {
-		super(theFirstName, theLastName, theEmail, thePassword);
+	public LinkedList<Job> getMyJobs() {
+		return jobsAtMyParks;
 	}
+	
+	public int getNumberOfJobs() {
+		int i = 0;
+		while(!jobsAtMyParks.isEmpty()) {
+			i++;
+			jobsAtMyParks.removeFirst();
+		}
+		return i;
+	}
+	
+	/* David thinks we can delete this. 2/14*/
+//	public Manager(String theFirstName, String theLastName, String theEmail,
+//			String thePassword) {
+//		super(theFirstName, theLastName, theEmail, thePassword);
+//	}
 	
 	@Override
 	public void viewSumAllJobs(Collection<Job> allJobs) {
@@ -54,20 +82,6 @@ public final class Manager extends AbstractUser implements Serializable {
 				System.out.println(temp.toStringTable());
 			}			
 		}
-	}
-	
-	/**
-	 * Parameterized constructor
-	 * @param theFirstName
-	 * @param theLastName
-	 * @param theEmail
-	 * @param thePassword
-	 * @param parksList
-	 */
-	protected Manager(String theFirstName, String theLastName, String theEmail,
-			String thePassword, ArrayList<String> parksList) {
-		super(theFirstName, theLastName, theEmail, thePassword);
-		parksManage = parksList;
 	}
 
 	@Override
@@ -214,7 +228,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * Create new job.
 	 * @param allJobs is a list of all Jobs.
 	 */
-	private void submitNewJob(Collection<Job> allJobs) {
+	protected void submitNewJob(Collection<Job> allJobs) {
 		if (allJobs.size() < MAX_NUMBER_JOBS) {
 			Job newJob = new Job();
 			newJob.createJob(getFirstName(), getLastName(), parksManage);			
@@ -265,6 +279,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	 */
 	private void update(Collection<Job> allJobs) {
 		jobsAtMyParks = new LinkedList<Job>();
+		
 		boolean iHaveJobs = false;
 		if (allJobs != null) {			
 			Job temp;
@@ -287,8 +302,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	 */
 	public String toString() {		
 		StringBuilder userSummary = new StringBuilder();
-		userSummary.append("Status: Park Manager");
-		userSummary.append("\n");
+		userSummary.append("Status: Park Manager\n");
 		userSummary.append("Name: ");
 		userSummary.append(getFirstName());
 		userSummary.append(" ");
