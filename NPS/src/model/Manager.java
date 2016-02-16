@@ -115,7 +115,8 @@ public final class Manager extends AbstractUser implements Serializable {
 					break;
 				case 2: deleteJob(allJobs);
 					break;
-				case 3: editJob(allJobs);
+				case 3: 
+					editJob(allJobs);
 					break;
 				case 4: viewSumAllJobs(allJobs);
 					break;
@@ -170,7 +171,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * Edit job's fields.
 	 * @param allJobs is a list of all Jobs.
 	 */
-	private void editJob(Collection<Job> allJobs) {
+	private boolean editJob(Collection<Job> allJobs) {
 		System.out.println("Enter Job's ID number or 0 to exit:");
 		int jobIDTemp = getNumber();
 		if (jobIDTemp > 0) {
@@ -178,9 +179,20 @@ public final class Manager extends AbstractUser implements Serializable {
 			if (foundJob == null) {
 				System.out.println("No job with ID " + jobIDTemp);
 			} else {
-				foundJob.editJob(parksManage);
+				Calendar tempDate = foundJob.enterDate();
+				if (tempDate != null) {
+					boolean allowChangeJob = jobsIn7Days(tempDate, allJobs);					
+					if (allowChangeJob) {	
+						foundJob.setDate(tempDate);
+						foundJob.editJob(parksManage);
+						return true;
+					} else {				
+						System.out.println("A job can't be edited because you are to busy for that week.");						
+					}
+				}
 			}
 		}		
+		return false;
 	}
 
 	/**
@@ -206,24 +218,33 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * Create new job.
 	 * @param allJobs is a list of all Jobs.
 	 */
-	private void submitNewJob(Collection<Job> allJobs) {
+	private boolean submitNewJob(Collection<Job> allJobs) {
 		if (allJobs.size() < MAX_NUMBER_JOBS) {
 			Job newJob = new Job();
-			newJob.createJob(getFirstName(), getLastName(), parksManage);			
-			boolean allowCreateJob = jobsIn7Days(newJob.getDate(), allJobs);
-			if (allowCreateJob) {			
-				System.out.println(newJob.toString());
-				System.out.println("1. To confirm job\n2. To exit without saving job");
-				if (getNumber() == 1) {
-					allJobs.add(newJob);
-					update(allJobs);
-				}
-			} else {
-				System.out.println("A job can't be added because you are to busy for that week.");
+			Calendar tempDate = newJob.enterDate();	
+			
+			if (tempDate != null) {
+				boolean allowCreateJob = jobsIn7Days(tempDate, allJobs);	
+				if (allowCreateJob) {		
+					newJob.setDate(tempDate);
+					newJob.createJob(getFirstName(), getLastName(), parksManage);		
+					System.out.println(newJob.toString());
+					System.out.println("1. To confirm job\n2. To exit without saving job");
+					if (getNumber() == 1) {
+						allJobs.add(newJob);
+						update(allJobs);
+						return true;
+					}
+				} else {				
+					System.out.println("A job can't be added because you are to busy for that week.");
+					return false;
+				}	
 			}
 		} else {
 			System.out.println("A job can't be added because the total number of pending jobs is currently 30.");
+			return false;			
 		}		
+		return false;
 	}
 	/**
 	 * Checking: if there during any consecutive 7 day period 

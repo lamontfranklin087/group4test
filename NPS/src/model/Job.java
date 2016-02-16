@@ -64,10 +64,10 @@ public class Job implements java.io.Serializable{
 		jobLocation = null;
 		jobDate = null;
 		jobDuration = 0;
-		totalSlotsAvailable = 0;
-		lightSlotsAvailable = 0;
-		mediumSlotsAvailable = 0;
-		heavySlotsAvailable = 0;
+		totalSlotsAvailable = 3;
+		lightSlotsAvailable = 1;
+		mediumSlotsAvailable = 1;
+		heavySlotsAvailable = 1;
 		jobDescription = null;
 		startTime = null;
 		totalVolunteers = 0;
@@ -80,7 +80,6 @@ public class Job implements java.io.Serializable{
 	public void createJob(String firstName, String lastName, ArrayList<String> parksManage) {
 		jobManager = firstName + " " + lastName;
 		enterJobLocation(parksManage);		
-		enterDate();
 		enterStartTime();
 		enterJobDuration();
 		enterJobSlot();		
@@ -113,50 +112,56 @@ public class Job implements java.io.Serializable{
 	 * Set job's date MM/DD/YYYY. 
 	 * Doesn't  allow to enter past dates and dates more them 90 days in future .
 	 */
-	protected void enterDate() {	
+	public Calendar enterDate() {	
 		keyboard = new Scanner(System.in);
-		do {								
-			try {				
-				System.out.print("\nEnter job date: (MM/dd/yyyy) ");			
-				String[] mystring = (keyboard.nextLine()).split("/");
-				Calendar currentDate = new GregorianCalendar();
-				Calendar mydate = new GregorianCalendar();
-				
-				int myDate = Integer.parseInt(mystring[1]);
-				int myYear = Integer.parseInt(mystring[2]);
-				int myMonth = Integer.parseInt(mystring[0]) - 1;
-								
-				mydate.set(Calendar.YEAR, myYear);
-				mydate.set(Calendar.MONTH, myMonth);
-				mydate.set(Calendar.DAY_OF_MONTH, myDate);	
-				
-				int curDate = currentDate.get(Calendar.DAY_OF_MONTH);
-				int curMonth = currentDate.get(Calendar.MONTH);
-				int curYear = currentDate.get(Calendar.YEAR);
-				
-				int resultDays = (myYear - currentDate.get(Calendar.YEAR)) * 12 * 30 
-						+ Math.abs(myMonth - currentDate.get(Calendar.MONTH) - 1) * 30
-						+ Math.abs(myDate - currentDate.get(Calendar.DATE));
-								
-				if (myYear < curYear || myMonth > 11 || myDate > 31 || myDate <= 0) {
-					System.out.print("\nYou can't enter past date. ");
-				} else if (myYear == curYear && myMonth < curMonth) {
-					System.out.print("\nYou can't enter past date. ");
-				} else if (myYear == curYear && myMonth == curMonth && myDate < curDate) {
-					System.out.print("\nYou can't enter past date. ");
-				} else if (resultDays > 90) {
-					System.out.print("\nYou can't enter date more then 90 days ahead. ");
-				} else {
-					jobDate = mydate;
-					break;
-				}
-			} catch (NumberFormatException e) {
-				System.out.print("\nWrong Date Format ");
-			} catch (ArrayIndexOutOfBoundsException e) {
-				System.out.print("\nWrong Date Format ");
+		try {				
+			System.out.print("\nEnter job date: (MM/dd/yyyy) ");			
+			String[] mystring = (keyboard.nextLine()).split("/");
+			Calendar currentDate = new GregorianCalendar();
+			Calendar mydate = new GregorianCalendar();
+			
+			int myDate = Integer.parseInt(mystring[1]);
+			int myYear = Integer.parseInt(mystring[2]);
+			int myMonth = Integer.parseInt(mystring[0]) - 1;
+							
+			mydate.set(Calendar.YEAR, myYear);
+			mydate.set(Calendar.MONTH, myMonth);
+			mydate.set(Calendar.DAY_OF_MONTH, myDate);	
+			
+			int curDate = currentDate.get(Calendar.DAY_OF_MONTH);
+			int curMonth = currentDate.get(Calendar.MONTH);
+			int curYear = currentDate.get(Calendar.YEAR);
+			
+			int resultDays = (myYear - currentDate.get(Calendar.YEAR)) * 12 * 30 
+					+ Math.abs(myMonth - currentDate.get(Calendar.MONTH)) * 30
+					+ Math.abs(myDate - currentDate.get(Calendar.DATE));
+							
+			if (myYear < curYear || myMonth > 11 || myDate > 31 || myDate <= 0) {
+				System.out.print("\nYou can't enter past date. ");
+				return null;
+			} else if (myYear == curYear && myMonth < curMonth) {
+				System.out.print("\nYou can't enter past date. ");
+				return null;
+			} else if (myYear == curYear && myMonth == curMonth && myDate < curDate) {
+				System.out.print("\nYou can't enter past date. ");
+				return null;
+			} else if (resultDays > 90) {
+				System.out.print("\nYou can't enter date more then 90 days ahead. ");
+				return null;
+			} else {
+				return mydate;
 			}
-		} while (true);
-		
+		} catch (NumberFormatException e) {
+			System.out.print("\nWrong Date Format ");
+			return null;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.print("\nWrong Date Format ");
+			return null;
+		}	
+	}
+	
+	public void setDate(Calendar newDate) {
+		jobDate = newDate;
 	}
 	
 	/**
@@ -235,31 +240,25 @@ public class Job implements java.io.Serializable{
 		while (true) {
 			System.out.println("\nSelect one of the folowing options:");
 			System.out.println("1. Change Job's Location:   " + jobLocation);
-			System.out.println("2. Change Job's Date:        " 
-								+ jobDate.get(Calendar.MONTH) + "/"
-								+ jobDate.get(Calendar.DATE) + "/"
-								+ jobDate.get(Calendar.YEAR));
-			System.out.println("3. Change Job's Duration:    " + jobDuration + " days");
-			System.out.println("4. Change Job's Slots:       " + totalSlotsAvailable);
-			System.out.println("5. Change Job's Description: " + jobDescription);
-			System.out.println("6. Change Job's Start Time:  " + startTime);
-			System.out.println("7. Exit ");
+			System.out.println("2. Change Job's Duration:    " + jobDuration + " days");
+			System.out.println("3. Change Job's Slots:       " + totalSlotsAvailable);
+			System.out.println("4. Change Job's Description: " + jobDescription);
+			System.out.println("5. Change Job's Start Time:  " + startTime);
+			System.out.println("6. Exit ");
 			
 	    	int userTyped = getNumber();
 	    	
 	    	if (userTyped == 1) {
 	    		enterJobLocation(parksManage);
-	    	} else if (userTyped == 2) {	    		
-	    		enterDate();
-	    	} else if (userTyped == 3) {
+	    	} else if (userTyped == 2) {
 	    		enterJobDuration();
-	    	} else if (userTyped == 4) {
+	    	} else if (userTyped == 3) {
 	    		enterJobSlot();
-	    	} else if (userTyped == 5) {
+	    	} else if (userTyped == 4) {
 	    		enterJobDescription();
-	    	} else if (userTyped == 6) {
+	    	} else if (userTyped == 5) {
 	    		enterStartTime();
-	    	} else if (userTyped == 7) {	    		
+	    	} else if (userTyped == 6) {	    		
 	    		break;
 	    	} 
 		}
@@ -352,6 +351,38 @@ public class Job implements java.io.Serializable{
 	
 	/**
 	 * Accessor.
+	 * @return job's totalSlotsAvailable.
+	 */
+	public int getTotalSlotsAvailable() {
+		return totalSlotsAvailable;
+	}
+	
+	/**
+	 * Accessor.
+	 * @return job's lightSlotsAvailable.
+	 */
+	public int getLightSlotsAvailable() {
+		return lightSlotsAvailable;
+	}
+	
+	/**
+	 * Accessor.
+	 * @return job's mediumSlotsAvailable.
+	 */
+	public int getMediumSlotsAvailable() {
+		return mediumSlotsAvailable;
+	}
+	
+	/**
+	 * Accessor.
+	 * @return job's heavySlotsAvailable.
+	 */
+	public int getHeavySlotsAvailable() {
+		return heavySlotsAvailable;
+	}
+	
+	/**
+	 * Accessor.
 	 * @return a list of volunteers for a job.
 	 */
 	public LinkedList<Volunteer> getVolunteers() {
@@ -421,37 +452,34 @@ public class Job implements java.io.Serializable{
 		} else {
 			if (dutyType == 1) {
 				if (lightVolunteers == null) {
-					lightVolunteers = new LinkedList<Volunteer>();
-				} else {
-					lightVolunteers.add(newVolunteer);
-					totalVolunteers = totalVolunteers + 1;
-					totalSlotsAvailable = totalSlotsAvailable - 1;
-					lightSlotsAvailable = lightSlotsAvailable - 1;
-					System.out.println("Congratulation, you have successfully sign-up to volunteer!\n");				
-					return true;
-				}				
+					lightVolunteers = new LinkedList<Volunteer>();					
+				} 
+				lightVolunteers.add(newVolunteer);
+				totalVolunteers = totalVolunteers + 1;
+				totalSlotsAvailable = totalSlotsAvailable - 1;
+				lightSlotsAvailable = lightSlotsAvailable - 1;
+				System.out.println("Congratulation, you have successfully sign-up to volunteer!\n");				
+				return true;								
 			} else if (dutyType == 2) {
 				if (mediumVolunteers == null) {
 					mediumVolunteers = new LinkedList<Volunteer>();
-				} else {
-					mediumVolunteers.add(newVolunteer);
-					totalVolunteers = totalVolunteers + 1;
-					totalSlotsAvailable = totalSlotsAvailable - 1;
-					mediumSlotsAvailable = mediumSlotsAvailable - 1;
-					System.out.println("Congratulation, you have successfully sign-up to volunteer!\n");				
-					return true;
-				}				
+				}
+				mediumVolunteers.add(newVolunteer);
+				totalVolunteers = totalVolunteers + 1;
+				totalSlotsAvailable = totalSlotsAvailable - 1;
+				mediumSlotsAvailable = mediumSlotsAvailable - 1;
+				System.out.println("Congratulation, you have successfully sign-up to volunteer!\n");				
+				return true;				
 			} else if (dutyType == 3) {
 				if (heavyVolunteers == null) {
 					heavyVolunteers = new LinkedList<Volunteer>();
-				} else {
-					heavyVolunteers.add(newVolunteer);
-					totalVolunteers = totalVolunteers + 1;
-					totalSlotsAvailable = totalSlotsAvailable - 1;
-					heavySlotsAvailable = heavySlotsAvailable - 1;
-					System.out.println("Congratulation, you have successfully sign-up to volunteer!\n");				
-					return true;
-				}				
+				} 
+				heavyVolunteers.add(newVolunteer);
+				totalVolunteers = totalVolunteers + 1;
+				totalSlotsAvailable = totalSlotsAvailable - 1;
+				heavySlotsAvailable = heavySlotsAvailable - 1;
+				System.out.println("Congratulation, you have successfully sign-up to volunteer!\n");				
+				return true;								
 			} 
 		}		
 		return false;

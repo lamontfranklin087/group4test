@@ -45,15 +45,54 @@ public class JobTest {
 	public void testEnterDate() {
 		Job testJob = new Job();
 		
-		String input = "3/16/2016";		
+		String input = "3/17/2016";	//correct Date
 		InputStream in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.enterDate();
+	    Calendar tempDate = testJob.enterDate();
+	    testJob.setDate(tempDate);
 	    
-	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 16);
+	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 17);
 	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
 	    assertTrue(testJob.getDate().get(Calendar.YEAR) == 2016);
+	    
+	    input = "5/16/2016";	//Future date - more then 3 months	
+		in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);	
+	    
+	    assertTrue(testJob.enterDate() == null);
+	    	    
+	    input = "2/14/2016";	//Past date	
+		in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    
+	    assertTrue(testJob.enterDate() == null);	    
 	}
+	
+	/**
+	 * Test method for {@link model.Job#addToSlot()}.
+	 */
+	@Test
+	public void testAddToSlot() {
+		Job testJob = new Job();
+		Volunteer newVolunteer = new Volunteer("Raylene", "Depew",
+				"RayleneDepew@mail.com",  "pass");
+		
+		testJob.addToSlot(newVolunteer, 1, 1);		
+		assertTrue(testJob.getVolunteers().size() == 1);		
+		testJob.addToSlot(newVolunteer, 1, testJob.getLightSlotsAvailable());
+		assertTrue(testJob.getVolunteers().size() == 1);
+		
+		testJob.addToSlot(newVolunteer, 2, 1);		
+		assertTrue(testJob.getVolunteers().size() == 2);		
+		testJob.addToSlot(newVolunteer, 2, testJob.getMediumSlotsAvailable());
+		assertTrue(testJob.getVolunteers().size() == 2);
+		
+		testJob.addToSlot(newVolunteer, 3, 1);		
+		assertTrue(testJob.getVolunteers().size() == 3);		
+		testJob.addToSlot(newVolunteer, 3, testJob.getHeavySlotsAvailable());
+		assertTrue(testJob.getVolunteers().size() == 3);
+	}
+	
 	
 	/**
 	 * Test method for {@link model.Job#setJobID()}.
@@ -130,7 +169,7 @@ public class JobTest {
 	    				
 		in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.enterDate();
+	    testJob.setDate(testJob.enterDate());
 	    	    
 	    input = "Build Walk Path";		
 		in = new ByteArrayInputStream(input.getBytes());
