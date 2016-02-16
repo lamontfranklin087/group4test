@@ -86,7 +86,7 @@ public abstract class AbstractUser implements User,Serializable{
 	/**
 	   * This method sets the user's email.
 	   * This allows for users to update or change their email.
-	   * @param email The new email the user would like to be contacted at.
+	   * @param theEmail The new email the user would like to be contacted at.
 	   */
 	public void setEmail(String theEmail) {
 		this.email = theEmail;
@@ -185,9 +185,9 @@ public abstract class AbstractUser implements User,Serializable{
 	
 	/**
 	 * Iterator for a job list.
-	 * @param jobID
-	 * @param allJobs
-	 * @return
+	 * @param jobID job's ID.
+	 * @param allJobs List of all jobs in a program.
+	 * @return found job.
 	 */
 	protected Job findJob(int jobID, Collection<Job> allJobs) {
 		if (allJobs != null) {

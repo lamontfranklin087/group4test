@@ -141,7 +141,7 @@ public class Job implements java.io.Serializable{
 	
 	/**
 	 * Set job's location.
-	 * @param parksManage 
+	 * @param parksManage List of all parks for this manager.
 	 */
 	protected void enterJobLocation(ArrayList<String> parksManage) {
 		if (parksManage != null && parksManage.size() > 0) {
@@ -160,7 +160,9 @@ public class Job implements java.io.Serializable{
 	
 	/**
 	 * Set job's date MM/DD/YYYY. 
-	 * Doesn't  allow to enter past dates and dates more them 90 days in future .
+	 * Doesn't  allow to enter past dates and dates more them 90 days in future.
+	 * @param allJobs is a list of all jobs.
+	 * @return true if date was set, otherwise false.
 	 */
 	protected boolean enterDate(Collection<Job> allJobs) {	
 		keyboard = new Scanner(System.in);
@@ -213,10 +215,9 @@ public class Job implements java.io.Serializable{
 	
 	/**
 	 * Checking: if there during any consecutive 7 day period 
-	 * more than 5 jobs or not.
-	 * @param newly createdJob
+	 * more than 5 jobs or not.	 
 	 * @param allJobs is a list of all Jobs.
-	 * @param mydate 
+	 * @param mydate is user entered date.
 	 * @return false if there more 5 or more jobs, otherwise true.
 	 */
 	protected boolean jobsIn7Days(Collection<Job> allJobs, Calendar mydate) {
@@ -261,6 +262,8 @@ public class Job implements java.io.Serializable{
 	/**
 	 * Set the number of available slots.
 	 * edited 2/10/16 LF slot method to add job duty levels
+	 * @param duty a string of duty job slot.
+	 * @return number of slots for this job.
 	 */
 	protected int fillJobSlot(String duty) {	
 
