@@ -132,8 +132,10 @@ public abstract class AbstractUser implements User,Serializable{
 				temp = itr.next();				
 				System.out.println(temp.toStringTable());										
 			}
+			System.out.println("Press Enter to continue.");
+			keyboard.nextLine();//consumer only
 		} else {
-			System.out.println("No jibs available at this time.");
+			System.out.println("No jobs available at this time.");
 		}
 	}
 	
