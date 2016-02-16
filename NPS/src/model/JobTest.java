@@ -9,6 +9,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.LinkedList;
 
 import org.junit.Test;
 
@@ -39,33 +41,33 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#enterDate()}.
-	 * Test enterDate only if data is in range from today to 90 days ahead.
+	 * Test enterDate.
 	 */
 	@Test
 	public void testEnterDate() {
+		Collection<Job> allJobs = new LinkedList<Job>();
 		Job testJob = new Job();
 		
-		String input = "3/17/2016";	//correct Date
+		String input = "5/1/2016";	//correct Date
 		InputStream in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    Calendar tempDate = testJob.enterDate();
-	    testJob.setDate(tempDate);
+	    testJob.enterDate(allJobs);
 	    
-	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 17);
-	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
+	    assertTrue(testJob.getDate().get(Calendar.DATE) == 1);
+	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 5 - 1);
 	    assertTrue(testJob.getDate().get(Calendar.YEAR) == 2016);
 	    
 	    input = "5/16/2016";	//Future date - more then 3 months	
 		in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);	
 	    
-	    assertTrue(testJob.enterDate() == null);
+	    assertFalse(testJob.enterDate(allJobs));
 	    	    
 	    input = "2/14/2016";	//Past date	
 		in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
 	    
-	    assertTrue(testJob.enterDate() == null);	    
+	    assertFalse(testJob.enterDate(allJobs));	    
 	}
 	
 	/**
@@ -162,14 +164,14 @@ public class JobTest {
 	 */
 	@Test
 	public void testToString() {
-		
+		Collection<Job> allJobs = new LinkedList<Job>();
 		Job testJob = new Job();
 		String input = "3/16/2016";		
 		InputStream in = new ByteArrayInputStream(input.getBytes());	    
 	    				
 		in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.setDate(testJob.enterDate());
+	    testJob.enterDate(allJobs);
 	    	    
 	    input = "Build Walk Path";		
 		in = new ByteArrayInputStream(input.getBytes());

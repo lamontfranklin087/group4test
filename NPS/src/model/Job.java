@@ -2,7 +2,9 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -15,7 +17,7 @@ import java.util.Scanner;
  */
 public class Job implements java.io.Serializable{
 	
-	public final int DUTY_OPTIONS = 3;
+	public final int DUTY_OPTIONS = 4;
 	/* Serial number since job is Serializable.*/
 	private static final long serialVersionUID = 1L;
 	
@@ -57,6 +59,10 @@ public class Job implements java.io.Serializable{
 	
 	private transient Scanner keyboard;
 	
+	private int MAX_JOBS_IN_7_CONSECUTIVE_DAYS = 5;
+	
+	private final int MAX_NUMBER_JOBS = 30;	
+	
 	
 	public Job() {
 		jobID = FIRST_ID_NUM + (++totalJobs);
@@ -77,13 +83,23 @@ public class Job implements java.io.Serializable{
 	}
 			
 	
-	public void createJob(String firstName, String lastName, ArrayList<String> parksManage) {
-		jobManager = firstName + " " + lastName;
-		enterJobLocation(parksManage);		
-		enterStartTime();
-		enterJobDuration();
-		enterJobSlot();		
-		enterJobDescription();
+	public boolean createJob(String firstName, String lastName, 
+						ArrayList<String> parksManage, Collection<Job> allJobs) {
+		if (allJobs.size() < MAX_NUMBER_JOBS) {
+			boolean result = enterDate(allJobs);
+			if (result) {
+				jobManager = firstName + " " + lastName;
+				enterJobLocation(parksManage);		
+				enterStartTime();
+				enterJobDuration();
+				enterJobSlot();		
+				enterJobDescription();
+			}
+			return result;
+		} else {
+			System.out.println("A job can't be added because the total number of pending jobs is currently 30.");
+			return false;			
+		}
 	}
 
 	protected void setJobID(int nextID) {
@@ -112,13 +128,13 @@ public class Job implements java.io.Serializable{
 	 * Set job's date MM/DD/YYYY. 
 	 * Doesn't  allow to enter past dates and dates more them 90 days in future .
 	 */
-	public Calendar enterDate() {	
+	protected boolean enterDate(Collection<Job> allJobs) {	
 		keyboard = new Scanner(System.in);
 		try {				
 			System.out.print("\nEnter job date: (MM/dd/yyyy) ");			
 			String[] mystring = (keyboard.nextLine()).split("/");
 			Calendar currentDate = new GregorianCalendar();
-			Calendar mydate = new GregorianCalendar();
+			Calendar mydate = new GregorianCalendar();		
 			
 			int myDate = Integer.parseInt(mystring[1]);
 			int myYear = Integer.parseInt(mystring[2]);
@@ -128,42 +144,75 @@ public class Job implements java.io.Serializable{
 			mydate.set(Calendar.MONTH, myMonth);
 			mydate.set(Calendar.DAY_OF_MONTH, myDate);	
 			
-			int curDate = currentDate.get(Calendar.DAY_OF_MONTH);
+			int curDate = currentDate.get(Calendar.DATE);
 			int curMonth = currentDate.get(Calendar.MONTH);
 			int curYear = currentDate.get(Calendar.YEAR);
 			
-			int resultDays = (myYear - currentDate.get(Calendar.YEAR)) * 12 * 30 
-					+ Math.abs(myMonth - currentDate.get(Calendar.MONTH)) * 30
-					+ Math.abs(myDate - currentDate.get(Calendar.DATE));
-							
-			if (myYear < curYear || myMonth > 11 || myDate > 31 || myDate <= 0) {
-				System.out.print("\nYou can't enter past date. ");
-				return null;
-			} else if (myYear == curYear && myMonth < curMonth) {
-				System.out.print("\nYou can't enter past date. ");
-				return null;
-			} else if (myYear == curYear && myMonth == curMonth && myDate < curDate) {
-				System.out.print("\nYou can't enter past date. ");
-				return null;
-			} else if (resultDays > 90) {
-				System.out.print("\nYou can't enter date more then 90 days ahead. ");
-				return null;
-			} else {
-				return mydate;
+			int resultDays = (myYear - curYear) * 12 * 30 
+					+ Math.abs(myMonth - curMonth) * 30
+					+ Math.abs(myDate - curDate);
+			
+			int jobDayOfYear = mydate.get(Calendar.DAY_OF_YEAR);
+			int curDayOfYear = currentDate.get(Calendar.DAY_OF_YEAR);
+			
+			if (curYear < myYear) {
+				jobDayOfYear = jobDayOfYear + 365;
 			}
+			
+			
+		 	resultDays = jobDayOfYear - curDayOfYear;
+		 	
+		 	if (resultDays <= 0) {
+		 		System.out.print("\nYou can't enter past date. ");
+				return false;
+		 	} else if (resultDays > 90) {
+		 		System.out.print("\nYou can't enter date more then 90 days ahead. ");
+				return false;
+		 	} else if (!jobsIn7Days(allJobs, mydate)) {
+				System.out.println("A job can't be edited because you are to busy for that week.");
+				return false;
+			} else {
+				jobDate = mydate;
+				return true;
+			}				
 		} catch (NumberFormatException e) {
 			System.out.print("\nWrong Date Format ");
-			return null;
+			return false;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.print("\nWrong Date Format ");
-			return null;
+			return false;
 		}	
 	}
 	
-	public void setDate(Calendar newDate) {
-		jobDate = newDate;
+	/**
+	 * Checking: if there during any consecutive 7 day period 
+	 * more than 5 jobs or not.
+	 * @param newly createdJob
+	 * @param allJobs is a list of all Jobs.
+	 * @param mydate 
+	 * @return false if there more 5 or more jobs, otherwise true.
+	 */
+	protected boolean jobsIn7Days(Collection<Job> allJobs, Calendar mydate) {
+		int jobsIn7Days = 0;	
+		int jobDayOfYear = mydate.get(Calendar.DAY_OF_YEAR);		
+		if (allJobs.size() == 0) {
+			return true;
+		}
+		Iterator<Job> itr = allJobs.iterator();
+		if (allJobs != null && allJobs.size() > 0) {		
+			while (itr.hasNext()) {
+				int temp = itr.next().getDate().get(Calendar.DAY_OF_YEAR);
+				if ((temp <= (jobDayOfYear + 3)) && (temp >= (jobDayOfYear - 3))) {					
+					jobsIn7Days = jobsIn7Days + 1;
+				}				
+			}
+			if (jobsIn7Days < MAX_JOBS_IN_7_CONSECUTIVE_DAYS) {
+				return true;
+			}
+		}
+		return false;
 	}
-	
+		
 	/**
 	 * Set job's duration time in days.
 	 */
@@ -235,30 +284,36 @@ public class Job implements java.io.Serializable{
 	
 	/**
 	 * To edit job's fields.
+	 * @param allJobs 
 	 */
-	public void editJob(ArrayList<String> parksManage) {			
+	public void editJob(ArrayList<String> parksManage, Collection<Job> allJobs) {			
 		while (true) {
 			System.out.println("\nSelect one of the folowing options:");
-			System.out.println("1. Change Job's Location:   " + jobLocation);
-			System.out.println("2. Change Job's Duration:    " + jobDuration + " days");
-			System.out.println("3. Change Job's Slots:       " + totalSlotsAvailable);
-			System.out.println("4. Change Job's Description: " + jobDescription);
-			System.out.println("5. Change Job's Start Time:  " + startTime);
-			System.out.println("6. Exit ");
+			System.out.println("1. Change Job's Date:   " + (jobDate.get(Calendar.MONTH) + 1) + "/" 
+							+ jobDate.get(Calendar.DAY_OF_MONTH) + "/" 
+							+ jobDate.get(Calendar.YEAR));
+			System.out.println("2. Change Job's Location:   " + jobLocation);
+			System.out.println("3. Change Job's Duration:    " + jobDuration + " days");
+			System.out.println("4. Change Job's Slots:       " + totalSlotsAvailable);
+			System.out.println("5. Change Job's Description: " + jobDescription);
+			System.out.println("6. Change Job's Start Time:  " + startTime);
+			System.out.println("7. Exit ");
 			
 	    	int userTyped = getNumber();
 	    	
 	    	if (userTyped == 1) {
+	    		enterDate(allJobs);
+	    	} else if (userTyped == 2){
 	    		enterJobLocation(parksManage);
-	    	} else if (userTyped == 2) {
-	    		enterJobDuration();
 	    	} else if (userTyped == 3) {
-	    		enterJobSlot();
+	    		enterJobDuration();
 	    	} else if (userTyped == 4) {
-	    		enterJobDescription();
+	    		enterJobSlot();
 	    	} else if (userTyped == 5) {
+	    		enterJobDescription();
+	    	} else if (userTyped == 6) {
 	    		enterStartTime();
-	    	} else if (userTyped == 6) {	    		
+	    	} else if (userTyped == 7) {	    		
 	    		break;
 	    	} 
 		}
