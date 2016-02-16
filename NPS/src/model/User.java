@@ -4,7 +4,7 @@ import java.util.Collection;
 
 /**
  * User interface.
- * @author David Humphreys
+ * @author dave1729
  * @version 02/06/2016
  */
 public interface User {	

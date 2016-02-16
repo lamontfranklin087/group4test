@@ -6,15 +6,14 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 /**
- * Creates a Truck object for use in the Easy Street GUI.
+ * Creates a Manager object for use in the Parks Program.
  * 
  * @author dave1729
- * @version 305-3
- * 
+ * @version 2/13/16
  * @author Ihar Lavor
- * @version 02/13/2016 
  * Added Business rules number 1, 2
  */
 public final class Manager extends AbstractUser implements Serializable {
@@ -48,6 +47,9 @@ public final class Manager extends AbstractUser implements Serializable {
 		parksManage = parksList;
 	}
 
+	/**
+	 * Simple name of Manager Class.
+	 */
 	@Override
 	public String getSimpleName() {
 		return "Park Manager";
@@ -152,6 +154,12 @@ public final class Manager extends AbstractUser implements Serializable {
 			temp.setJobID(maxNumber);
 		}
 	}
+	
+	/**
+	 * Displays all the currently pending jobs.
+	 * 
+	 * @param p a collection of the current jobs.
+	 */
 	@Override
 	public void viewSumAllJobs(Collection<Job> p){ 
 		if (jobsAtMyParks != null && jobsAtMyParks.size() > 0) {
@@ -163,6 +171,8 @@ public final class Manager extends AbstractUser implements Serializable {
 				temp = itr.next();				
 				System.out.println(temp.toStringTable());										
 			}
+			System.out.println("Press Enter to return to the Main Menu.");
+			keyboard.nextLine();//consumer
 		}
 	}
 	
@@ -200,6 +210,8 @@ public final class Manager extends AbstractUser implements Serializable {
 				allJobs.remove(temp);
 				update(allJobs);
 				System.out.println("Job with ID " + jobIDTemp + " was deleted.");
+				System.out.println("Press Enter to return to the Main Menu.");
+				keyboard.nextLine();//consumer
 			}
 		}
 	}

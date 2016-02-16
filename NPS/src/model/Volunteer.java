@@ -18,11 +18,26 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		super();
 	}
 
-	protected Volunteer(String theFirstName, String theLastName,
+	/**
+	 * Constructor for the volunteer class.
+	 * 
+	 * @param theFirstName  first name of this volunteer
+	 * @param theLastName  last name for this volunteer
+	 * @param theEmail  the email address registered for this volunteer
+	 * @param thePassword  this volunteer's password
+	 */
+	public Volunteer(String theFirstName, String theLastName,
 			String theEmail, String thePassword) {
 		super(theFirstName, theLastName, theEmail, thePassword);
 	}
 
+	/**
+	 * Prints the main menu for the volunteer class, gets input from the user
+	 * and calls the following menu.
+	 * 
+	 * @param allJobs  a collection of all the pending jobs
+	 * @param allUsers  a collection of all the currently existing users
+	 */
 	@Override
 	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
 		boolean exit = false;
@@ -57,6 +72,11 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		}
 	}
 	
+	/**
+	 * Displays all the jobs that the current volunteer is signed up for.
+	 * 
+	 * @param allJobs  a collection of all the existing jobs
+	 */
 	private void viewMyJobs(Collection<Job> allJobs) {
 		
 		ParksProgram.menuHeader(this);
@@ -82,9 +102,16 @@ public final class Volunteer extends AbstractUser implements Serializable {
 					+ "Slots\t" + "Manager\t\t" + "Locaton\t\t"  
 					+ "\t\tDescription");
 			myJobs.forEach(job->System.out.println(job.toStringTable()));
+			System.out.println("Press Enter to return to the Main Menu.");
+			keyboard.nextLine();//consumer
 		}
 	}
 	
+	/**
+	 * Gives the current volunteer options to sign up for current jobs.
+	 * 
+	 * @param allJobs  a collection of all the existing jobs
+	 */
 	private void jobSignUp(Collection<Job> allJobs) {
 		System.out.println("Please enter Job ID to sign-up or 0 to quit: ");
 		int id = getNumber();
@@ -98,6 +125,8 @@ public final class Volunteer extends AbstractUser implements Serializable {
 					}
 				}
 			});
+			System.out.println("Press Enter to return to the Main Menu.");
+			keyboard.nextLine();//consumer
 		}
 	}
 	
@@ -138,6 +167,11 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		return "Volunteer";
 	}
 
+	/**
+	 * A string representation of this volunteer.
+	 * 
+	 * @return  the resulting string
+	 */
 	public String toString() {		
 		StringBuilder userSummary = new StringBuilder();
 		userSummary.append("Status: Volunteer");

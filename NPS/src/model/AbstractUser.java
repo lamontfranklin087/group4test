@@ -25,7 +25,7 @@ public abstract class AbstractUser implements User,Serializable{
 	private String lastName;
 	private String email;
 	private String password;
-	private transient Scanner keyboard;	
+	protected transient Scanner keyboard;	
 	
 	protected AbstractUser() {
 		firstName = "Test";
@@ -129,6 +129,8 @@ public abstract class AbstractUser implements User,Serializable{
 				temp = itr.next();				
 				System.out.println(temp.toStringTable());										
 			}
+			System.out.println("Press Enter to return to the Main Menu.");
+			keyboard.nextLine();//consumer
 		} else {
 			System.out.println("No jibs available at this time.");
 		}
@@ -145,6 +147,8 @@ public abstract class AbstractUser implements User,Serializable{
 				System.out.println(job.toString());
 				}
 			});
+			System.out.println("Press Enter to return to the Main Menu.");
+			keyboard.nextLine();//consumer
 		}
 		
 	}

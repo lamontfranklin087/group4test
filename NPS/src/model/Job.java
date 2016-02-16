@@ -27,43 +27,63 @@ public class Job implements java.io.Serializable{
 	/* The maximum id will be up to FIRST_ID_NUM*/
 	private static int FIRST_ID_NUM = 0;
 
+	/* Job id for this job.*/
 	private int jobID;
 	
+	/* The manager who manager this job. */
 	private String jobManager;
 	
+	/* The City where the job is to take place. */
 	private String jobLocation;
 	
+	/* Date of job saved as a Calendar object. */
 	private Calendar jobDate;
 	
+	/* The number of days the job is expected to last. */
 	private int jobDuration;
 	
+	/* The number of total available volunteer slots for this job. */
 	private int totalSlotsAvailable;
 	
+	/* The number of light available volunteer slots for this job. */
 	private int lightSlotsAvailable;
 	
+	/* The number of medium available volunteer slots for this job. */
 	private int mediumSlotsAvailable;
 	
+	/* The number of heavy available volunteer slots for this job. */
 	private int heavySlotsAvailable;
 	
+	/* A short job description of the tasks to be completed in this job. */
 	private String jobDescription;
 	
+	/* The start time. e.g. "8:00 AM" */
 	private String startTime;
 	
+	/* The number of total volunteers currently signed up to work. */
 	private int totalVolunteers;
-		
+	
+	/* The number of light volunteers currently signed up to work. */
 	private LinkedList<Volunteer> lightVolunteers;
 	
+	/* The number of medium volunteers currently signed up to work. */
 	private LinkedList<Volunteer> mediumVolunteers;
 	
+	/* The number of heavy volunteers currently signed up to work. */
 	private LinkedList<Volunteer> heavyVolunteers;
 	
+	/* Scanner used for user input. */
 	private transient Scanner keyboard;
 	
+	/* The number of maximum allowable jobs to be pending for any 7 day period. */
 	private int MAX_JOBS_IN_7_CONSECUTIVE_DAYS = 5;
 	
+	/* The max number of jobs that can be pending for all dates. */
 	private final int MAX_NUMBER_JOBS = 30;	
 	
-	
+	/**
+	 * No parameter job constructor.
+	 */
 	public Job() {
 		jobID = FIRST_ID_NUM + (++totalJobs);
 		jobManager = null;
@@ -82,7 +102,15 @@ public class Job implements java.io.Serializable{
 		heavyVolunteers = null;
 	}
 			
-	
+	/**
+	 * 
+	 * 
+	 * @param firstName  first name of Park Manager for this park
+	 * @param lastName  last name of Park Manager for this park
+	 * @param parksManage  an array list of all park names
+	 * @param allJobs  a collection of all pending jobs
+	 * @return  returns a boolean, true if job is created
+	 */
 	public boolean createJob(String firstName, String lastName, 
 						ArrayList<String> parksManage, Collection<Job> allJobs) {
 		if (allJobs.size() < MAX_NUMBER_JOBS) {
@@ -102,9 +130,15 @@ public class Job implements java.io.Serializable{
 		}
 	}
 
+	/**
+	 * Setter for JobId
+	 * 
+	 * @param nextID the new job id.
+	 */
 	protected void setJobID(int nextID) {
 		totalJobs = nextID;
 	}
+	
 	/**
 	 * Set job's location.
 	 * @param parksManage 
