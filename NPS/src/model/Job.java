@@ -176,25 +176,18 @@ public class Job implements java.io.Serializable{
 							
 			mydate.set(Calendar.YEAR, myYear);
 			mydate.set(Calendar.MONTH, myMonth);
-			mydate.set(Calendar.DAY_OF_MONTH, myDate);	
+			mydate.set(Calendar.DAY_OF_MONTH, myDate);			
 			
-			int curDate = currentDate.get(Calendar.DATE);
-			int curMonth = currentDate.get(Calendar.MONTH);
 			int curYear = currentDate.get(Calendar.YEAR);
-			
-			int resultDays = (myYear - curYear) * 12 * 30 
-					+ Math.abs(myMonth - curMonth) * 30
-					+ Math.abs(myDate - curDate);
-			
+						
 			int jobDayOfYear = mydate.get(Calendar.DAY_OF_YEAR);
 			int curDayOfYear = currentDate.get(Calendar.DAY_OF_YEAR);
 			
 			if (curYear < myYear) {
 				jobDayOfYear = jobDayOfYear + 365;
-			}
+			}		
 			
-			
-		 	resultDays = jobDayOfYear - curDayOfYear;
+		 	int resultDays = jobDayOfYear - curDayOfYear;
 		 	
 		 	if (resultDays <= 0) {
 		 		System.out.print("\nYou can't enter past date. ");
