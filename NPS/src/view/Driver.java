@@ -6,7 +6,7 @@ import model.Job;
 import model.ParksProgram;
 
 /**
- * Initiating Main for Parks Program
+ * Initiating Main for Parks Program DAVIDS DRIVER
  * @author David, Ian, Ihar, Lamont
  */
 public class Driver {
