@@ -4,7 +4,7 @@ import java.util.Collection;
 
 /**
  * User interface.
- * @author David Humphreys
+ * @author dave1729
  * @version 02/06/2016
  */
 public interface User {	
@@ -13,11 +13,10 @@ public interface User {
 	public abstract String getSimpleName();
 	
 	/** Print's the main menu for that user and starts their chain of menu's 
-	 * @param allUsers 
-	 * @param allJobs 
+	 * @param allUsers List of all users.
+	 * @param allJobs list of all jobs.
 	 */
 	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);	
-	
 	
 	/**
 	   * This method sets the user's first name.
@@ -37,7 +36,6 @@ public interface User {
 	   * This method sets the user's last name.
 	   * This allows for users to update or change their last name.
 	   * @param theLastName The new last name the user would like.
-	   * @return the user's first name.
 	   */
 	public void setLastName(String theLastName);
 	
@@ -51,7 +49,7 @@ public interface User {
 	/**
 	   * This method sets the user's email.
 	   * This allows for users to update or change their email.
-	   * @param email The new email the user would like to be contacted at.
+	   * @param theEmail The new email the user would like to be contacted at.
 	   */
 	public void setEmail(String theEmail);
 		

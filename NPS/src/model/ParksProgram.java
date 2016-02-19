@@ -65,31 +65,39 @@ public class ParksProgram {
 	 * Check for past jobs and remove them from list before user see them.
 	 */
 	private void checkForPastJobs() {
-		Calendar currentDate = new GregorianCalendar();
-		int curMonth = currentDate.get(Calendar.MONTH) + 1;
-		int curDate = currentDate.get(Calendar.DATE);
+		Calendar currentDate = new GregorianCalendar();		
 		int curYear = currentDate.get(Calendar.YEAR);
 		
 		Calendar jobDate;
-		int jobDay;
 		int jobYear;
-		int jobMonth;
+		boolean ifDeleted = false;
 		
 		if (allJobs != null && allJobs.size() > 0) {
 			Iterator<Job> itr = allJobs.iterator();
-			while (itr.hasNext()) {
-				Job temp = itr.next();
+			Job temp = null;
+			while (itr.hasNext()) {				
+				if (!ifDeleted) {
+					temp = itr.next();					
+				}
 				jobDate = temp.getDate();
+				jobYear = jobDate.get(Calendar.YEAR);	
+								
+				int jobDayOfYear = jobDate.get(Calendar.DAY_OF_YEAR);
+				int curDayOfYear = currentDate.get(Calendar.DAY_OF_YEAR);
 				
-				jobMonth = jobDate.get(Calendar.MONTH) + 1;
-				jobDay = jobDate.get(Calendar.DATE);
-				jobYear = jobDate.get(Calendar.YEAR);
+				if (curYear < jobYear) {
+					jobDayOfYear = jobDayOfYear + 365;
+				}		
 				
-				int resultDays = (jobYear - curYear) * 12 * 30 
-						+ (jobMonth - curMonth) * 30
-						+ (jobDay - curDate);
-				if (resultDays < 0) {
-					//add code here.....
+			 	int resultDays = jobDayOfYear - curDayOfYear;
+				
+				if (resultDays <= 0) {				
+					allJobs.remove(temp);
+					itr = allJobs.iterator();
+					temp = itr.next();
+					ifDeleted = true;
+				} else {
+					ifDeleted = false;
 				}
 			}
 		}	
@@ -131,7 +139,7 @@ public class ParksProgram {
 			
 			while (itr.hasNext()) {
 				User temp = itr.next();
-	
+
 				if (temp.getEmail().equals(email)
 						&& temp.getPassword().equals(password)) {
 					return temp;

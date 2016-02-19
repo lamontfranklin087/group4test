@@ -25,7 +25,7 @@ public abstract class AbstractUser implements User,Serializable{
 	private String lastName;
 	private String email;
 	private String password;
-	private transient Scanner keyboard;	
+	protected transient Scanner keyboard;	
 	
 	protected AbstractUser() {
 		firstName = "Test";
@@ -46,9 +46,6 @@ public abstract class AbstractUser implements User,Serializable{
 	
 	/** Print's the main menu for that user and starts their chain of menu's */
 	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);
-	
-	
-	
 	
 	/**
 	   * This method sets the user's first name.
@@ -89,7 +86,7 @@ public abstract class AbstractUser implements User,Serializable{
 	/**
 	   * This method sets the user's email.
 	   * This allows for users to update or change their email.
-	   * @param email The new email the user would like to be contacted at.
+	   * @param theEmail The new email the user would like to be contacted at.
 	   */
 	public void setEmail(String theEmail) {
 		this.email = theEmail;
@@ -132,10 +129,10 @@ public abstract class AbstractUser implements User,Serializable{
 				temp = itr.next();				
 				System.out.println(temp.toStringTable());										
 			}
-			System.out.println("Press Enter to continue.");
-			keyboard.nextLine();//consumer only
+			System.out.println("Press Enter to return to the Main Menu.");
+			keyboard.nextLine();//consumer
 		} else {
-			System.out.println("No jobs available at this time.");
+			System.out.println("No jibs available at this time.");
 		}
 	}
 	
@@ -150,6 +147,8 @@ public abstract class AbstractUser implements User,Serializable{
 				System.out.println(job.toString());
 				}
 			});
+			System.out.println("Press Enter to return to the Main Menu.");
+			keyboard.nextLine();//consumer
 		}
 		
 	}
@@ -186,9 +185,9 @@ public abstract class AbstractUser implements User,Serializable{
 	
 	/**
 	 * Iterator for a job list.
-	 * @param jobID
-	 * @param allJobs
-	 * @return
+	 * @param jobID job's ID.
+	 * @param allJobs List of all jobs in a program.
+	 * @return found job.
 	 */
 	protected Job findJob(int jobID, Collection<Job> allJobs) {
 		if (allJobs != null) {

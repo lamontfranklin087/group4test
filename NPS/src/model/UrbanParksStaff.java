@@ -4,6 +4,12 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 
+/**
+ * Creates an Urban Parks staff object for use in the Parks Program.
+ * 
+ * @author dave1729
+ * @version 02/13/2016 
+ */
 public final class UrbanParksStaff extends AbstractUser implements Serializable {
 
 	/**
@@ -74,16 +80,18 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 		if (allUsers != null) {
 			Iterator<User> itr = allUsers.iterator();
 			User user;
-			System.out.println("Last & First Name      Email");
 			while (itr.hasNext()) {
 				user = itr.next();
 				if (user.getLastName().equals(volunt) 
 						&& user.getSimpleName().equalsIgnoreCase("Volunteer")) {
+					System.out.println("Last & First Name      Email");
 					System.out.print(user.getLastName() + " ");
 					System.out.print(user.getFirstName() + "    ");
 					System.out.println(user.getEmail());									
 				}				
 			}
+			System.out.println("Press Enter to return to the Main Menu.");
+			keyboard.nextLine();//consumer
 		} else {
 			System.out.println("There is no " + volunt + " volunteer.");
 		}
@@ -98,6 +106,11 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 		return "Urban Parks Staff";
 	}
 	
+	/**
+	 * String representation of the Urban Parks Staff Member.
+	 * 
+	 * @return the resulting string
+	 */
 	public String toString() {		
 		StringBuilder userSummary = new StringBuilder();
 		userSummary.append("Status: Urban Parks Staff");

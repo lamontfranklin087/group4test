@@ -6,15 +6,14 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 /**
- * Creates a Truck object for use in the Easy Street GUI.
+ * Creates a Manager object for use in the Parks Program.
  * 
  * @author dave1729
- * @version 305-3
- * 
+ * @version 2/13/16
  * @author Ihar Lavor
- * @version 02/13/2016 
  * Added Business rules number 1, 2
  */
 public final class Manager extends AbstractUser implements Serializable {
@@ -24,18 +23,16 @@ public final class Manager extends AbstractUser implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final int MAIN_MENU_OPTIONS = 6;
-	private final int MAX_NUMBER_JOBS = 30;
-	private final int MAX_JOBS_IN_7_CONSECUTIVE_DAYS = 5;
+	private final int MAX_NUMBER_JOBS = 30;	
 	private LinkedList<Job> jobsAtMyParks = new LinkedList<Job>();
 	ArrayList<String> parksManage;
 
-//	/**
-//	 * Default constructor. David thinks we can delete this. 2/14
-//	 */
-//	public Manager() {
-//		super();
-//	}
-	
+	/**
+	 * Default constructor.
+	 */
+	public Manager() {
+		super();
+	}
 	/**
 	 * Parameterized constructor
 	 * @param theFirstName
@@ -44,46 +41,15 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * @param thePassword
 	 * @param parksList
 	 */
-	public Manager(String theFirstName, String theLastName, String theEmail,
-			String thePassword, ArrayList<String> theParksList) {
+	protected Manager(String theFirstName, String theLastName, String theEmail,
+			String thePassword, ArrayList<String> parksList) {
 		super(theFirstName, theLastName, theEmail, thePassword);
-		parksManage = theParksList;
-	}
-	
-	public LinkedList<Job> getMyJobs() {
-		return jobsAtMyParks;
-	}
-	
-	public int getNumberOfJobs() {
-		int i = 0;
-		while(!jobsAtMyParks.isEmpty()) {
-			i++;
-			jobsAtMyParks.removeFirst();
-		}
-		return i;
-	}
-	
-	/* David thinks we can delete this. 2/14*/
-//	public Manager(String theFirstName, String theLastName, String theEmail,
-//			String thePassword) {
-//		super(theFirstName, theLastName, theEmail, thePassword);
-//	}
-	
-	@Override
-	public void viewSumAllJobs(Collection<Job> allJobs) {
-		Iterator<Job> itr = allJobs.iterator();
-		
-		while (itr.hasNext()) {
-			Job temp = itr.next();
-			if (temp.getJobManager().equals(getFirstName() + " " + getLastName())) {
-				System.out.println("ID     " + "Date\t    " + "Start     " + "Duration\t" 
-		                + "Slots\t" + "Volun.\t"+ "Locaton\t\t" + "Manager\t\t" 
-						 + "Description");
-				System.out.println(temp.toStringTable());
-			}			
-		}
+		parksManage = parksList;
 	}
 
+	/**
+	 * Simple name of Manager Class.
+	 */
 	@Override
 	public String getSimpleName() {
 		return "Park Manager";
@@ -150,7 +116,8 @@ public final class Manager extends AbstractUser implements Serializable {
 					break;
 				case 2: deleteJob(allJobs);
 					break;
-				case 3: editJob(allJobs);
+				case 3: 
+					editJob(allJobs);
 					break;
 				case 4: viewSumAllJobs(allJobs);
 					break;
@@ -189,20 +156,43 @@ public final class Manager extends AbstractUser implements Serializable {
 	}
 	
 	/**
+	 * Displays all the currently pending jobs.
+	 * 
+	 * @param p a collection of the current jobs.
+	 */
+	@Override
+	public void viewSumAllJobs(Collection<Job> p){ 
+		if (jobsAtMyParks != null && jobsAtMyParks.size() > 0) {
+			Iterator<Job> itr = jobsAtMyParks.iterator();
+			System.out.println("ID     " + "Date\t    " + "Duration\t" 
+	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t\t" + "Description");
+			Job temp;
+			while (itr.hasNext()) {
+				temp = itr.next();				
+				System.out.println(temp.toStringTable());										
+			}
+			System.out.println("Press Enter to return to the Main Menu.");
+			keyboard.nextLine();//consumer
+		}
+	}
+	
+	/**
 	 * Edit job's fields.
 	 * @param allJobs is a list of all Jobs.
 	 */
-	private void editJob(Collection<Job> allJobs) {
+	private boolean editJob(Collection<Job> allJobs) {
 		System.out.println("Enter Job's ID number or 0 to exit:");
 		int jobIDTemp = getNumber();
 		if (jobIDTemp > 0) {
-			Job foundJob = findJob(jobIDTemp, allJobs);
+			Job foundJob = findJob(jobIDTemp, allJobs);			
 			if (foundJob == null) {
 				System.out.println("No job with ID " + jobIDTemp);
 			} else {
-				foundJob.editJob(parksManage);
+				foundJob.editJob(parksManage, allJobs);
+				return true;
 			}
 		}		
+		return false;
 	}
 
 	/**
@@ -220,6 +210,8 @@ public final class Manager extends AbstractUser implements Serializable {
 				allJobs.remove(temp);
 				update(allJobs);
 				System.out.println("Job with ID " + jobIDTemp + " was deleted.");
+				System.out.println("Press Enter to return to the Main Menu.");
+				keyboard.nextLine();//consumer
 			}
 		}
 	}
@@ -228,48 +220,18 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * Create new job.
 	 * @param allJobs is a list of all Jobs.
 	 */
-	protected void submitNewJob(Collection<Job> allJobs) {
-		if (allJobs.size() < MAX_NUMBER_JOBS) {
-			Job newJob = new Job();
-			newJob.createJob(getFirstName(), getLastName(), parksManage);			
-			boolean allowCreateJob = jobsIn7Days(newJob.getDate(), allJobs);
-			if (allowCreateJob) {			
-				System.out.println(newJob.toString());
-				System.out.println("1. To confirm job\n2. To exit without saving job");
-				if (getNumber() == 1) {
-					allJobs.add(newJob);
-					update(allJobs);
-				}
-			} else {
-				System.out.println("A job can't be added because you are to busy for that week.");
-			}
-		} else {
-			System.out.println("A job can't be added because the total number of pending jobs is currently 30.");
-		}		
-	}
-	/**
-	 * Checking: if there during any consecutive 7 day period 
-	 * more than 5 jobs or not.
-	 * @param newly createdJob
-	 * @param allJobs is a list of all Jobs.
-	 * @return false if there more 5 or more jobs, otherwise true.
-	 */
-	private boolean jobsIn7Days(Calendar createdJob, Collection<Job> allJobs) {
-		int jobsIn7Days = 0;	
-		int jobDayOfYear = createdJob.get(Calendar.DAY_OF_YEAR);
-				
-		Iterator<Job> itr = jobsAtMyParks.iterator();
-		if (jobsAtMyParks != null && jobsAtMyParks.size() > 0) {		
-			while (itr.hasNext()) {
-				int temp = itr.next().getDate().get(Calendar.DAY_OF_YEAR);
-				if ((temp <= (jobDayOfYear + 3)) && (temp >= (jobDayOfYear - 3))) {					
-					jobsIn7Days = jobsIn7Days + 1;
-				}				
-			}
-			if (jobsIn7Days < MAX_JOBS_IN_7_CONSECUTIVE_DAYS) {
+	private boolean submitNewJob(Collection<Job> allJobs) {		
+		Job newJob = new Job();			
+		boolean result = newJob.createJob(getFirstName(), getLastName(), parksManage, allJobs);
+		if (result) {
+			System.out.println(newJob.toString());
+			System.out.println("1. To confirm job\n2. To exit without saving job");
+			if (getNumber() == 1) {
+				allJobs.add(newJob);
+				update(allJobs);
 				return true;
-			}
-		}
+			}	
+		}		
 		return false;
 	}
 	
@@ -279,7 +241,6 @@ public final class Manager extends AbstractUser implements Serializable {
 	 */
 	private void update(Collection<Job> allJobs) {
 		jobsAtMyParks = new LinkedList<Job>();
-		
 		boolean iHaveJobs = false;
 		if (allJobs != null) {			
 			Job temp;
@@ -302,7 +263,8 @@ public final class Manager extends AbstractUser implements Serializable {
 	 */
 	public String toString() {		
 		StringBuilder userSummary = new StringBuilder();
-		userSummary.append("Status: Park Manager\n");
+		userSummary.append("Status: Park Manager");
+		userSummary.append("\n");
 		userSummary.append("Name: ");
 		userSummary.append(getFirstName());
 		userSummary.append(" ");

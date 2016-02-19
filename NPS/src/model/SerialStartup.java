@@ -100,7 +100,7 @@ public class SerialStartup {
 		setEmail(String theEmail);
 		setPassword(String thePassword);
 		*/
-		User readUser;			
+		User readUser;
 		while (scanner.hasNext()) {	
 			String userData = scanner.nextLine();
 			String[] parts = userData.split(", ");
@@ -119,7 +119,6 @@ public class SerialStartup {
 			} else {
 				readUser = null;
 			}
-			
 			if (readUser != null) {
 				allUsers.add(readUser);
 			} else {

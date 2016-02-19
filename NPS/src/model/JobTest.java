@@ -6,19 +6,18 @@ package model;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.LinkedList;
 
 import org.junit.Test;
 
 /**
  * Job Test.
  * @author Ihar Lavor
- * @version 02/06/2016
+ * @version 02/13/2016
  *
  */
 public class JobTest {
@@ -42,21 +41,60 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#enterDate()}.
-	 * Test enterDate only if data is in range from today to 90 days ahead.
+	 * Test enterDate.
 	 */
 	@Test
 	public void testEnterDate() {
+		Collection<Job> allJobs = new LinkedList<Job>();
 		Job testJob = new Job();
 		
-		String input = "3/16/2016";		
+		String input = "5/1/2016";	//correct Date
 		InputStream in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.enterDate();
+	    testJob.enterDate(allJobs);
 	    
-	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 16);
-	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
+	    assertTrue(testJob.getDate().get(Calendar.DATE) == 1);
+	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 5 - 1);
 	    assertTrue(testJob.getDate().get(Calendar.YEAR) == 2016);
+	    
+	    input = "5/16/2016";	//Future date - more then 3 months	
+		in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);	
+	    
+	    assertFalse(testJob.enterDate(allJobs));
+	    	    
+	    input = "2/14/2016";	//Past date	
+		in = new ByteArrayInputStream(input.getBytes());
+	    System.setIn(in);
+	    
+	    assertFalse(testJob.enterDate(allJobs));	    
 	}
+	
+	/**
+	 * Test method for {@link model.Job#addToSlot()}.
+	 */
+	@Test
+	public void testAddToSlot() {
+		Job testJob = new Job();
+		Volunteer newVolunteer = new Volunteer("Raylene", "Depew",
+				"RayleneDepew@mail.com",  "pass");
+		
+		testJob.addToSlot(newVolunteer, 1, 1);		
+		assertTrue(testJob.getVolunteers().size() == 1);		
+		testJob.addToSlot(newVolunteer, 1, testJob.getLightSlotsAvailable());
+		assertTrue(testJob.getVolunteers().size() == 1);
+		
+		testJob.addToSlot(newVolunteer, 2, 1);		
+		assertTrue(testJob.getVolunteers().size() == 2);		
+		testJob.addToSlot(newVolunteer, 2, testJob.getMediumSlotsAvailable());
+		assertTrue(testJob.getVolunteers().size() == 2);
+		
+		testJob.addToSlot(newVolunteer, 3, 1);		
+		assertTrue(testJob.getVolunteers().size() == 3);		
+		testJob.addToSlot(newVolunteer, 3, testJob.getHeavySlotsAvailable());
+		assertTrue(testJob.getVolunteers().size() == 3);
+	}
+	
 	
 	/**
 	 * Test method for {@link model.Job#setJobID()}.
@@ -120,92 +158,20 @@ public class JobTest {
 	    
 	    assertTrue(testJob.getStartTime().equals("8:00 AM"));  
 	}
-	
-	/**
-	 * Test method for {@link model.Job#deleteJob()}.
-	 * @throws IOException 
-	 */
-	@Test
-	public void testDeleteJob() throws IOException {
-		
-		Job testJob = new Job();
-		String input = "6";
-		
-		InputStream in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.enterJobSlot();
-	    		
-	    input = "3/16/2016";		
-		in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.enterDate();
-	    	    
-	    input = "Build Walk Path";		
-		in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.enterJobDescription();
-	    
-	    input = "2";		
-		in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.enterJobDuration();
-	    
-	    input = "Tacoma Park";		
-	    in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    	    
-	    input = "8:00 AM";		
-		in = new ByteArrayInputStream(input.getBytes());
-	    System.setIn(in);
-	    testJob.enterStartTime();
-	    
-	    Volunteer vol = new Volunteer(null, null, null, null);
-	    testJob.addVolunteer(vol);
-	    	    
-	    assertTrue(testJob.getAvailableSlots() == 6);
-	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 16);
-	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
-	    assertTrue(testJob.getDate().get(Calendar.YEAR) == 2016);
-	    assertTrue(testJob.getDescription().equals("Build Walk Path"));
-	    assertTrue(testJob.getJobDuration() == 2);
-	    assertTrue(testJob.getJobLocation().equals("Tacoma Park"));
-	    assertTrue(testJob.getStartTime().equals("8:00 AM"));
-	    assertTrue(testJob.getVolunteers().size() == 1);
-	    
-	    testJob.deleteJob();
-	    
-	    assertTrue(testJob.getAvailableSlots() == -1);
-	    assertTrue(testJob.getDate() == null);
-	    assertTrue(testJob.getDescription() == null);
-	    assertTrue(testJob.getJobDuration() == -1);
-	    assertTrue(testJob.getJobLocation() == null);
-	    assertTrue(testJob.getStartTime() == null);
-	    assertTrue(testJob.getVolunteers() == null);
-	}
-
-	/**
-	 * Test method for {@link model.Job#addVolunteer(model.Volunteer)}.
-	 */
-	@Test
-	public void testAddVolunteer() {
-		Job testJob = new Job();
-		
-		Volunteer vol = new Volunteer(null, null, null, null);
-	}
 		
 	/**
 	 * Test method for {@link model.Job#deleteJob()}.
 	 */
 	@Test
 	public void testToString() {
-		
+		Collection<Job> allJobs = new LinkedList<Job>();
 		Job testJob = new Job();
 		String input = "3/16/2016";		
 		InputStream in = new ByteArrayInputStream(input.getBytes());	    
 	    				
 		in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
-	    testJob.enterDate();
+	    testJob.enterDate(allJobs);
 	    	    
 	    input = "Build Walk Path";		
 		in = new ByteArrayInputStream(input.getBytes());
@@ -228,11 +194,6 @@ public class JobTest {
 		in = new ByteArrayInputStream(input.getBytes());
 	    System.setIn(in);
 	    testJob.enterStartTime();
-	    
-	    Volunteer vol = new Volunteer(null, null, null, null);
-	    testJob.addVolunteer(vol);
-	    	    	    
-	    assertTrue(testJob.getAvailableSlots() == 6);
 	    	            
 	    assertTrue(testJob.getDate().get(Calendar.DAY_OF_MONTH) == 16);
 	    assertTrue(testJob.getDate().get(Calendar.MONTH) == 3 - 1);
