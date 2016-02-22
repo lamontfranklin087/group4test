@@ -24,6 +24,9 @@ public class ParksProgram {
 	private Scanner keyboard;	
 
 	public ParksProgram(Menu theMenu) {
+		Scanner scan = new Scanner(System.in);
+		int menuSelection = 0;
+		boolean isInteger = false;
 		//SPANISH MENU
 		String menuName = "Spanish Menu";
 		
@@ -37,16 +40,27 @@ public class ParksProgram {
 
 		theMenu.updateMenu(menuName, middleText, menuList);
 		
-		//This is just my easy 2 second delay
-		for(int i = 0; i < 40000000; i++) {
-			System.out.print("");
+		//get next menu selection
+		menuSelection = scan.nextInt();
+		while(menuSelection <= 0 || menuSelection > theMenu.getMenuOptions().size()) {
+			System.out.println("Sorry, please try a number between 1 and " + theMenu.getMenuOptions().size());
+			if(scan.hasNextInt()) {
+				menuSelection = scan.nextInt();
+			}
+			else if(scan.hasNext()){
+				//consumer extra input
+				scan.next();
+				//ask again for int input
+				System.out.println("Sorry, selection must be a number value.");
+				menuSelection = scan.nextInt();
+			}
 		}
 		
 		//ENGLISH MENU
 		menuName = "English Menu";
 		
 		middleText = new StringBuilder();
-		middleText.append("This Menu is all in english.");
+		middleText.append("NOW this Menu is all in english!");
 		
 		menuList = new ArrayList<String>();
 		menuList.add("Option One");

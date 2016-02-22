@@ -103,7 +103,7 @@ public class TextBasedIO implements Observer {
 	private void printMenuOptions(ArrayList<String> theMenuOptions) {
 		if(theMenuOptions.size() > 0) {
 			for(int i = 0; i < theMenuOptions.size(); i++) {
-				System.out.println(i + ")  " + theMenuOptions.get(i));
+				System.out.println((i + 1) + ")  " + theMenuOptions.get(i));
 			}
 			//gives a double space before input prompt
 			System.out.println();
