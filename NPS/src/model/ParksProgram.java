@@ -1,6 +1,7 @@
 package model;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -22,44 +23,74 @@ public class ParksProgram {
 	private Collection<User> allUsers;		
 	private Scanner keyboard;	
 
-	public ParksProgram() {
-		try {
-			allUsers = SerialStartup.serialReadUsers();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			allUsers = new LinkedList<User>();
-		}
-		try {
-			allJobs = SerialStartup.serialReadJobs();						
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			allJobs = new LinkedList<Job>();
+	public ParksProgram(Menu theMenu) {
+		//SPANISH MENU
+		String menuName = "Spanish Menu";
+		
+		StringBuilder middleText = new StringBuilder();
+		middleText.append("This Menu is all in spanish.");
+		
+		ArrayList<String> menuList = new ArrayList<String>();
+		menuList.add("Option Uno");
+		menuList.add("Option Dos");
+		menuList.add("Option Tres");
+
+		theMenu.updateMenu(menuName, middleText, menuList);
+		
+		//This is just my easy 2 second delay
+		for(int i = 0; i < 40000000; i++) {
+			System.out.print("");
 		}
 		
-		checkForPastJobs();
-		User currentUser;
-		do {
-			currentUser = login();
-			if (currentUser != null) {
-				//We have a User and allJobs
-				run(currentUser, allJobs, allUsers);
-			}
-		} while (currentUser != null);
+		//ENGLISH MENU
+		menuName = "English Menu";
 		
-		if (allUsers != null) {
-			try {
-				SerialStartup.serialWriteUsers(allUsers);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();			
-			}
-		}
-		if (allJobs != null) {
-			try {
-				SerialStartup.serialWriteJobs(allJobs);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();			
-			}
-		}
+		middleText = new StringBuilder();
+		middleText.append("This Menu is all in english.");
+		
+		menuList = new ArrayList<String>();
+		menuList.add("Option One");
+		menuList.add("Option Two");
+		
+		Menu menu2 = new Menu(menuName, middleText, menuList);
+		theMenu.updateMenu(menu2);
+//		try {
+//			allUsers = SerialStartup.serialReadUsers();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//			allUsers = new LinkedList<User>();
+//		}
+//		try {
+//			allJobs = SerialStartup.serialReadJobs();						
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//			allJobs = new LinkedList<Job>();
+//		}
+//		
+//		checkForPastJobs();
+//		User currentUser;
+//		do {
+//			currentUser = login();
+//			if (currentUser != null) {
+//				//We have a User and allJobs
+//				run(currentUser, allJobs, allUsers);
+//			}
+//		} while (currentUser != null);
+//		
+//		if (allUsers != null) {
+//			try {
+//				SerialStartup.serialWriteUsers(allUsers);
+//			} catch (FileNotFoundException e) {
+//				e.printStackTrace();			
+//			}
+//		}
+//		if (allJobs != null) {
+//			try {
+//				SerialStartup.serialWriteJobs(allJobs);
+//			} catch (FileNotFoundException e) {
+//				e.printStackTrace();			
+//			}
+//		}
 	}
 
 	private void run(User currentUser, Collection<Job> allJobs, Collection<User> allUsers) {

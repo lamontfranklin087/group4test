@@ -18,6 +18,7 @@ public class Driver {
 		TextBasedIO textIO = new TextBasedIO();
 		menu.addObserver(textIO);
 		
+		new ParksProgram(menu);
 	}
 
 }

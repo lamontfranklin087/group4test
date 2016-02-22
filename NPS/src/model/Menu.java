@@ -12,7 +12,7 @@ public class Menu extends Observable {
 	private String menuName;
 	
 	/* Any test that needs to be between the menu and options. */
-	private StringBuilder otherText;
+	private StringBuilder menuGreeting;
 	
 	/* Menu Options in current menu, an empty array has no options. */
 	private ArrayList<String> menuOptions;
@@ -22,7 +22,7 @@ public class Menu extends Observable {
 	 */
 	public Menu(){
 		setMenuName(null);
-		setOtherText(new StringBuilder());
+		setMenuGreeting(new StringBuilder());
 		setMenuOptions(new ArrayList<String>());
 	}
 	
@@ -30,26 +30,41 @@ public class Menu extends Observable {
 	 * Basic constructor for creating a menu.
 	 * 
 	 * @param theMenuName  the name of the current menu
-	 * @param theOtherText  any text that should appear between the menu name and option selection
+	 * @param theMenuGreeting  any text that should appear between the menu name and option selection
 	 * @param theMenuOptions  a list of menu option titles that the user will choose between
 	 */
-	public Menu(String theMenuName, StringBuilder theOtherText, ArrayList<String> theMenuOptions){
+	public Menu(String theMenuName, StringBuilder theMenuGreeting, ArrayList<String> theMenuOptions){
 		setMenuName(theMenuName);
-		setOtherText(theOtherText);
+		setMenuGreeting(theMenuGreeting);
 		setMenuOptions(theMenuOptions);
 	}
 
 	/**
-	 * Just a test function to reset menu if desired.
+	 * A Menu update using a menu object.
 	 * 
 	 * @param theMenuName  the name of the current menu
-	 * @param theOtherText  any text that should appear between the menu name and option selection
+	 * @param theMenuGreeting  any text that should appear between the menu name and option selection
 	 * @param theMenuOptions  a list of menu option titles that the user will choose between
 	 */
-	public void setTestMenu(String theMenuName, StringBuilder theOtherText, ArrayList<String> theMenuOptions) {
-		setMenuName(theMenuName);
-		setOtherText(theOtherText);
-		setMenuOptions(theMenuOptions);
+	public void updateMenu(Menu theNewMenu) {
+		menuName = theNewMenu.getMenuName();
+		menuGreeting = theNewMenu.getMenuGreeting();
+		menuOptions = theNewMenu.getMenuOptions();
+        setChanged();
+	    notifyObservers();
+	}
+
+	/**
+	 * A Menu update using individual parameters.
+	 * 
+	 * @param theMenuName  the name of the current menu
+	 * @param theMenuGreeting  any text that should appear between the menu name and option selection
+	 * @param theMenuOptions  a list of menu option titles that the user will choose between
+	 */
+	public void updateMenu(String theMenuName, StringBuilder theMenuGreeting, ArrayList<String> theMenuOptions) {
+		menuName = theMenuName;
+		menuGreeting = theMenuGreeting;
+		menuOptions = theMenuOptions;
         setChanged();
 	    notifyObservers();
 	}
@@ -64,12 +79,12 @@ public class Menu extends Observable {
 	    notifyObservers();
 	}
 
-	public StringBuilder getOtherText() {
-		return otherText;
+	public StringBuilder getMenuGreeting() {
+		return menuGreeting;
 	}
 
-	public void setOtherText(StringBuilder otherText) {
-		this.otherText = otherText;
+	public void setMenuGreeting(StringBuilder otherText) {
+		this.menuGreeting = otherText;
         setChanged();
 	    notifyObservers();
 	}
