@@ -41,7 +41,8 @@ public class ParksProgram {
 		do {
 			currentUser = login();
 			if (currentUser != null) {
-				currentUser.mainMenu(allJobs, allUsers);
+				//We have a User and allJobs
+				run(currentUser, allJobs, allUsers);
 			}
 		} while (currentUser != null);
 		
@@ -59,6 +60,11 @@ public class ParksProgram {
 				e.printStackTrace();			
 			}
 		}
+	}
+
+	private void run(User currentUser, Collection<Job> allJobs, Collection<User> allUsers) {
+		
+		
 	}
 
 	/**
