@@ -1,22 +1,23 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  * User interface.
  * @author dave1729
  * @version 02/06/2016
+ * revision Ihar Lavor 2/22/2016 
  */
 public interface User {	
 	
-	public abstract void viewSumAllJobs(Collection<Job> allJobs);
+	public abstract StringBuilder viewSumAllJobs(Collection<Job> allJobs);
 	public abstract String getSimpleName();
 	
-	/** Print's the main menu for that user and starts their chain of menu's 
-	 * @param allUsers List of all users.
-	 * @param allJobs list of all jobs.
-	 */
-	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);	
+	/** Print's the main menu for that user and starts their chain of menu's */
+	public abstract ArrayList<String> getMainMenu();
+	
+	public abstract ArrayList<String> getMethodList();
 	
 	/**
 	   * This method sets the user's first name.

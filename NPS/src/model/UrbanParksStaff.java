@@ -1,14 +1,17 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Scanner;
 
 /**
  * Creates an Urban Parks staff object for use in the Parks Program.
  * 
  * @author dave1729
  * @version 02/13/2016 
+ * revision Ihar Lavor 2/22/2016 
  */
 public final class UrbanParksStaff extends AbstractUser implements Serializable {
 
@@ -16,7 +19,6 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final int MAIN_MENU_OPTIONS = 4;
 
 	public UrbanParksStaff() {
 		super();
@@ -34,49 +36,36 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 		super(theFirstName, theLastName, theEmail, thePassword);
 	}
 
-	/** 
-	 * Print's the main menu and returns the current menu choice.
-	 * @return menuChoice	the next menu to be entered.
-	 **/
 	@Override
-	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
-		boolean exit = false;
-		while (!exit) {
-			int menuChoice = 0;
-			ParksProgram.menuHeader(this);
-			System.out.println("            ___Menu___");
-	   		System.out.println("1. View a summary of all upcoming jobs");
-	   		System.out.println("2. View details of a selected upcoming job");
-	   		System.out.println("3. Search volunteers by last name");
-	   		System.out.println("4. Exit");
-			
-			menuChoice = getNumber();
-			while(menuChoice < 1 || menuChoice > MAIN_MENU_OPTIONS) {
-				System.out.print("Must select a menu option between 1 and " + MAIN_MENU_OPTIONS + "\nSelection: ");
-				menuChoice = getNumber();
-			}
-			switch(menuChoice){
-				case 1: viewSumAllJobs(allJobs);
-					break;
-				case 2: viewJobDetails(allJobs);
-					break;
-				case 3: searchVolunteer(allUsers);
-					break;				
-				case 4: System.out.println("Exiting...");
-					exit = true;
-					break;
-			}
-			
-		}
+	public ArrayList<String> getMainMenu() {		
+		ArrayList<String>  middleText = new ArrayList<String>();
+		middleText.add("View a summary of all upcoming jobs");
+		middleText.add("View details of a selected upcoming job");
+		middleText.add("Search volunteers by last name");
+		middleText.add("Exit");				
+		return middleText;
+	}
+	
+	@Override
+	public ArrayList<String> getMethodList() {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("viewSumAllJobs");
+		list.add("viewJobDetails");
+		list.add("searchVolunteer");
+		
+		return list;
 	}
 	
 	/**
 	 * Search volunteer by Last Name
 	 * @param allUsers
+	 * @return 
 	 */
-	protected void searchVolunteer(Collection<User> allUsers) {
+	public StringBuilder searchVolunteer(Collection<User> allUsers) {
 		System.out.println("Enter Volunteer's last name:");
-		String volunt = getString();
+		scan = new Scanner(System.in);		
+		String volunt = scan.nextLine();
+		StringBuilder volunteerData = new StringBuilder();
 		if (allUsers != null) {
 			Iterator<User> itr = allUsers.iterator();
 			User user;
@@ -84,18 +73,16 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 				user = itr.next();
 				if (user.getLastName().equals(volunt) 
 						&& user.getSimpleName().equalsIgnoreCase("Volunteer")) {
-					System.out.println("Last & First Name      Email");
-					System.out.print(user.getLastName() + " ");
-					System.out.print(user.getFirstName() + "    ");
-					System.out.println(user.getEmail());									
+					volunteerData.append("\nLast & First Name      Email");
+					volunteerData.append("\n" + user.getLastName() + " "
+										      + user.getFirstName() + "    "
+										      +	user.getEmail());									
 				}				
 			}
-			System.out.println("Press Enter to return to the Main Menu.");
-			keyboard.nextLine();//consumer
 		} else {
-			System.out.println("There is no " + volunt + " volunteer.");
+			return new StringBuilder("There is no " + volunt + " volunteer.");
 		}
-		System.out.println();
+		return volunteerData;
 	}
 	
 	/**

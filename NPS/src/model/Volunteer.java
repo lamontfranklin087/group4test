@@ -1,7 +1,9 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -12,7 +14,6 @@ import java.util.LinkedList;
 public final class Volunteer extends AbstractUser implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private final int MAIN_MENU_OPTIONS = 5;
 
 	public Volunteer() {
 		super();
@@ -31,45 +32,26 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		super(theFirstName, theLastName, theEmail, thePassword);
 	}
 
-	/**
-	 * Prints the main menu for the volunteer class, gets input from the user
-	 * and calls the following menu.
-	 * 
-	 * @param allJobs  a collection of all the pending jobs
-	 * @param allUsers  a collection of all the currently existing users
-	 */
 	@Override
-	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
-		boolean exit = false;
-		while (!exit) {
-			int menuChoice = 0;
-			ParksProgram.menuHeader(this);
-			System.out.println("            ___Menu___");
-			System.out.println("1. View the jobs I am signed up for");
-			System.out.println("2. View a summary of all upcoming jobs");
-			System.out.println("3. View details of a selected upcoming job");
-			System.out.println("4. Volunteer for a job");
-			System.out.println("5. Exit");
-
-			menuChoice = getNumber();
-			while(menuChoice < 1 || menuChoice > MAIN_MENU_OPTIONS) {
-				System.out.print("Must select a menu option between 1 and " + MAIN_MENU_OPTIONS + "\nSelection: ");
-				menuChoice = getNumber();
-			}
-			switch(menuChoice){
-				case 1: viewMyJobs(allJobs);
-					break;
-				case 2: viewSumAllJobs(allJobs);
-					break;
-				case 3: viewJobDetails(allJobs);
-					break;
-				case 4: jobSignUp(allJobs);
-					break;
-				case 5: System.out.println("Exiting...");
-					exit = true;
-					break;
-			}
-		}
+	public ArrayList<String> getMainMenu() {		
+		ArrayList<String>  middleText = new ArrayList<String>();
+		middleText.add("View the jobs I am signed up for");
+		middleText.add("View a summary of all upcoming jobs");
+		middleText.add("View details of a selected upcoming job");
+		middleText.add("Volunteer for a job");		
+		middleText.add("Exit");				
+		return middleText;
+	}
+	
+	@Override
+	public ArrayList<String> getMethodList() {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("viewMyJobs");
+		list.add("viewSumAllJobs");
+		list.add("viewJobDetails");
+		list.add("jobSignUp");
+		
+		return list;
 	}
 	
 	/**
@@ -77,11 +59,7 @@ public final class Volunteer extends AbstractUser implements Serializable {
 	 * 
 	 * @param allJobs  a collection of all the existing jobs
 	 */
-	private void viewMyJobs(Collection<Job> allJobs) {
-		
-		ParksProgram.menuHeader(this);
-		System.out.println("            ___MyJobs___");		
-		
+	public StringBuilder viewMyJobs(Collection<Job> allJobs) {				
 		LinkedList<Job> myJobs = new LinkedList<Job>();
 		
 		allJobs.forEach(job->{
@@ -96,14 +74,14 @@ public final class Volunteer extends AbstractUser implements Serializable {
 				});
 			
 		if (myJobs.isEmpty()) {
-			System.out.println("You are not currently signed up for any jobs.");
+			return new StringBuilder("You are not currently signed up for any jobs.");
 		} else {
-			System.out.println("ID     " + "Date\t    " + "Duration\t" 
+			StringBuilder string = new StringBuilder();
+			string.append("ID     " + "Date\t    " + "Duration\t" 
 					+ "Slots\t" + "Manager\t\t" + "Locaton\t\t"  
 					+ "\t\tDescription");
-			myJobs.forEach(job->System.out.println(job.toStringTable()));
-			System.out.println("Press Enter to return to the Main Menu.");
-			keyboard.nextLine();//consumer
+			myJobs.forEach(job->string.append("\n" + job.toStringTable()));
+			return string;
 		}
 	}
 	
@@ -112,25 +90,27 @@ public final class Volunteer extends AbstractUser implements Serializable {
 	 * 
 	 * @param allJobs  a collection of all the existing jobs
 	 */
-	private void jobSignUp(Collection<Job> allJobs) {
+	public StringBuilder jobSignUp(Collection<Job> allJobs) {
 		System.out.println("Please enter Job ID to sign-up or 0 to quit: ");
 		int id = getNumber();
 		if (id != 0) {
-			allJobs.forEach(job->{
-				if (job.getJobID() == id){
-					if (dateAvailable(allJobs, job)) {
-						job.addVolunteer(this);
+			Iterator<Job> itr = allJobs.iterator();
+			while (itr.hasNext()) {
+				Job temp = itr.next();
+				if (temp.getJobID() == id){
+					if (dateAvailable(allJobs, temp)) {
+						temp.addVolunteer(this);
+						return new StringBuilder("You successfully signed up for a job");
 					} else {
-						System.out.println("You are already committed on that day.");
+						return new StringBuilder("You are already committed on that day.");
 					}
-				}
-			});
-			System.out.println("Press Enter to return to the Main Menu.");
-			keyboard.nextLine();//consumer
+				}			
+			}
 		}
+		return null;
 	}
 	
-	public boolean dateAvailable(Collection<Job> allJobs, Job theJob) {
+	private boolean dateAvailable(Collection<Job> allJobs, Job theJob) {
 				
 		LinkedList<Job> myJobs = new LinkedList<Job>();
 		

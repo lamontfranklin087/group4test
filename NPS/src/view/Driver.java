@@ -1,8 +1,10 @@
 package view;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 
 import model.Job;
+import model.Menu;
 import model.ParksProgram;
 
 /**
@@ -12,7 +14,11 @@ import model.ParksProgram;
 public class Driver {
 
 	public static void main(String[] args) throws ParseException {
-		new ParksProgram();		
+		Menu menu = new Menu();
+		TextBasedIO textIO = new TextBasedIO();
+		menu.addObserver(textIO);
+		
+		new ParksProgram(menu);
 	}
 
 }

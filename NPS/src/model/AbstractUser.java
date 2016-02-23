@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -12,6 +13,7 @@ import java.util.Scanner;
  * @version 360-1
  * @author Ihar Lavor
  * @version 02/12/2016 added findJob(), getNumber() functions and modified other functions.
+ * revision Ihar Lavor 2/22/2016 
  */
 public abstract class AbstractUser implements User,Serializable{
 	
@@ -19,7 +21,7 @@ public abstract class AbstractUser implements User,Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected final transient Scanner scan = new Scanner(System.in);
+	protected transient Scanner scan = new Scanner(System.in);
 	
 	private String firstName;
 	private String lastName;
@@ -45,8 +47,10 @@ public abstract class AbstractUser implements User,Serializable{
 	public abstract String getSimpleName();
 	
 	/** Print's the main menu for that user and starts their chain of menu's */
-	public abstract void mainMenu(Collection<Job> allJobs, Collection<User> allUsers);
+	public abstract ArrayList<String> getMainMenu();
 	
+	public abstract ArrayList<String> getMethodList();
+		
 	/**
 	   * This method sets the user's first name.
 	   * This allows for users to update or change their first name.
@@ -119,38 +123,41 @@ public abstract class AbstractUser implements User,Serializable{
 		return password;
 	}
 	
-	public void viewSumAllJobs(Collection<Job> allJobs){ 
+	public StringBuilder viewSumAllJobs(Collection<Job> allJobs){ 
+				
+		StringBuilder sumAllJobs = new StringBuilder();
+		
 		if (allJobs != null && allJobs.size() > 0) {
 			Iterator<Job> itr = allJobs.iterator();
-			System.out.println("ID     " + "Date\t    " + "Duration\t" 
-	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t" + "Description");
+			sumAllJobs.append("\nID     " + "Date\t    " + "Duration\t" 
+	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t\t" + "Description");
 			Job temp;
 			while (itr.hasNext()) {
 				temp = itr.next();				
-				System.out.println(temp.toStringTable());										
-			}
-			System.out.println("Press Enter to return to the Main Menu.");
-			keyboard.nextLine();//consumer
-		} else {
-			System.out.println("No jibs available at this time.");
+				sumAllJobs.append("\n" + temp.toStringTable());										
+			}			
 		}
+		return sumAllJobs;	
 	}
 	
-	public void viewJobDetails(Collection<Job> allJobs) {
+	public StringBuilder viewJobDetails(Collection<Job> allJobs) {
 		System.out.println("Please enter Job ID to view job details or 0 to quit: ");
 		int id = getNumber();
-		if(id != 0){
-			allJobs.forEach(job->{
-				if(job.getJobID() == id){
-				ParksProgram.menuHeader(this);
-				System.out.println("            ___Job Details___");
-				System.out.println(job.toString());
-				}
-			});
-			System.out.println("Press Enter to return to the Main Menu.");
-			keyboard.nextLine();//consumer
-		}
 		
+		StringBuilder jobDetails = new StringBuilder();
+		
+		if (allJobs != null && allJobs.size() > 0) {
+			Iterator<Job> itr = allJobs.iterator();
+			jobDetails.append("\n            ___Job Details___");
+			Job temp;
+			while (itr.hasNext()) {
+				temp = itr.next();	
+				if(temp.getJobID() == id){
+					jobDetails.append("\n" + temp.toString());		
+				}
+			}			
+		}
+		return jobDetails;			
 	}
 	
 	/**
@@ -174,15 +181,7 @@ public abstract class AbstractUser implements User,Serializable{
 		}
 		return result;
 	}
-	/**
-	 * Reads user's input in console.
-	 * @return String
-	 */
-	protected String getString() {
-		keyboard = new Scanner(System.in);		
-		return keyboard.nextLine();
-	}
-	
+		
 	/**
 	 * Iterator for a job list.
 	 * @param jobID job's ID.
@@ -200,5 +199,5 @@ public abstract class AbstractUser implements User,Serializable{
 		   }
 		}
 	   return null;
-   }	
+   }
 }

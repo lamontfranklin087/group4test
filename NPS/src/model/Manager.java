@@ -2,11 +2,9 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 /**
  * Creates a Manager object for use in the Parks Program.
@@ -14,16 +12,15 @@ import java.util.Scanner;
  * @author dave1729
  * @version 2/13/16
  * @author Ihar Lavor
- * Added Business rules number 1, 2
+ * @version 2/22/2016
+ * 
  */
 public final class Manager extends AbstractUser implements Serializable {
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private final int MAIN_MENU_OPTIONS = 6;
-	private final int MAX_NUMBER_JOBS = 30;	
+	private static final long serialVersionUID = 1L;	
 	private LinkedList<Job> jobsAtMyParks = new LinkedList<Job>();
 	ArrayList<String> parksManage;
 
@@ -55,11 +52,37 @@ public final class Manager extends AbstractUser implements Serializable {
 		return "Park Manager";
 	}
 	
+	@Override
+	public ArrayList<String> getMainMenu() {		
+		ArrayList<String>  middleText = new ArrayList<String>();
+		middleText.add("Submit a new job");
+		middleText.add("Delete a job");
+		middleText.add("Edit the details of a job");
+		middleText.add("View a summary of all upcoming jobs");
+		middleText.add("View the Volunteers for a job");
+		middleText.add("Exit");				
+		return middleText;
+	}
+	
+	@Override
+	public ArrayList<String> getMethodList() {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("submitNewJob");
+		list.add("deleteJob");
+		list.add("editJob");
+		list.add("viewSumAllJobs");
+		list.add("viewVolunteers");
+		
+		return list;
+	}
+	
 	/**
 	 * Prints a list of all volunteers for a job.
 	 * @param allJobs is a list of all Jobs.
+	 * @return 
 	 */
-	public void viewVolunteers(LinkedList<Job> allJobs) {
+
+	public StringBuilder viewVolunteers(Collection<Job> allJobs) {
 		if (allJobs != null) {
 			System.out.println("Enter Job's ID to view volunteers or 1 to exit");
 			int temp = getNumber();
@@ -70,65 +93,24 @@ public final class Manager extends AbstractUser implements Serializable {
 					
 					if (volunteer != null) {
 						Iterator<Volunteer> itr = volunteer.iterator();
-						System.out.println("First Name\tLastName\tEmail address");			
+						StringBuilder allVolunteers = new StringBuilder();
+						allVolunteers.append("\nFirst Name\tLastName\tEmail address");			
 						while (itr.hasNext()) {
 							Volunteer tempVol = itr.next();
-							System.out.println(tempVol.getFirstName() + "\t" +
+							allVolunteers.append("\n" + tempVol.getFirstName() + "\t" +
 											   tempVol.getLastName() + "\t" +
 											   tempVol.getEmail());
 						}
+						return allVolunteers;
 					} else {
-						System.out.println("No volunteers for this job");
+						return new StringBuilder("No volunteers for this job");
 					}
 				}
 			}
 		}
+		return null;
 	}
 	
-	/** 
-	 * Print's the main menu and returns the current menu choice.
-	 * @return menuChoice	the next menu to be entered.
-	 * */
-	@Override
-	public void mainMenu(Collection<Job> allJobs, Collection<User> allUsers) {
-		
-		managerJobList(allJobs);
-		
-		boolean exit = false;
-		while (!exit) {
-			int menuChoice = 0;
-			ParksProgram.menuHeader(this);
-			System.out.println("            ___Menu___");
-	   		System.out.println("1. Submit a new job");
-	   		System.out.println("2. Delete a job");
-	   		System.out.println("3. Edit the details of a job");
-	   		System.out.println("4. View a summary of all upcoming jobs");
-	   		System.out.println("5. View the Volunteers for a job");
-	   		System.out.println("6. Exit");
-			
-			menuChoice = getNumber();
-			while(menuChoice < 1 || menuChoice > MAIN_MENU_OPTIONS) {
-				System.out.print("Must select a menu option between 1 and " + MAIN_MENU_OPTIONS + "\nSelection: ");
-				menuChoice = getNumber();
-			}
-			switch(menuChoice){
-				case 1: submitNewJob(allJobs);
-					break;
-				case 2: deleteJob(allJobs);
-					break;
-				case 3: 
-					editJob(allJobs);
-					break;
-				case 4: viewSumAllJobs(allJobs);
-					break;
-				case 5: viewVolunteers(jobsAtMyParks);
-					break;
-				case 6: System.out.println("Exiting...");
-					exit = true;
-					break;
-			}			
-		}
-	}
 	
 	/**
 	 * Create a list of all jobs this manager manages.
@@ -159,68 +141,69 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * Displays all the currently pending jobs.
 	 * 
 	 * @param p a collection of the current jobs.
+	 * @return 
 	 */
 	@Override
-	public void viewSumAllJobs(Collection<Job> p){ 
+	public StringBuilder viewSumAllJobs(Collection<Job> allJobs){ 
+		managerJobList(allJobs);
+		StringBuilder sumAllJobs = new StringBuilder();
+		
 		if (jobsAtMyParks != null && jobsAtMyParks.size() > 0) {
 			Iterator<Job> itr = jobsAtMyParks.iterator();
-			System.out.println("ID     " + "Date\t    " + "Duration\t" 
+			sumAllJobs.append("\nID     " + "Date\t    " + "Duration\t" 
 	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t\t" + "Description");
 			Job temp;
 			while (itr.hasNext()) {
 				temp = itr.next();				
-				System.out.println(temp.toStringTable());										
-			}
-			System.out.println("Press Enter to return to the Main Menu.");
-			keyboard.nextLine();//consumer
+				sumAllJobs.append("\n" + temp.toStringTable());										
+			}			
 		}
+		return sumAllJobs;
 	}
 	
 	/**
 	 * Edit job's fields.
 	 * @param allJobs is a list of all Jobs.
 	 */
-	private boolean editJob(Collection<Job> allJobs) {
+	public StringBuilder editJob(Collection<Job> allJobs) {
 		System.out.println("Enter Job's ID number or 0 to exit:");
 		int jobIDTemp = getNumber();
 		if (jobIDTemp > 0) {
 			Job foundJob = findJob(jobIDTemp, allJobs);			
 			if (foundJob == null) {
-				System.out.println("No job with ID " + jobIDTemp);
+				return new StringBuilder("\nNo job with ID " + jobIDTemp);
 			} else {
 				foundJob.editJob(parksManage, allJobs);
-				return true;
+				return new StringBuilder("\nJob with ID " + jobIDTemp + " was succesfully changed");
 			}
 		}		
-		return false;
+		return null;
 	}
 
 	/**
 	 * Delete a job.
 	 * @param allJobs is a list of all Jobs
 	 */
-	private void deleteJob(Collection<Job> allJobs) {
+	public StringBuilder deleteJob(Collection<Job> allJobs) {
 		System.out.println("Enter Job's ID number or 0 to exit:");
 		int jobIDTemp = getNumber();
 		if (jobIDTemp > 0) {
 			Job temp = findJob(jobIDTemp, allJobs);			
 			if (temp == null) {
-				System.out.println("No job with ID " + jobIDTemp);
+				return new StringBuilder("\nNo job with ID " + jobIDTemp);
 			} else {
 				allJobs.remove(temp);
-				update(allJobs);
-				System.out.println("Job with ID " + jobIDTemp + " was deleted.");
-				System.out.println("Press Enter to return to the Main Menu.");
-				keyboard.nextLine();//consumer
+				return new StringBuilder("\nJob with ID " + jobIDTemp + " was deleted.");
 			}
 		}
+		return null;
 	}
 
 	/**
 	 * Create new job.
 	 * @param allJobs is a list of all Jobs.
 	 */
-	private boolean submitNewJob(Collection<Job> allJobs) {		
+	public boolean submitNewJob(Collection<Job> allJobs) {		
 		Job newJob = new Job();			
 		boolean result = newJob.createJob(getFirstName(), getLastName(), parksManage, allJobs);
 		if (result) {
@@ -228,34 +211,10 @@ public final class Manager extends AbstractUser implements Serializable {
 			System.out.println("1. To confirm job\n2. To exit without saving job");
 			if (getNumber() == 1) {
 				allJobs.add(newJob);
-				update(allJobs);
 				return true;
 			}	
 		}		
 		return false;
-	}
-	
-	/**
-	 * Updates a list of jobs current manager manages.
-	 * @param allJobs is a list of all Jobs.
-	 */
-	private void update(Collection<Job> allJobs) {
-		jobsAtMyParks = new LinkedList<Job>();
-		boolean iHaveJobs = false;
-		if (allJobs != null) {			
-			Job temp;
-			Iterator<Job> itr = allJobs.iterator();
-			while (itr.hasNext()) {
-				temp = itr.next();				
-				if (temp.getJobManager().equalsIgnoreCase(this.getFirstName() + " " + this.getLastName())) {
-					jobsAtMyParks.add(temp);
-					iHaveJobs = true;
-				}
-			}
-		}
-		if (!iHaveJobs) {
-			jobsAtMyParks = null;
-		}
 	}
 		
 	/**
