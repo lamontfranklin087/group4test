@@ -21,8 +21,7 @@ public class SerialStartup {
 	
 	public static void serialWriteUsers(Collection<User> myUsers)throws FileNotFoundException{
 		try {
-	         FileOutputStream fileOut =
-	         new FileOutputStream("users.txt");
+	         FileOutputStream fileOut = new FileOutputStream("users.txt");
 	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
 	         out.writeObject(myUsers);
 	         out.close();
@@ -127,8 +126,7 @@ public class SerialStartup {
 		}
 		allUsers.forEach(user->System.out.println(user.toString()));
 		try {
-	         FileOutputStream fileOut =
-	         new FileOutputStream("users.txt");
+	         FileOutputStream fileOut = new FileOutputStream("users.txt");
 	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
 	         out.writeObject(allUsers);
 	         out.close();
