@@ -30,15 +30,15 @@ public class ParksProgram {
 		//SPANISH MENU
 		String menuName = "Spanish Menu";
 		
-		StringBuilder middleText = new StringBuilder();
-		middleText.append("This Menu is all in spanish.");
+		ArrayList<String> greeting = new ArrayList<String>();
+		greeting.add("This Menu is all in spanish.");
 		
 		ArrayList<String> menuList = new ArrayList<String>();
 		menuList.add("Option Uno");
 		menuList.add("Option Dos");
 		menuList.add("Option Tres");
 
-		theMenu.updateMenu(menuName, middleText, menuList);
+		theMenu.updateMenu(menuName, greeting, menuList);
 		
 		//get next menu selection
 		menuSelection = scan.nextInt();
@@ -59,14 +59,14 @@ public class ParksProgram {
 		//ENGLISH MENU
 		menuName = "English Menu";
 		
-		middleText = new StringBuilder();
-		middleText.append("NOW this Menu is all in english!");
+		greeting = new ArrayList<String>();
+		greeting.add("NOW this Menu is all in english! This line gets too long, see how it goes on and on and on!");
 		
 		menuList = new ArrayList<String>();
 		menuList.add("Option One");
-		menuList.add("Option Two");
+		menuList.add("Option Two, is really long, it just keep going on forever and ever, see what I mean?");
 		
-		Menu menu2 = new Menu(menuName, middleText, menuList);
+		Menu menu2 = new Menu(menuName, greeting, menuList);
 		theMenu.updateMenu(menu2);
 //		try {
 //			allUsers = SerialStartup.serialReadUsers();

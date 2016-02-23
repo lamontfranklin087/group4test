@@ -52,14 +52,14 @@ public class TextBasedIO implements Observer {
 	 * @param temp  the menu item to be printed
 	 */
 	private void printHeader(String theProgramName) {
-		int programNameSize = theProgramName.length();
+		int numCharsToPrint = SCREEN_WIDTH - theProgramName.length();
 		
 		System.out.println();
-		for(int i = 0; i < (SCREEN_WIDTH - programNameSize) / 2; i++) {
+		for(int i = 0; i < numCharsToPrint / 2; i++) {
 			System.out.print("-");
 		}
 		System.out.print(theProgramName);
-		for(int i = (SCREEN_WIDTH - programNameSize) / 2; i < SCREEN_WIDTH; i++) {
+		for(int i = numCharsToPrint / 2; i < numCharsToPrint; i++) {
 			System.out.print("-");
 		}
 		System.out.println();
@@ -71,39 +71,60 @@ public class TextBasedIO implements Observer {
 	 * @param theMenuName  string representation of the menu name
 	 */
 	private void printMenuName(String theMenuName) {
-		int programNameSize = theMenuName.length();
-		for(int i = 0; i < (SCREEN_WIDTH - programNameSize) / 2; i++) {
+		int numSpacesToPrint = SCREEN_WIDTH - theMenuName.length();
+		for(int i = 0; i < numSpacesToPrint / 2; i++) {
 			System.out.print(" ");
 		}
 		System.out.print(theMenuName);
-		for(int i = (SCREEN_WIDTH - programNameSize) / 2; i < SCREEN_WIDTH; i++) {
+		for(int i = numSpacesToPrint / 2; i < numSpacesToPrint; i++) {
 			System.out.print(" ");
 		}
 		System.out.println();
 	}
 
 	/**
-	 * Prints the "greeting" or top text in the menu.
+	 * Prints the "greeting" or top text in the menu. Will cut short lines
+	 * that are longer than the SCREEN_WIDTH.
 	 * 
-	 * @param temp  the menu item to be printed
+	 * @param temp  the list of "greetings" in string form
 	 */
-	private void printMenuGreeting(StringBuilder theMenuGreeting) {
-		//gets and prints out the stringbuilder that represents the greeting
-		System.out.println(theMenuGreeting.toString());
+	private void printMenuGreeting(ArrayList<String> theMenuGreeting) {
+		//gets and prints each string in the list
+		for(int i = 0; i < theMenuGreeting.size(); i++) {
+			//if a string is too long, we cut it off a little before the screen edge
+			if(theMenuGreeting.get(i).length() > SCREEN_WIDTH) {
+				String partialLine = theMenuGreeting.get(i).substring(0, (SCREEN_WIDTH - 4));
+				System.out.println(partialLine + "... ");
+			}
+			//if it's short enough we just print it
+			else {
+				System.out.println(theMenuGreeting.get(i));
+			}
+		}
 		//gives a double space before menu options
 		System.out.println();
 	}
 
 	/**
 	 * Prints the menu options passed in via theMenuOptions, or a simple 
-	 * return statement is there are no options to print.
+	 * return statement is there are no options to print. It'll cut short
+	 * lines that are longer than the SCREEN_WIDTH.
 	 * 
 	 * @param theMenuOptions  the list of options in string form
 	 */
 	private void printMenuOptions(ArrayList<String> theMenuOptions) {
 		if(theMenuOptions.size() > 0) {
 			for(int i = 0; i < theMenuOptions.size(); i++) {
-				System.out.println((i + 1) + ")  " + theMenuOptions.get(i));
+				if(theMenuOptions.get(i).length() > SCREEN_WIDTH - 4) {
+					String partialLine = theMenuOptions.get(i).substring(0, (SCREEN_WIDTH - 8));
+					System.out.println((i + 1) + ")  " + partialLine + "... ");
+				}
+				//if it's short enough we just print it
+				else {
+					System.out.println((i + 1) + ")  " + theMenuOptions.get(i));
+				}
+				
+				
 			}
 			//gives a double space before input prompt
 			System.out.println();

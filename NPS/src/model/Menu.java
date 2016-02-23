@@ -12,7 +12,7 @@ public class Menu extends Observable {
 	private String menuName;
 	
 	/* Any test that needs to be between the menu and options. */
-	private StringBuilder menuGreeting;
+	private ArrayList<String> menuGreeting;
 	
 	/* Menu Options in current menu, an empty array has no options. */
 	private ArrayList<String> menuOptions;
@@ -22,7 +22,7 @@ public class Menu extends Observable {
 	 */
 	public Menu(){
 		setMenuName(null);
-		setMenuGreeting(new StringBuilder());
+		setMenuGreeting(new ArrayList<String>());
 		setMenuOptions(new ArrayList<String>());
 	}
 	
@@ -33,7 +33,7 @@ public class Menu extends Observable {
 	 * @param theMenuGreeting  any text that should appear between the menu name and option selection
 	 * @param theMenuOptions  a list of menu option titles that the user will choose between
 	 */
-	public Menu(String theMenuName, StringBuilder theMenuGreeting, ArrayList<String> theMenuOptions){
+	public Menu(String theMenuName, ArrayList<String> theMenuGreeting, ArrayList<String> theMenuOptions){
 		setMenuName(theMenuName);
 		setMenuGreeting(theMenuGreeting);
 		setMenuOptions(theMenuOptions);
@@ -61,7 +61,7 @@ public class Menu extends Observable {
 	 * @param theMenuGreeting  any text that should appear between the menu name and option selection
 	 * @param theMenuOptions  a list of menu option titles that the user will choose between
 	 */
-	public void updateMenu(String theMenuName, StringBuilder theMenuGreeting, ArrayList<String> theMenuOptions) {
+	public void updateMenu(String theMenuName, ArrayList<String> theMenuGreeting, ArrayList<String> theMenuOptions) {
 		menuName = theMenuName;
 		menuGreeting = theMenuGreeting;
 		menuOptions = theMenuOptions;
@@ -79,11 +79,11 @@ public class Menu extends Observable {
 	    notifyObservers();
 	}
 
-	public StringBuilder getMenuGreeting() {
+	public ArrayList<String> getMenuGreeting() {
 		return menuGreeting;
 	}
 
-	public void setMenuGreeting(StringBuilder otherText) {
+	public void setMenuGreeting(ArrayList<String> otherText) {
 		this.menuGreeting = otherText;
         setChanged();
 	    notifyObservers();
