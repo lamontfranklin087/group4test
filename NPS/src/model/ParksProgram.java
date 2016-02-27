@@ -73,7 +73,7 @@ public class ParksProgram {
 		keyboard = new Scanner(System.in);
 		switch (menuSelection) {
 		case 1:
-			if (allJobs.size() < MAX_NUMBER_JOBS) {
+			if (allJobs == null || allJobs.size() < MAX_NUMBER_JOBS) {
 				userInterface.printText("        Creating new job\n");
 				if (getNewJobData(currentUser)) {
 					userInterface.printText("New job was successfully created.");
