@@ -2,8 +2,8 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -43,103 +43,76 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		return middleText;
 	}
 	
-	@Override
-	public ArrayList<String> getMethodList() {
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("viewMyJobs");
-		list.add("viewSumAllJobs");
-		list.add("viewJobDetails");
-		list.add("jobSignUp");
-		
-		return list;
-	}
-	
 	/**
-	 * Displays all the jobs that the current volunteer is signed up for.
-	 * 
-	 * @param allJobs  a collection of all the existing jobs
+	 * Create a list of all jobs this volunteer is signed up for. 
+	 * @param allJobs a collection of all the existing jobs
+	 * @return a list jobs for this volunteer.
 	 */
-	public StringBuilder viewMyJobs(Collection<Job> allJobs) {				
+	public LinkedList<Job> viewMyJobs(Collection<Job> allJobs) {			
 		LinkedList<Job> myJobs = new LinkedList<Job>();
-		
-		allJobs.forEach(job->{
-				LinkedList<Volunteer> volunteers = job.getVolunteers();
-				if (volunteers!=null){
-					volunteers.forEach(member->{
-						if(member.getEmail().equals(this.getEmail()))
-							myJobs.add(job);
-						
-						});
-					}
-				});
-			
-		if (myJobs.isEmpty()) {
-			return new StringBuilder("You are not currently signed up for any jobs.");
-		} else {
-			StringBuilder string = new StringBuilder();
-			string.append("ID     " + "Date\t    " + "Duration\t" 
-					+ "Slots\t" + "Manager\t\t" + "Locaton\t\t"  
-					+ "\t\tDescription");
-			myJobs.forEach(job->string.append("\n" + job.toStringTable()));
-			return string;
+		for (Job tempJob : allJobs) {
+			LinkedList<Volunteer> volunteers = tempJob.getVolunteers();			
+			for (Volunteer tempVolunteer : volunteers) {
+				if(tempVolunteer.getEmail().equals(this.getEmail())) {
+					myJobs.add(tempJob);
+				}
+			}								
 		}
+		return myJobs;
 	}
 	
 	/**
-	 * Gives the current volunteer options to sign up for current jobs.
-	 * 
-	 * @param allJobs  a collection of all the existing jobs
+	 * Sign up this volunteer for a job.
+	 * @param allJobs is a collection of all existing jobs.
+	 * @param aJobID is a identification number for a specific job (must be > 0).
+	 * @param aSlot is a slot name for which volunteer want to sign up (must be "light", "medium", or "heavy").
+	 * @return true if volunteer was added to a job, otherwise false.
 	 */
-	public StringBuilder jobSignUp(Collection<Job> allJobs) {
-		System.out.println("Please enter Job ID to sign-up or 0 to quit: ");
-		int id = getNumber();
-		if (id != 0) {
-			Iterator<Job> itr = allJobs.iterator();
-			while (itr.hasNext()) {
-				Job temp = itr.next();
-				if (temp.getJobID() == id){
+	public boolean jobSignUp(Collection<Job> allJobs, int aJobID, String aSlot) {
+		if (aJobID > 0) {
+			for (Job temp : allJobs) {			
+				if (temp.getJobID() == aJobID){
 					if (dateAvailable(allJobs, temp)) {
-						temp.addVolunteer(this);
-						return new StringBuilder("You successfully signed up for a job");
-					} else {
-						return new StringBuilder("You are already committed on that day.");
-					}
+						temp.addVolunteer(this, aSlot);
+						return temp.addVolunteer(this, aSlot);
+					} 
 				}			
 			}
 		}
-		return null;
+		return false;
 	}
 	
-	private boolean dateAvailable(Collection<Job> allJobs, Job theJob) {
-				
-		LinkedList<Job> myJobs = new LinkedList<Job>();
+	/**
+	 * Checks if this volunteer already committed on that day.
+	 * @param allJobs is a collection of all existing jobs.
+	 * @param theJob is a job for which volunteer want to sign up.
+	 * @return false if volunteer was committed on that day, otherwise true.
+	 */
+	private boolean dateAvailable(Collection<Job> allJobs, Job theJob) {	
+		ArrayList<Integer> myBusyDates = new ArrayList<Integer>();
 		
-		allJobs.forEach(job->{
-			LinkedList<Volunteer> volunteers = job.getVolunteers();
+		for (Job tempJob : allJobs) {
+			LinkedList<Volunteer> volunteers = tempJob.getVolunteers();
 			if (volunteers != null){
-				volunteers.forEach(member->{
-				if (member.getEmail().equals(this.getEmail())) {						
-					myJobs.add(job);
-				}
-			});
-			}
-		});
-			
-		if (myJobs.isEmpty()) {
-			return true;
-		} else {
-			boolean scheduled = false;
-			for (Job job:myJobs) {
-				if(job.getDate().equals(theJob.getDate())) {
-					scheduled = true;
+				for (Volunteer tempVolunteer : volunteers) {				
+					if (tempVolunteer.getEmail().equals(this.getEmail())) {	
+						myBusyDates.add(tempJob.getDate().get(Calendar.DAY_OF_YEAR));
+						if (tempJob.getJobDuration() == 2) {
+							//adds another day if job duration is 2 days
+							//It mean that volunteer not available for 2 days in a row.
+							myBusyDates.add(tempJob.getDate().get(Calendar.DAY_OF_YEAR) + 1);
+						}
+					}
 				}
 			}
-			if (scheduled){
+		}	
+		int jobDate = theJob.getDate().get(Calendar.DAY_OF_YEAR);
+		for (Integer tempDate : myBusyDates) {
+			if (jobDate == tempDate) {
 				return false;
-			} else {
-				return true;
-			}			
-		}
+			}
+		}	
+		return true;		
 	}
 	
 	@Override
@@ -148,8 +121,7 @@ public final class Volunteer extends AbstractUser implements Serializable {
 	}
 
 	/**
-	 * A string representation of this volunteer.
-	 * 
+	 * A string representation of this volunteer.	 * 
 	 * @return  the resulting string
 	 */
 	public String toString() {		

@@ -11,68 +11,70 @@ import java.util.Collection;
  */
 public interface User {	
 	
-	public abstract StringBuilder viewSumAllJobs(Collection<Job> allJobs);
-	public abstract String getSimpleName();
-	
-	/** Print's the main menu for that user and starts their chain of menu's */
-	public abstract ArrayList<String> getMainMenu();
-	
-	public abstract ArrayList<String> getMethodList();
+	/**
+	 * Accessor to all currently pending jobs for this User.
+	 * @return a list of all jobs for this User, or null if there is no jobs.
+	 */
+	public abstract Collection<Job> viewSumAllJobs();
 	
 	/**
-	   * This method sets the user's first name.
-	   * This allows for users to update or change their first name.
-	   * @param theFirstName The new first name the user would like.
-	   */
+	 * Accessor to a user type: manager, UrbanParkStaff, or volunteer.
+	 * @return a user type as a string.
+	 */
+	public abstract String getSimpleName();
+	
+	/** 
+	 * Accessor to a menu for a user.
+	 * @return an array list of strings where each string represent one menu option.
+	 */
+	public abstract ArrayList<String> getMainMenu();
+		
+	/**
+	 * This method sets the user's first name.
+	 * @param theFirstName is user's first name (must be a string).
+	 */
 	public void setFirstName(String theFirstName);
 	
 	/**
-	   * Gets the user's first name.
-	   * This allows for displaying of the user's first name.
-	   * @return firstName The user's first name.
-	   */
+	 * Accessor to the user's first name.
+	 * @return The user's first name as a String.
+	 */
 	public String getFirstName();
 	
 	/**
-	   * This method sets the user's last name.
-	   * This allows for users to update or change their last name.
-	   * @param theLastName The new last name the user would like.
-	   */
+	 * This method sets the user's last name.
+	 * @param theLastName The user's last name.
+	 */
 	public void setLastName(String theLastName);
 	
 	/**
-	   * Gets the user's last name.
-	   * This allows for displaying of the user's last name.
-	   * @return lastName The user's last name.
-	   */
+	 * Accessor to a user's last name.
+	 * @return The user's last name as a String.
+	 */
 	public String getLastName();
 	
 	/**
-	   * This method sets the user's email.
-	   * This allows for users to update or change their email.
-	   * @param theEmail The new email the user would like to be contacted at.
-	   */
+	 * This method sets the user's email.
+	 * @param theEmail The new user's email.
+	 */
 	public void setEmail(String theEmail);
 		
 	/**
-	   * Gets the user's email.
-	   * This allows for displaying of the user's email.
-	   * @return email The user's email.
-	   */
+	 * Accessor to the user's email.
+	 * @return The user's email as a String.
+	 */
 	public String getEmail();
 	
 	/**
-	   * This method sets the user's password.
-	   * This allows for users to update or change their password.
-	   * @param thePassword The new password the user would like.
-	   */
+	 * This method sets the user's password.
+	 * @param thePassword The user's password.
+	 */
 	public void setPassword(String thePassword);
 	
 	/**
-	   * Gets the user's password name.
-	   * This allows for comparing of the user's password.
-	   * @return password The user's password.
-	   */
+	 * Accessor to the user's password.
+	 * @return The user's password as a String.
+	 */
 	public String getPassword();
 	
 }

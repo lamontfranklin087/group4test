@@ -3,7 +3,6 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Scanner;
 
 /**
@@ -27,8 +26,12 @@ public abstract class AbstractUser implements User,Serializable{
 	private String lastName;
 	private String email;
 	private String password;
-	protected transient Scanner keyboard;	
+	protected Collection<Job> allJobs;
+	//private Collection<User> allUsers;	
 	
+	/**
+	 * Default constructor for a User.
+	 */
 	protected AbstractUser() {
 		firstName = "Test";
 		lastName = "User";
@@ -36,167 +39,136 @@ public abstract class AbstractUser implements User,Serializable{
 		password = "pass";
 	}
 	
-	protected AbstractUser(String theFirstName, String theLastName, String theEmail, String thePassword) {
-		
+	/**
+	 * Parameterized constructor for a User.
+	 * @param anAllJobs is a list of all available jobs.
+	 * @param anAllUsers is a list of all users.
+	 */
+	protected AbstractUser(Collection<Job> anAllJobs, Collection<User> anAllUsers) {
+		allJobs = anAllJobs;
+		//allUsers = anAllUsers;
+	}
+	
+	/**
+	 * Parameterized constructor for a User.
+	 * @param theFirstName User's first name.
+	 * @param theLastName User's last name.
+	 * @param theEmail User's email address.
+	 * @param thePassword User's password.
+	 */
+	protected AbstractUser(String theFirstName, String theLastName, 
+						   String theEmail, String thePassword) {		
 		firstName = theFirstName;
 		lastName = theLastName;
 		email = theEmail;
-		password = thePassword;
+		password = thePassword;		
 	}
-		
+	
+	/**
+	 * Accessor to a user type: manager, UrbanParkStaff, or volunteer.
+	 * @return a user type as a string.
+	 */
 	public abstract String getSimpleName();
 	
-	/** Print's the main menu for that user and starts their chain of menu's */
+	/** 
+	 * Accessor to a menu for a user.
+	 * @return an array list of strings where each string represent one menu option.
+	 */
 	public abstract ArrayList<String> getMainMenu();
-	
-	public abstract ArrayList<String> getMethodList();
-		
+			
 	/**
-	   * This method sets the user's first name.
-	   * This allows for users to update or change their first name.
-	   * @param theFirstName The new first name the user would like.
-	   */
+	 * This method sets the user's first name.
+	 * @param theFirstName is user's first name (must be a string).
+	 */
 	public void setFirstName(String theFirstName) {
 		this.firstName = theFirstName;
 	}
 	
 	/**
-	   * Gets the user's first name.
-	   * This allows for displaying of the user's first name.
-	   * @return firstName The user's first name.
-	   */
+	 * Accessor to the user's first name.
+	 * @return The user's first name as a String.
+	 */
 	public String getFirstName() {
 		return firstName;
 	}
 	
 	/**
-	   * This method sets the user's last name.
-	   * This allows for users to update or change their last name.
-	   * @param theLastName The new last name the user would like.
-	   */
+	 * This method sets the user's last name.
+	 * @param theLastName The user's last name.
+	 */
 	public void setLastName(String theLastName) {
 		this.lastName = theLastName;
 	}
 	
 	/**
-	   * Gets the user's last name.
-	   * This allows for displaying of the user's last name.
-	   * @return lastName The user's last name.
-	   */
+	 * Accessor to a user's last name.
+	 * @return The user's last name as a String.
+	 */
 	public String getLastName() {
 		return lastName;
 	}
 	
 	/**
-	   * This method sets the user's email.
-	   * This allows for users to update or change their email.
-	   * @param theEmail The new email the user would like to be contacted at.
-	   */
+	 * This method sets the user's email.
+	 * @param theEmail The new user's email.
+	 */
 	public void setEmail(String theEmail) {
 		this.email = theEmail;
 	}	
 	
 	/**
-	   * Gets the user's email.
-	   * This allows for displaying of the user's email.
-	   * @return email The user's email.
-	   */
+	 * Accessor to the user's email.
+	 * @return The user's email as a String.
+	 */
 	public String getEmail() {
 		return email;
 	}
 	
 	/**
-	   * This method sets the user's password.
-	   * This allows for users to update or change their password.
-	   * @param thePassword The new password the user would like.
-	   */
+	 * This method sets the user's password.
+	 * @param thePassword The user's password.
+	 */
 	public void setPassword(String thePassword) {
 		this.password = thePassword;
 	}
 	
 	/**
-	   * Gets the user's password name.
-	   * This allows for comparing of the user's password.
-	   * @return password The user's password.
-	   */
+	 * Accessor to the user's password.
+	 * @return The user's password as a String.
+	 */
 	public String getPassword() {
 		return password;
-	}
+	}	
 	
-	public StringBuilder viewSumAllJobs(Collection<Job> allJobs){ 
-				
-		StringBuilder sumAllJobs = new StringBuilder();
-		
-		if (allJobs != null && allJobs.size() > 0) {
-			Iterator<Job> itr = allJobs.iterator();
-			sumAllJobs.append("\nID     " + "Date\t    " + "Duration\t" 
-	                + "Slots\t" + "Manager\t\t" + "Locaton\t\t\t" + "Description");
-			Job temp;
-			while (itr.hasNext()) {
-				temp = itr.next();				
-				sumAllJobs.append("\n" + temp.toStringTable());										
-			}			
-		}
-		return sumAllJobs;	
-	}
-	
-	public StringBuilder viewJobDetails(Collection<Job> allJobs) {
-		System.out.println("Please enter Job ID to view job details or 0 to quit: ");
-		int id = getNumber();
-		
-		StringBuilder jobDetails = new StringBuilder();
-		
-		if (allJobs != null && allJobs.size() > 0) {
-			Iterator<Job> itr = allJobs.iterator();
-			jobDetails.append("\n            ___Job Details___");
-			Job temp;
-			while (itr.hasNext()) {
-				temp = itr.next();	
-				if(temp.getJobID() == id){
-					jobDetails.append("\n" + temp.toString());		
-				}
-			}			
-		}
-		return jobDetails;			
+	/**
+	   * Accessor to a list of all jobs.
+	   * @return list of all jobs.
+	   */
+	public Collection<Job> viewSumAllJobs() {		
+		return allJobs;	
 	}
 	
 	/**
-	 * Parse string to integer.
-	 * @return an integer number from 1 to ...
-	 */
-	protected int getNumber() {
-		int result = -1;
-		keyboard = new Scanner(System.in);
-		
-		while(true){
-	        try {	        	
-	        	String temp = keyboard.nextLine();
-	        	if (Integer.parseInt(temp) >= 0) {
-	        		result = Integer.parseInt(temp);
-	        		break;
-	        	}
-	        } catch(NumberFormatException ne) {
-	            System.out.println("That's not a write number.");	            
-	        }	
-		}
-		return result;
+     * Accessor to a specific job.
+     * @param aJobID is a job's ID number.
+     * @return found job, if there is no job with aJobID then return null.
+     */
+	public Job viewJobDetails(int aJobID) {	
+		return findJob(aJobID);			
 	}
 		
 	/**
-	 * Iterator for a job list.
+	 * Find a job from a list of all jobs.
 	 * @param jobID job's ID.
-	 * @param allJobs List of all jobs in a program.
 	 * @return found job.
 	 */
-	protected Job findJob(int jobID, Collection<Job> allJobs) {
+	protected Job findJob(int jobID) {
 		if (allJobs != null) {
-		   Iterator<Job> itr = allJobs.iterator();	  
-		   while (itr.hasNext()) {
-			   Job temp = itr.next();
-			   if (temp.getJobID() == jobID) {
-				   return temp;
-			   }
-		   }
+			for (Job tempJob : allJobs) {
+				if (tempJob.getJobID() == jobID) {
+					   return tempJob;
+				}
+			}
 		}
 	   return null;
    }

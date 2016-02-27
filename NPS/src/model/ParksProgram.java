@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import view.UI;
+
 /**
  * Login menu, read and write from/to text files.
  * @author Ihar Lavor
@@ -23,118 +25,253 @@ import java.util.Scanner;
 public class ParksProgram {
 	private Collection<Job> allJobs;
 	private Collection<User> allUsers;	
-	private Menu menuAccessor;
-	private Scanner scan;
+	private UI userInterface;
+	/* The number of maximum allowable jobs to be pending for any 7 day period. */
+	private int MAX_JOBS_IN_7_CONSECUTIVE_DAYS = 5;
+	
+	/* The max number of jobs that can be pending for all dates. */
+	private final int MAX_NUMBER_JOBS = 30;	
+	
+	private Scanner keyboard = new Scanner(System.in);
 
 
-	public ParksProgram(Menu theMenu) {
-		menuAccessor = theMenu;
-		
+	public ParksProgram() {	
 		readSerialFile();
 		checkForPastJobs();		
 		
+		userInterface = new UI();
+		
 		User currentUser;
 		do {
-			currentUser = login();
-			if (currentUser != null) {
-				run(currentUser, allJobs, allUsers);
+			currentUser = login(userInterface);
+			if (currentUser != null) {				
+				run(currentUser);
 			}
 		} while (currentUser != null);
 		writeSerialFile();
 	}
-
-	@SuppressWarnings("rawtypes")
-	private void run(User currentUser, Collection<Job> allJobs, Collection<User> allUsers) {				
-		ArrayList<String> methodsList = currentUser.getMethodList();
-		int menuSelection;
+	
+	private void run(User currentUser) {
+		int menuSelection = 0;
 		do {
-			menuSelection = 0;
-			printData(currentUser, currentUser.getMainMenu(), null);
-			
-			menuSelection = getNumber();
-			if (menuSelection > 0 && menuSelection < currentUser.getMainMenu().size()) {	
-				
-				Class[] param1 = new Class[1];	
-				param1[0] = Collection.class;
-				java.lang.reflect.Method method = null;
-				
-				try {
-					String methodName = methodsList.get(menuSelection - 1);	
-					method = currentUser.getClass().getMethod(methodName, param1);
-				} catch (SecurityException e) {					
-				} catch (NoSuchMethodException e) {	}
-				
-				try {
-					StringBuilder temp;
-					if (method.getName().equalsIgnoreCase("searchVolunteer")) {
-						temp = (StringBuilder) method.invoke(currentUser, allUsers);
-					} else {
-						temp = (StringBuilder) method.invoke(currentUser, allJobs);
-					}
-					printData(currentUser, null, temp);	
-					scan.nextLine();
-				} catch (IllegalArgumentException e) {
-				} catch (IllegalAccessException e) {
-				} catch (InvocationTargetException e) {}
-			}			
+			userInterface.clearScreen();
+			userInterface.menuHeader(currentUser);
+			menuSelection = userInterface.printMenuOptions(currentUser.getMainMenu());
+			if (currentUser.getSimpleName().equalsIgnoreCase("Park Manager")) {
+				managerHere((Manager) currentUser, menuSelection);
+			} else if (currentUser.getSimpleName().equalsIgnoreCase("Volunteer")) {
+				volunteerHere(currentUser, menuSelection);
+			} else if (currentUser.getSimpleName().equalsIgnoreCase("Urban Parks Staff")) {
+				staffHere(currentUser, menuSelection);
+			} 					
 		} while (menuSelection != currentUser.getMainMenu().size());
 	}
 	
-	private void printData(User currentUser, ArrayList<String> menuList, StringBuilder temp) {		
-		String menuName = "You are logged in as...";
+	private void managerHere(Manager currentUser, int menuSelection) {
+		userInterface.clearScreen();
+		userInterface.menuHeader(currentUser);
+		keyboard = new Scanner(System.in);
+		switch (menuSelection) {
+		case 1:
+			if (allJobs.size() < MAX_NUMBER_JOBS) {
+				userInterface.printText("        Creating new job\n");
+				if (getNewJobData(currentUser)) {
+					userInterface.printText("New job was successfully created.");
+				} else {
+					userInterface.printText("Something went wrong and job wasn't created. \nTry again.");
+				}
+			} else {
+				userInterface.printText("You reached maximum limit of jobs.");
+			}
+			break;
+		case 2:			
+			userInterface.printText("        Deleting a job\n");
+			userInterface.printText("Enter job ID: ");
+			if (currentUser.deleteJob(getNumber())) {
+				userInterface.printText("\nJob was successfully deleted.");
+			} else {
+				userInterface.printText("\nJob wasn't found.");
+			}
+			break;
+		case 3:
+			break;
+		case 4:
+			userInterface.printText("           All jobs you manage: ");
+			Collection<Job> availableJobs = currentUser.viewSumAllJobs();
+			for (Job tempJobs : availableJobs) {
+				userInterface.printText(tempJobs.toStringTable());
+			}
+			userInterface.waitForReturnKey();
+			break;
+		case 5:
+			userInterface.printText("         View the Volunteers for a job\n");
+			userInterface.printText("Enter job ID: ");			
+			LinkedList<Volunteer> volunteersForJob = currentUser.viewVolunteers(getNumber());
+			for (User tempVolunteer : volunteersForJob) {
+				userInterface.printText(tempVolunteer.toString());
+			}
+			userInterface.waitForReturnKey();
+			break;
+		case 6:
+			userInterface.printText("Exiting...");
+			break;
+		}			
+//		middleText.add("3 Edit the details of a job");
+	}
+	
+	private void staffHere(User currentUser, int menuSelection) {
 		
-		StringBuilder middleText = new StringBuilder();
-		middleText.append("\t\t    " + currentUser.getSimpleName() + ", " + currentUser.getFirstName()
-		+ " " + currentUser.getLastName());		
-		
-		if (menuList == null) {
-			menuAccessor.updateMenu(menuName, middleText, null, temp);
-		} else {
-			menuAccessor.updateMenu(menuName, middleText, menuList, null);
-		}
 	}
 
-	/**This class logs the user in and returns the resulting user information.
-	 * 
-	 * @return 
-	 */
-	@SuppressWarnings("resource")
-	private User login() {				
-		ArrayList<String> menuList = new ArrayList<String>();
-		menuList.add("Login");
-		menuList.add("Terminate program");
-		StringBuilder middleText = new StringBuilder("");
-		String menuName = "Login page";
+	private void volunteerHere(User currentUser, int menuSelection) {
 		
-		menuAccessor.updateMenu(menuName, middleText, menuList, null);
-
-		if (getNumber() == 1) {		   
-			Scanner keyboard = new Scanner(System.in);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * This class logs the user in and returns the resulting user information.
+	 * @param userInterface 
+	 * @return 
+	 */	
+	private User login(UI userInterface) {
+		userInterface.clearScreen();
+		userInterface.menuHeader(null);
+		
+		ArrayList<String> menuList = new ArrayList<String>();
+		StringBuilder textString = new StringBuilder();
+		textString.append("                 Login page");
+		textString.append("\n");
+		userInterface.printText(textString.toString());
+				
+		menuList.add("Login");
+		menuList.add("Terminate program");	
+		
+		int userSelection = userInterface.printMenuOptions(menuList);		
+		
+		if (userSelection == 1) {
+			userInterface.clearScreen();
+			userInterface.printMenuOptions(null);
 			
-			middleText.append("\n\nEnter your email address: ");
-			menuAccessor.updateMenu(menuName, middleText, new ArrayList<String>(), null);
-			
+			userInterface.printText("Enter your email address: ");						
 			String email = keyboard.nextLine();
 			
-			middleText.append(email);
-			middleText.append("\nEnter your password:");
-			menuAccessor.updateMenu(menuName, middleText, new ArrayList<String>(), null);
-			
-			String password = keyboard.nextLine();
+			userInterface.printText("Enter your password: ");						
+			String password = keyboard.nextLine();			
 
-			Iterator<User> itr = allUsers.iterator();
-			
-			while (itr.hasNext()) {
-				User temp = itr.next();
-				if (temp.getEmail().equals(email)
-						&& temp.getPassword().equals(password)) {
-					return temp;
-				}				
-			}
+			for (User tempUser : allUsers) {
+				if (tempUser.getEmail().equals(email)
+						&& tempUser.getPassword().equals(password)) {
+					return tempUser;
+				}
+			}			
 		}
 		return null;
 	}
-
+	
+	private boolean getNewJobData(Manager currentUser) {
+		
+		userInterface.printText("Enter Job's date (format mm/dd/yyyy): ");				
+		String[] mystring = (keyboard.nextLine()).split("/");
+		Calendar currentDate = new GregorianCalendar();
+		Calendar futureJobDate = new GregorianCalendar();		
+		
+		int myDate = Integer.parseInt(mystring[1]);
+		int myYear = Integer.parseInt(mystring[2]);
+		int myMonth = Integer.parseInt(mystring[0]) - 1;
+						
+		futureJobDate.set(Calendar.YEAR, myYear);
+		futureJobDate.set(Calendar.MONTH, myMonth);
+		futureJobDate.set(Calendar.DAY_OF_MONTH, myDate);	
+		
+		int curYear = currentDate.get(Calendar.YEAR);		
+		int jobDayOfYear = futureJobDate.get(Calendar.DAY_OF_YEAR);
+		int curDayOfYear = currentDate.get(Calendar.DAY_OF_YEAR);
+		
+		if (curYear < myYear) {
+			jobDayOfYear = jobDayOfYear + 365;
+		}		
+	 	int resultDays = jobDayOfYear - curDayOfYear;	 	
+	 	if (resultDays <= 0) {
+	 		userInterface.printText("You can't enter past date. ");
+			return false;
+	 	} else if (resultDays > 90) {
+	 		userInterface.printText("You can't enter date more then 90 days ahead. ");
+			return false;
+	 	} else if (!jobsIn7Days(allJobs, futureJobDate)) {
+	 		userInterface.printText("A job can't be added because you are to busy for that week.");
+			return false;
+		}
+	 	
+	 	userInterface.printText("Select job location: ");
+	 	int parkName = userInterface.printMenuOptions(currentUser.getParksList());
+	 	System.out.println(currentUser.getParksList().size());
+	 	String aJobLocation = currentUser.getParksList().get(parkName);
+	 	
+	 	userInterface.printText("Enter job Duration: ");
+	 	int aDuration = getNumber();
+	 	if (aDuration != 1 || aDuration != 2) {
+	 		return false;
+	 	}
+	 	
+	 	userInterface.printText("Enter the number of light slots: ");
+	 	int aLightSlot = getNumber();
+	 	
+	 	userInterface.printText("Enter the number of medium slots: ");
+	 	int aMediumSlot = getNumber();
+	 	
+	 	userInterface.printText("Enter the number of heavy slots: ");
+	 	int aHeavySlot = getNumber();
+	 	
+	 	userInterface.printText("Enter job's start time (for example 8:00AM): ");
+	 	String aStartTime = keyboard.nextLine();
+	 	
+	 	userInterface.printText("Enter job's start time (for example 8:00AM): ");
+	 	String aDescription = keyboard.nextLine();
+	 	
+		boolean result = currentUser.submitNewJob(aJobLocation, futureJobDate, aDuration, aLightSlot, aMediumSlot, 
+				aHeavySlot, aDescription, aStartTime);
+		
+		return result;
+	}
+	
+	/**
+	 * Checking: if there during any consecutive 7 day period 
+	 * more than 5 jobs or not.	 
+	 * @param allJobs is a list of all Jobs.
+	 * @param mydate is user entered date.
+	 * @return false if there more 5 or more jobs, otherwise true.
+	 */
+	protected boolean jobsIn7Days(Collection<Job> allJobs, Calendar mydate) {
+		int jobsIn7Days = 0;	
+		int jobDayOfYear = mydate.get(Calendar.DAY_OF_YEAR);		
+		if (allJobs.size() == 0) {
+			return true;
+		}
+		Iterator<Job> itr = allJobs.iterator();
+		if (allJobs != null && allJobs.size() > 0) {		
+			while (itr.hasNext()) {
+				int temp = itr.next().getDate().get(Calendar.DAY_OF_YEAR);
+				if ((temp <= (jobDayOfYear + 3)) && (temp >= (jobDayOfYear - 3))) {					
+					jobsIn7Days = jobsIn7Days + 1;
+				}				
+			}
+			if (jobsIn7Days < MAX_JOBS_IN_7_CONSECUTIVE_DAYS) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Read all jobs and user from a file.
+	 */
 	private void readSerialFile() {
 		try {
 			allUsers = SerialStartup.serialReadUsers();
@@ -150,6 +287,9 @@ public class ParksProgram {
 		}
 	}
 	
+	/**
+	 * Writes all jobs and user to a file.
+	 */
 	private void writeSerialFile() {
 		if (allUsers != null) {
 			try {
@@ -206,32 +346,17 @@ public class ParksProgram {
 			}
 		}	
 	}
-
-	/**
-	 * Header for all menus
-	 * @param theUser
-	 */
-	public static void menuHeader(User theUser){
-		System.out.println();
-		System.out.println("-------------Urban Parks Collective!------------");
-		System.out.println("You are logged in as...");
-		System.out.println(theUser.getSimpleName() + ", " + theUser.getFirstName()
-		+ " " + theUser.getLastName());
-		System.out.println();
-	}
-
 	
 	/**
 	 * Parse string to integer.
 	 * @return an integer number from 1 to ...
 	 */
 	private int getNumber() {	
-		//get next menu selection
 		int result = 0;
-		scan = new Scanner(System.in);
+		keyboard = new Scanner(System.in);
 
 		try {	        	
-			String temp = scan.nextLine();
+			String temp = keyboard.nextLine();
 			if (Integer.parseInt(temp) >= 0) {
 				result = Integer.parseInt(temp);				
 			}

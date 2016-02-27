@@ -3,8 +3,6 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Scanner;
 
 /**
  * Creates an Urban Parks staff object for use in the Parks Program.
@@ -45,48 +43,28 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 		middleText.add("Exit");				
 		return middleText;
 	}
-	
-	@Override
-	public ArrayList<String> getMethodList() {
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("viewSumAllJobs");
-		list.add("viewJobDetails");
-		list.add("searchVolunteer");
 		
-		return list;
-	}
-	
 	/**
-	 * Search volunteer by Last Name
-	 * @param allUsers
-	 * @return 
+	 * Search volunteer by Last Name.
+	 * @param allUsers is a collection of all users.
+	 * @param aVolunteerLastName is a volunteer's last name.
+	 * @return a volunteer if found, otherwise return null.
 	 */
-	public StringBuilder searchVolunteer(Collection<User> allUsers) {
-		System.out.println("Enter Volunteer's last name:");
-		scan = new Scanner(System.in);		
-		String volunt = scan.nextLine();
-		StringBuilder volunteerData = new StringBuilder();
+	public User searchVolunteer(Collection<User> allUsers, String aVolunteerLastName) {
 		if (allUsers != null) {
-			Iterator<User> itr = allUsers.iterator();
-			User user;
-			while (itr.hasNext()) {
-				user = itr.next();
-				if (user.getLastName().equals(volunt) 
-						&& user.getSimpleName().equalsIgnoreCase("Volunteer")) {
-					volunteerData.append("\nLast & First Name      Email");
-					volunteerData.append("\n" + user.getLastName() + " "
-										      + user.getFirstName() + "    "
-										      +	user.getEmail());									
-				}				
+			for (User tempUser : allUsers) {
+				if (tempUser.getLastName().equals(aVolunteerLastName) 
+						&& tempUser.getSimpleName().equalsIgnoreCase("Volunteer")) {
+					return tempUser;
+				}
 			}
-		} else {
-			return new StringBuilder("There is no " + volunt + " volunteer.");
 		}
-		return volunteerData;
+		return null;
 	}
 	
 	/**
-	 * Return the type of user (Staff, Manager or Volunteer)
+	 * Accessor to a user type (Staff, Manager or Volunteer).
+	 * @return the type of this user (Staff, Manager or Volunteer)
 	 */
 	@Override
 	public String getSimpleName() {
@@ -109,5 +87,5 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 		userSummary.append("\n");
 		userSummary.append(getEmail());
 		return userSummary.toString();
-	}	
+	}
 }
