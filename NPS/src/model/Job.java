@@ -310,6 +310,13 @@ public class Job implements java.io.Serializable {
 	
 	/**
 	 * Accessor.
+	 * @return a number of volunteers signed up for this job.
+	 */
+	public int getTotalVolunteers() {
+		return totalVolunteers;
+	}
+	/**
+	 * Accessor.
 	 * @return a list of volunteers for a job.
 	 */
 	public LinkedList<Volunteer> getVolunteers() {

@@ -294,46 +294,52 @@ public class ParksProgram {
 		userInterface.printText("        Editnig a job\n");
 		userInterface.printText("Enter job ID: ");
 		int tempJobID = getNumber();
-		userInterface.clearScreen();
-		userInterface.menuHeader(currentUser);
-		int editMenuSelection = userInterface.printMenuOptions(tempEditMenu);
 		
-		String aJobLocation = null;
-		Calendar aJobDate = null; 
-		int aDuration = 0;
-		int aLightSlot = 0;
-		int aMediumSlot = 0;
-		int aHeavySlot = 0;
-		String aDescription = null;
-		String aStartTime = null;
-		
-		switch (editMenuSelection) {
-			case 1:
-				aJobDate = getJobDateFromUser();
-				break;
-			case 2:
-				aJobLocation = getJobLocationFromUser(currentUser);
-				break;
-			case 3:
-				aDuration = getJobDurationFromUser();
-				break;
-			case 4:
-				aLightSlot = getLightSlotFromUser();
-				aMediumSlot = getMediumSlotFromUser(); 
-				aHeavySlot = getHeavySlotFromUser();
-				break;
-			case 5:
-				aDescription = getJobDescriptionFromUser();
-				break;
-			case 6:
-				aStartTime = getJobStartTimeFromUser();
-				break;
-			case 7:
-				break;
-		}
+		if (currentUser.findJob(tempJobID, allJobs).getTotalVolunteers() <= 0) {
+			userInterface.clearScreen();
+			userInterface.menuHeader(currentUser);
+			int editMenuSelection = userInterface.printMenuOptions(tempEditMenu);
+			
+			String aJobLocation = null;
+			Calendar aJobDate = null; 
+			int aDuration = 0;
+			int aLightSlot = 0;
+			int aMediumSlot = 0;
+			int aHeavySlot = 0;
+			String aDescription = null;
+			String aStartTime = null;
+			
+			switch (editMenuSelection) {
+				case 1:
+					aJobDate = getJobDateFromUser();
+					break;
+				case 2:
+					aJobLocation = getJobLocationFromUser(currentUser);
+					break;
+				case 3:
+					aDuration = getJobDurationFromUser();
+					break;
+				case 4:
+					aLightSlot = getLightSlotFromUser();
+					aMediumSlot = getMediumSlotFromUser(); 
+					aHeavySlot = getHeavySlotFromUser();
+					break;
+				case 5:
+					aDescription = getJobDescriptionFromUser();
+					break;
+				case 6:
+					aStartTime = getJobStartTimeFromUser();
+					break;
+				case 7:
+					break;
+			}		
 		return currentUser.editJob(aJobLocation, aJobDate, aDuration, 
 				aLightSlot, aMediumSlot, aHeavySlot, aDescription, 
 				aStartTime, allJobs, tempJobID);
+		} else {
+			userInterface.printText("You can't edit this job because volunteer already signed up for this job.");
+		}
+		return false;
 	}
 	
 	/**

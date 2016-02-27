@@ -153,7 +153,7 @@ public abstract class AbstractUser implements User,Serializable{
 	 * @param anAllJobs 
 	 * @return found job.
 	 */
-	protected Job findJob(int jobID, Collection<Job> anAllJobs) {
+	public Job findJob(int jobID, Collection<Job> anAllJobs) {
 		if (anAllJobs != null) {
 			for (Job tempJob : anAllJobs) {
 				if (tempJob.getJobID() == jobID) {
