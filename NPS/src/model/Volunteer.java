@@ -52,19 +52,23 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		LinkedList<Job> myJobs = new LinkedList<Job>();
 		if (allJobs != null) {
 			for (Job tempJob : allJobs) {
-				LinkedList<Volunteer> volunteers = tempJob.getVolunteers();
-				if (volunteers != null) {
-					for (Volunteer tempVolunteer : volunteers) {
-						if(tempVolunteer.getEmail().equals(this.getEmail())) {
-							myJobs.add(tempJob);
-						}
-					}
-				}
+				if(matchVolunteer(tempJob.getVolunteers())) myJobs.add(tempJob);
 			}
 		}
 		return myJobs;
 	}
 	
+	public Boolean matchVolunteer( LinkedList<Volunteer> volunteers){
+		if (volunteers != null) {
+			for (Volunteer tempVolunteer : volunteers) {
+				if(tempVolunteer.getEmail().equals(this.getEmail())) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 	/**
 	 * Sign up this volunteer for a job.
 	 * @param allJobs is a collection of all existing jobs.
@@ -91,21 +95,14 @@ public final class Volunteer extends AbstractUser implements Serializable {
 	 */
 	private boolean dateAvailable(Collection<Job> allJobs, Job theJob) {	
 		ArrayList<Integer> myBusyDates = new ArrayList<Integer>();
-		
-		for (Job tempJob : allJobs) {
-			LinkedList<Volunteer> volunteers = tempJob.getVolunteers();
-			if (volunteers != null){
-				for (Volunteer tempVolunteer : volunteers) {				
-					if (tempVolunteer.getEmail().equals(this.getEmail())) {	
-						myBusyDates.add(tempJob.getDate().get(Calendar.DAY_OF_YEAR));
-						if (tempJob.getJobDuration() == 2) {
-							//adds another day if job duration is 2 days
-							//It mean that volunteer not available for 2 days in a row.
-							myBusyDates.add(tempJob.getDate().get(Calendar.DAY_OF_YEAR) + 1);
-						}
-					}
-				}
-			}
+		LinkedList<Job> myJobs = viewMyJobs(allJobs);
+		for (Job tempJob : myJobs) {			
+			myBusyDates.add(tempJob.getDate().get(Calendar.DAY_OF_YEAR));
+			if (tempJob.getJobDuration() == 2) {
+				//adds another day if job duration is 2 days
+				//It mean that volunteer not available for 2 days in a row.
+				myBusyDates.add(tempJob.getDate().get(Calendar.DAY_OF_YEAR) + 1);
+			}			
 		}	
 		int jobDate = theJob.getDate().get(Calendar.DAY_OF_YEAR);
 		for (Integer tempDate : myBusyDates) {
