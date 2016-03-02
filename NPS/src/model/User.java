@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -22,13 +21,7 @@ public interface User {
 	 * @return a user type as a string.
 	 */
 	public abstract String getSimpleName();
-	
-	/** 
-	 * Accessor to a menu for a user.
-	 * @return an array list of strings where each string represent one menu option.
-	 */
-	public abstract ArrayList<String> getMainMenu();
-		
+				
 	/**
 	 * This method sets the user's first name.
 	 * @param theFirstName is user's first name (must be a string).

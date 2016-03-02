@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -34,16 +33,6 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 		super(theFirstName, theLastName, theEmail, thePassword);
 	}
 
-	@Override
-	public ArrayList<String> getMainMenu() {		
-		ArrayList<String>  middleText = new ArrayList<String>();
-		middleText.add("View a summary of all upcoming jobs");
-		middleText.add("View details of a selected upcoming job");
-		middleText.add("Search volunteers by last name");
-		middleText.add("Exit");				
-		return middleText;
-	}
-		
 	/**
 	 * Search volunteer by Last Name.
 	 * @param allUsers is a collection of all users.

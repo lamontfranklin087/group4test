@@ -1,12 +1,10 @@
-package view;
+package controller;
 
-import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -25,21 +23,22 @@ import model.Volunteer;
 public class ParksProgram {
 	private Collection<Job> allJobs;
 	private Collection<User> allUsers;	
-	private UI userInterface;
-	/* The number of maximum allowable jobs to be pending for any 7 day period. */
-	private int MAX_JOBS_IN_7_CONSECUTIVE_DAYS = 5;
+	private UI userInterface;	
+	private int EXIT = 10;
 	
 	/* The max number of jobs that can be pending for all dates. */
 	private final int MAX_NUMBER_JOBS = 30;	
 	//Scanner to receive input from user.
 	private Scanner keyboard = new Scanner(System.in);
+	
+	CheckBusinessRules checkBusRule = new CheckBusinessRules();
 
 	/**
 	 * Main driver to run program.
 	 * @param args additional parameters.
 	 * @throws ParseException exception.
 	 */
-    public static void main(String[] args) throws ParseException {		
+    public static void main(String[] args) throws ParseException {	
 		new ParksProgram();		
 	}	
 	
@@ -47,11 +46,12 @@ public class ParksProgram {
      * Initializer for this program.
      */
 	public ParksProgram() {	
-		readSerialFile();
-		if (allJobs == null || allJobs.size() == 0) {
-			allJobs = new LinkedList<Job>();
-		}
-		checkForPastJobs();		
+		ReadWriteSerialFile readFile = new ReadWriteSerialFile();
+		readFile.readSerialFile();
+		allJobs = readFile.getAllJobs();
+		allUsers = readFile.getAllUsers();			
+		
+		checkBusRule.checkForPastJobs(allJobs);		
 		
 		userInterface = new UI();
 		
@@ -59,30 +59,46 @@ public class ParksProgram {
 		do {
 			currentUser = login(userInterface);
 			if (currentUser != null) {				
-				run(currentUser);
+				serveCurrentUser(currentUser);
 			}
 		} while (currentUser != null);
-		writeSerialFile();
+		readFile.writeSerialFile(allJobs, allUsers);
+	}
+	
+	/**
+	 * This class logs the user in and returns the resulting user information.
+	 * @param userInterface.
+	 * @return user object corresponding to provided email and password.
+	 */	
+	private User login(UI userInterface) {
+		ArrayList<String> userData = userInterface.loginScreen(userInterface);
+		if (allUsers != null && userData != null && userData.size() > 0) {
+			for (User tempUser : allUsers) {
+				if (tempUser.getEmail().equals(userData.get(0))
+						&& tempUser.getPassword().equals(userData.get(1))) {
+					return tempUser;
+				}
+			}	
+		}		
+		return null;
 	}
 	
 	/**
 	 * Checking user type and call corresponding method.
 	 * @param currentUser user just logged in.
 	 */
-	private void run(User currentUser) {
+	private void serveCurrentUser(User currentUser) {
 		int menuSelection = 0;
-		do {
-			userInterface.clearScreen();
-			userInterface.menuHeader(currentUser);
-			menuSelection = userInterface.printMenuOptions(currentUser.getMainMenu());
-			if (currentUser.getSimpleName().equalsIgnoreCase("Park Manager")) {
+		do {			
+			menuSelection = userInterface.printMenu(currentUser);
+			if (currentUser instanceof Manager) {
 				managerHere((Manager) currentUser, menuSelection);
-			} else if (currentUser.getSimpleName().equalsIgnoreCase("Volunteer")) {
+			} else if (currentUser instanceof Volunteer) {
 				volunteerHere((Volunteer)currentUser, menuSelection);
-			} else if (currentUser.getSimpleName().equalsIgnoreCase("Urban Parks Staff")) {
+			} else if (currentUser instanceof UrbanParksStaff) {
 				staffHere((UrbanParksStaff)currentUser, menuSelection);
 			} 					
-		} while (menuSelection != currentUser.getMainMenu().size());
+		} while (menuSelection != EXIT);
 	}
 	
 	/**
@@ -342,46 +358,7 @@ public class ParksProgram {
 		return false;
 	}
 	
-	/**
-	 * This class logs the user in and returns the resulting user information.
-	 * @param userInterface.
-	 * @return user object corresponding to provided email and password.
-	 */	
-	private User login(UI userInterface) {
-		userInterface.clearScreen();
-		userInterface.menuHeader(null);
-		
-		ArrayList<String> menuList = new ArrayList<String>();
-		StringBuilder textString = new StringBuilder();
-		textString.append("                 Login page");
-		textString.append("\n");
-		userInterface.printText(textString.toString());
-				
-		menuList.add("Login");
-		menuList.add("Terminate program");	
-		
-		int userSelection = userInterface.printMenuOptions(menuList);		
-		
-		if (userSelection == 1) {
-			userInterface.clearScreen();
-			userInterface.printMenuOptions(null);
-			userInterface.menuHeader(null);
-			userInterface.printText("Enter your email address: ");						
-			String email = keyboard.nextLine();
-			
-			userInterface.printText("Enter your password: ");						
-			String password = keyboard.nextLine();			
-			if (allUsers != null) {
-				for (User tempUser : allUsers) {
-					if (tempUser.getEmail().equals(email)
-							&& tempUser.getPassword().equals(password)) {
-						return tempUser;
-					}
-				}	
-			}
-		}
-		return null;
-	}
+	
 	
 	/**
 	 * Handle the input from user to get job's date.
@@ -415,7 +392,7 @@ public class ParksProgram {
 	 	} else if (resultDays > 90) {
 	 		userInterface.printText("You can't enter date more then 90 days ahead. ");
 			return null;
-	 	} else if (!jobsIn7Days(allJobs, futureJobDate)) {
+	 	} else if (!(checkBusRule.jobsIn7Days(allJobs, futureJobDate))) {
 	 		userInterface.printText("A job can't be added because you are to busy for that week.");
 			return null;
 		}
@@ -482,112 +459,8 @@ public class ParksProgram {
 	 	return keyboard.nextLine();
 	}		
 	
-	/**
-	 * Checking: if there during any consecutive 7 day period 
-	 * more than 5 jobs or not.	 
-	 * @param allJobs is a list of all Jobs.
-	 * @param mydate is user entered date.
-	 * @return false if there 5 or more jobs in 7 days, otherwise true.
-	 */
-	protected boolean jobsIn7Days(Collection<Job> allJobs, Calendar mydate) {
-		int jobsIn7Days = 0;	
-		int jobDayOfYear = mydate.get(Calendar.DAY_OF_YEAR);		
-		if (allJobs.size() == 0) {
-			return true;
-		}
-		Iterator<Job> itr = allJobs.iterator();
-		if (allJobs != null && allJobs.size() > 0) {		
-			while (itr.hasNext()) {
-				int temp = itr.next().getDate().get(Calendar.DAY_OF_YEAR);
-				if ((temp <= (jobDayOfYear + 3)) && (temp >= (jobDayOfYear - 3))) {					
-					jobsIn7Days = jobsIn7Days + 1;
-				}				
-			}
-			if (jobsIn7Days < MAX_JOBS_IN_7_CONSECUTIVE_DAYS) {
-				return true;
-			}
-		}
-		return false;
-	}
 	
-	/**
-	 * Read all jobs and user from a file.
-	 */
-	private void readSerialFile() {
-		try {
-			allUsers = SerialStartup.serialReadUsers();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			allUsers = new LinkedList<User>();
-		}
-		try {
-			allJobs = SerialStartup.serialReadJobs();						
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			allJobs = new LinkedList<Job>();
-		}
-	}
-	
-	/**
-	 * Writes all jobs and user to a file.
-	 */
-	private void writeSerialFile() {
-		if (allUsers != null) {
-			try {
-				SerialStartup.serialWriteUsers(allUsers);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();			
-			}
-		}
-		if (allJobs != null) {
-			try {
-				SerialStartup.serialWriteJobs(allJobs);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();			
-			}
-		}
-	}
-	
-	/**
-	 * Check for past jobs and remove them from list before user see them.
-	 */
-	private void checkForPastJobs() {
-		Calendar currentDate = new GregorianCalendar();		
-		int curYear = currentDate.get(Calendar.YEAR);
 		
-		Calendar jobDate;
-		int jobYear;
-		boolean ifDeleted = false;
-		
-		if (allJobs != null && allJobs.size() > 0) {
-			Iterator<Job> itr = allJobs.iterator();
-			Job temp = null;
-			while (itr.hasNext()) {				
-				if (!ifDeleted) {
-					temp = itr.next();					
-				}
-				jobDate = temp.getDate();
-				jobYear = jobDate.get(Calendar.YEAR);	
-								
-				int jobDayOfYear = jobDate.get(Calendar.DAY_OF_YEAR);
-				int curDayOfYear = currentDate.get(Calendar.DAY_OF_YEAR);
-				
-				if (curYear < jobYear) {
-					jobDayOfYear = jobDayOfYear + 365;
-				}		
-								
-				if ((jobDayOfYear - curDayOfYear) <= 0) {				
-					allJobs.remove(temp);
-					itr = allJobs.iterator();
-					temp = itr.next();
-					ifDeleted = true;
-				} else {
-					ifDeleted = false;
-				}
-			}
-		}	
-	}
-	
 	/**
 	 * Parse string to integer.
 	 * @return an integer number from 1 to ...

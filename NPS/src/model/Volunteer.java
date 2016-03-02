@@ -32,17 +32,6 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		super(theFirstName, theLastName, theEmail, thePassword);
 	}
 
-	@Override
-	public ArrayList<String> getMainMenu() {		
-		ArrayList<String>  middleText = new ArrayList<String>();
-		middleText.add("View the jobs I am signed up for");
-		middleText.add("View a summary of all upcoming jobs");
-		middleText.add("View details of a selected upcoming job");
-		middleText.add("Volunteer for a job");		
-		middleText.add("Exit");				
-		return middleText;
-	}
-	
 	/**
 	 * Create a list of all jobs this volunteer is signed up for. 
 	 * @param allJobs a collection of all the existing jobs

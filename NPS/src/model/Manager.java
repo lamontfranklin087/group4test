@@ -53,18 +53,6 @@ public final class Manager extends AbstractUser implements Serializable {
 		return "Park Manager";
 	}
 	
-	@Override
-	public ArrayList<String> getMainMenu() {		
-		ArrayList<String>  menuText = new ArrayList<String>();
-		menuText.add("Submit a new job");
-		menuText.add("Delete a job");
-		menuText.add("Edit the details of a job");
-		menuText.add("View a summary of all upcoming jobs");
-		menuText.add("View the Volunteers for a job");
-		menuText.add("Exit");				
-		return menuText;
-	}
-	
 	public ArrayList<String> getEditMenu() {	
 		ArrayList<String>  menuText = new ArrayList<String>();
 		menuText.add("Change Job's Date");

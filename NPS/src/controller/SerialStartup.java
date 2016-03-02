@@ -1,4 +1,4 @@
-package view;
+package controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -23,6 +24,10 @@ import model.Volunteer;
 public class SerialStartup {
 	private Collection<User> allUsers;	
 	
+	public static void main(String[] args) throws ParseException, FileNotFoundException{
+		// TODO Auto-generated method stub
+		new SerialStartup();
+	}
 	
 	public static void serialWriteUsers(Collection<User> myUsers)throws FileNotFoundException{
 		try {
