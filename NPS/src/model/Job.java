@@ -88,14 +88,24 @@ public class Job implements java.io.Serializable {
 		mediumVolunteers = null;
 		heavyVolunteers = null;
 	}
+	
 
+	/**
+	 * Setter for sequential JobIds
+	 * 
+	 * @param nextID the new job id.
+	 */
+	public void setNextJobID(int nextID) {
+		totalJobs = nextID;
+	}
+	
 	/**
 	 * Setter for JobId
 	 * 
 	 * @param nextID the new job id.
 	 */
-	protected void setJobID(int nextID) {
-		totalJobs = nextID;
+	public void setJobID(int nextID) {
+		jobID = nextID;
 	}
 	
 	/**

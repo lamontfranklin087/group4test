@@ -90,7 +90,7 @@ public final class Manager extends AbstractUser implements Serializable {
 					jobsAtMyParks.add(temp);
 				}
 			}
-			temp.setJobID(maxNumber);
+			temp.setNextJobID(maxNumber);
 		}
 	}
 	
