@@ -2,17 +2,29 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.Collection;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import model.Job;
 import model.User;
 import model.Volunteer;
 
 public class VolunteerTest {
-	User testUser;
+	private final int NUM_OF_TEST_JOBS = 10;
+	
+	private User testUser;
+	private Collection<Job> testJobs;
+	private Collection<User> testUsers;
 
 	@Before
 	public void setUp() throws Exception {
-		testUser = new Volunteer("TestFirst", "TestLast", "TestEmail", "TestPassword");
+		testUser = new Volunteer("JUnitTestFirst", "JUnitTestLast",
+								 "JUnitTestEmail", "JUnitTestPassword");
+		for (int i = 0; i < NUM_OF_TEST_JOBS; i++) {
+			
+		}
 	}
 
 	/**
@@ -24,13 +36,11 @@ public class VolunteerTest {
 	}
 
 	@Test
-	public void testVolunteer() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testVolunteerStringStringStringString() {
-		fail("Not yet implemented");
+		assertEquals("testVolunteer() FirstName Test failed!", "JUnitTestFirst", testUser.getFirstName());
+		assertEquals("testVolunteer() LastName Test failed!", "JUnitTestLast", testUser.getLastName());
+		assertEquals("testVolunteer() Email Test failed!", "JUnitTestEmail", testUser.getEmail());
+		assertEquals("testVolunteer() Password Test failed!", "JUnitTestPassword", testUser.getPassword());
 	}
 
 	@Test

@@ -22,7 +22,7 @@ import model.Volunteer;
  */
 public class ParksProgram {
 	private Collection<Job> allJobs;
-	private Collection<User> allUsers;	
+	private Collection<User> allUsers;
 	private UI userInterface;	
 	private int EXIT = 10;
 	
