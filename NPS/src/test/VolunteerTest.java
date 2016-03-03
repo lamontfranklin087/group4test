@@ -2,12 +2,9 @@ package test;
 
 import static org.junit.Assert.*;
 
-import java.util.Collection;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Job;
 import model.User;
 import model.Volunteer;
 
@@ -15,8 +12,6 @@ public class VolunteerTest {
 	private final int NUM_OF_TEST_JOBS = 10;
 	
 	private User testUser;
-	private Collection<Job> testJobs;
-	private Collection<User> testUsers;
 
 	@Before
 	public void setUp() throws Exception {
