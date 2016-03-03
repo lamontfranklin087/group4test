@@ -143,7 +143,7 @@ public class UI {
 	        		break;
 	        	}
 	        } catch(NumberFormatException ne) {
-	            System.out.println("That's not a write number.");	            
+	            System.out.println("That's not a valid number.");	            
 	        }	
 		}
 		return result;
