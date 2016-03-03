@@ -25,15 +25,16 @@ public class VolunteerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Job temp = new Job();
+		Job tempJob;
 		testUser = new Volunteer("JUnitTestFirst", "JUnitTestLast",
 								 "JUnitTestEmail", "JUnitTestPassword");
 		testJobs = new LinkedList<Job>();
 		for (int i = 0; i < NUM_OF_TEST_JOBS; i++) {
-			temp.setJobSlot(5, 5, 5);
-			temp.setJobID(i + 1);
-			temp.setJobDescription("TestJob#:" + (i + 1));
-			testJobs.add(temp);
+			tempJob = new Job();
+			tempJob.setJobSlot(5, 5, 5);
+			tempJob.setJobID(i + 1);
+			tempJob.setJobDescription("TestJob#:" + (i + 1));
+			testJobs.add(tempJob);
 		}
 	}
 
@@ -43,14 +44,6 @@ public class VolunteerTest {
 	@Test
 	public void testGetSimpleName() {
 		assertEquals("getSimpleName() Test failed!", "Volunteer", testUser.getSimpleName());
-	}
-
-	@Test
-	public void testVolunteerStringStringStringString() {
-		assertEquals("testVolunteer() FirstName Test failed!", "JUnitTestFirst", testUser.getFirstName());
-		assertEquals("testVolunteer() LastName Test failed!", "JUnitTestLast", testUser.getLastName());
-		assertEquals("testVolunteer() Email Test failed!", "JUnitTestEmail", testUser.getEmail());
-		assertEquals("testVolunteer() Password Test failed!", "JUnitTestPassword", testUser.getPassword());
 	}
 	
 	@Test

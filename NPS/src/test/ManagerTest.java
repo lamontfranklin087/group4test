@@ -2,38 +2,87 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import model.Job;
+import model.Manager;
+import model.MyOwnException;
+import model.User;
+import model.Volunteer;
+
 public class ManagerTest {
+	
+	private final int STARTING_NUM_TEST_JOBS = 10;
+	
+	private final int NUM_OF_TEST_PARKS = 5;
+	
+	private User testUser = new Volunteer();
+	
+	private ArrayList<String> testParksManage;
+	
+	private Collection<Job> testJobs;
 
 	@Before
 	public void setUp() throws Exception {
+		Job tempJob = new Job();
+		testJobs = new LinkedList<Job>();
+		for (int i = 1; i <= STARTING_NUM_TEST_JOBS; i++) {
+			//tempJob.setJobSlot(5, 5, 5);
+			tempJob.setJobID(i + 1);
+			tempJob.setJobManager("Test Manager");
+			tempJob.setJobDescription("TestJob#:" + i);
+			testJobs.add(tempJob);
+		}
+		
+		testParksManage = new ArrayList<String>();
+		for (int i = 1; i <= STARTING_NUM_TEST_JOBS; i++) {
+			testParksManage.add("Park#:" + i);
+		}
+		
+		testUser = new Manager("JUnitTestFirst", "JUnitTestLast",
+								 "JUnitTestEmail", "JUnitTestPassword", testParksManage);
+
 	}
 
 	@Test
 	public void testGetSimpleName() {
-		fail("Not yet implemented");
+		assertEquals("getSimpleName() Test failed!", "Park Manager", testUser.getSimpleName());
 	}
 
 	@Test
-	public void testViewSumAllJobs() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testManager() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testManagerMultipleParameterConstructor() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testViewVolunteers() {
-		fail("Not yet implemented");
+	public void testViewSumAllJobs() throws MyOwnException {
+		//number of jobs to make for this manager
+		int testUserJobsExpected = 3;
+		
+		Collection<Job> testUserJobsActual;
+		
+		//make jobs for this manager
+		Job tempJob;
+		for (int i = 1; i <= testUserJobsExpected; i++) {
+			tempJob = new Job();
+			//tempJob.setJobSlot(5, 5, 5);
+			tempJob.setJobID(i + STARTING_NUM_TEST_JOBS);
+			tempJob.setJobManager("JUnitTestFirst JUnitTestLast");
+			//tempJob.setJobDescription("TestJob#:" + (i + 1));
+			testJobs.add(tempJob);
+		}
+		
+		//run our method we are testing with those jobs included
+		testUserJobsActual = testUser.viewSumAllJobs(testJobs);
+		
+		//check that we were returned the correct number of jobs
+		assertEquals("Number of Jobs failed in viewSumAllJobs()", testUserJobsExpected, testUserJobsActual.size());
+		
+		//check that they are the correct jobs, this assumes they return in the same order
+		for (int i = 1; i <= testUserJobsExpected; i++) {
+			assertEquals("Actual Jobs failed in viewSumAllJobs()", i + STARTING_NUM_TEST_JOBS,
+						((LinkedList<Job>) testUserJobsActual).pop().getJobID());
+		}
 	}
 
 	@Test
@@ -43,7 +92,18 @@ public class ManagerTest {
 
 	@Test
 	public void testDeleteJob() {
-		fail("Not yet implemented");
+		//check that initial numbers of jobs are correct
+		assertEquals("Number of INITIAL Jobs failed in deleteJob()", STARTING_NUM_TEST_JOBS, testJobs.size());
+		
+		int numToRemove = 3;//must be less than half as test removes every other job
+		
+		//delete the jobs using the method to be tested
+		for(int i = 1; i <= numToRemove; i += 2) {
+			((Manager) testUser).deleteJob(i, testJobs);
+		}
+		System.out.println((STARTING_NUM_TEST_JOBS - numToRemove) + " " + testJobs.size());
+		//check that that number of jobs was removed
+		assertEquals("Number of RESULTING Jobs failed in deleteJob()", STARTING_NUM_TEST_JOBS - numToRemove, testJobs.size());
 	}
 
 	@Test
