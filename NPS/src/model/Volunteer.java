@@ -49,7 +49,7 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		return myJobs;
 	}
 	
-	public Boolean matchVolunteer( LinkedList<Volunteer> volunteers){
+	private Boolean matchVolunteer( LinkedList<Volunteer> volunteers){
 		if (volunteers != null) {
 			for (Volunteer tempVolunteer : volunteers) {
 				if(tempVolunteer.getEmail().equals(this.getEmail())) {
@@ -76,7 +76,7 @@ public final class Volunteer extends AbstractUser implements Serializable {
 				}			
 			}			
 		}
-		return false;
+		throw new MyOwnException("Job's list is empty.");
 	}
 	
 	/**

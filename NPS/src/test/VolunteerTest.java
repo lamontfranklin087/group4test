@@ -39,38 +39,12 @@ public class VolunteerTest {
 	}
 
 	@Test
-	public void testViewMyJobs() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testMatchVolunteer() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testJobSignUp() {
 		fail("Not yet implemented");
 	}
-
+	
 	@Test
-	public void testToString() {
+	public void testviewMyJobs() {
 		fail("Not yet implemented");
 	}
-
-	@Test
-	public void testViewSumAllJobs() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testViewJobDetails() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testFindJob() {
-		fail("Not yet implemented");
-	}
-
 }
