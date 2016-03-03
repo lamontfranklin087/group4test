@@ -6,15 +6,22 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import model.Job;
+import model.MyOwnException;
+import view.UI;
 
 public class CheckBusinessRules {
 
 	/* The number of maximum allowable jobs to be pending for any 7 day period. */
 	private int MAX_JOBS_IN_7_CONSECUTIVE_DAYS = 5;
+		
+	UI userInterface = new UI();
 	
-	/* The max number of jobs that can be pending for all dates. */
-	private final int MAX_NUMBER_JOBS = 30;	
-	
+	public boolean checkJobDuration(int aDuration) throws MyOwnException {
+		if (aDuration < 1 || aDuration > 2) {
+			throw new MyOwnException("Job's duration can't be less than 0 or greater than 2.");
+		}
+		return true;
+	}
 	/**
 	 * Check for past jobs and remove them from list before user see them.
 	 */
@@ -61,8 +68,9 @@ public class CheckBusinessRules {
 	 * @param allJobs is a list of all Jobs.
 	 * @param mydate is user entered date.
 	 * @return false if there 5 or more jobs in 7 days, otherwise true.
+	 * @throws MyOwnException 
 	 */
-	protected boolean jobsIn7Days(Collection<Job> allJobs, Calendar mydate) {
+	protected boolean jobsIn7Days(Collection<Job> allJobs, Calendar mydate) throws MyOwnException {
 		int jobsIn7Days = 0;	
 		int jobDayOfYear = mydate.get(Calendar.DAY_OF_YEAR);		
 		if (allJobs.size() == 0) {
@@ -76,10 +84,44 @@ public class CheckBusinessRules {
 					jobsIn7Days = jobsIn7Days + 1;
 				}				
 			}
-			if (jobsIn7Days < MAX_JOBS_IN_7_CONSECUTIVE_DAYS) {
+			if (jobsIn7Days < MAX_JOBS_IN_7_CONSECUTIVE_DAYS) {				
 				return true;
 			}
-		}
-		return false;
+		}		
+		throw new MyOwnException("A job can't be added because you are to busy for that week.");
+	}
+	
+	public boolean checkForPastDate(Calendar futureJobDate) throws MyOwnException {
+		Calendar currentDate = new GregorianCalendar();
+		
+		int curYear = currentDate.get(Calendar.YEAR);		
+		int jobDayOfYear = futureJobDate.get(Calendar.DAY_OF_YEAR);
+		int curDayOfYear = currentDate.get(Calendar.DAY_OF_YEAR);
+		
+		if (curYear < futureJobDate.get(Calendar.YEAR)) {
+			jobDayOfYear = jobDayOfYear + 365;
+		}		
+	 	int resultDays = jobDayOfYear - curDayOfYear;	
+	 	if (resultDays > 0) {	 		
+			return true;
+	 	}
+	 	throw new MyOwnException("You can't enter past date. ");
+	}
+	
+	public boolean checkForFutureDate(Calendar futureJobDate) throws MyOwnException {
+		Calendar currentDate = new GregorianCalendar();
+		
+		int curYear = currentDate.get(Calendar.YEAR);		
+		int jobDayOfYear = futureJobDate.get(Calendar.DAY_OF_YEAR);
+		int curDayOfYear = currentDate.get(Calendar.DAY_OF_YEAR);
+		
+		if (curYear < futureJobDate.get(Calendar.YEAR)) {
+			jobDayOfYear = jobDayOfYear + 365;
+		}		
+	 	int resultDays = jobDayOfYear - curDayOfYear;	
+	 	if (resultDays < 90) {
+			return true;
+	 	}
+	 	throw new MyOwnException("You can't enter date more then 90 days ahead. ");	 	
 	}
 }

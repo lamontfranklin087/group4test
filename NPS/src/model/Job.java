@@ -101,22 +101,24 @@ public class Job implements java.io.Serializable {
 	/**
 	 * Set job's location.
 	 * @param aJobLocation a park name for this job.
+	 * @throws MyOwnException 
 	 */
-	public boolean setJobLocation(String aJobLocation) {	
+	public boolean setJobLocation(String aJobLocation) throws MyOwnException {	
 		if (aJobLocation != null && aJobLocation.length() > 0) {
 			jobLocation = aJobLocation;
 			return true;
+		} else {
+			throw new MyOwnException("Job's location can't be null or empty string.");
 		}
-		return false;
 	}
 	
 	/**
 	 * Doesn't  allow to enter past dates.
 	 * @param aJobDate is a date for a future job.
 	 * @return true if date was set, otherwise false.
-	 * @throws NullPointerException if date equals null.
+	 * @throws MyOwnException if date equals to null.
 	 */
-	public boolean setDate(Calendar aJobDate) {		
+	public boolean setDate(Calendar aJobDate) throws MyOwnException {		
 		if (aJobDate != null) {				
 			Calendar currentDate = new GregorianCalendar();
 			
@@ -131,39 +133,41 @@ public class Job implements java.io.Serializable {
 		 	int resultDays = jobDayOfYear - curDayOfYear;
 		 	
 		 	if (resultDays <= 0) {
-		 		return false;
+		 		throw new MyOwnException("Job's date can't be past.");
 		 	} else {
 				jobDate = aJobDate;
 				return true;
 			}
 		} else {
-			throw new NullPointerException();
+			throw new MyOwnException("Job's date can't be null.");
 		}
 	}
 		
 	/**
 	 * Set job's duration time in days.
 	 * @return true if job duration is 1 or 2 otherwise false.
+	 * @throws MyOwnException 
 	 */
-	public boolean setJobDuration(int aDuration) {
-		if (aDuration >= 1 || aDuration <= 2) {
+	public boolean setJobDuration(int aDuration) throws MyOwnException {
+		if (aDuration > 0) {
 			jobDuration = aDuration;
 			return true;
 		} else {
-			return false;	
+			throw new MyOwnException("Job's duration can't be less than 0 or greater than 2.");	
 		}		
 	}
 	
 	/**
 	 * Set job's manager.
 	 * @return true if job's manager was set, otherwise false.
+	 * @throws MyOwnException 
 	 */
-	public boolean setJobManager(String aJobManager) {
+	public boolean setJobManager(String aJobManager) throws MyOwnException {
 		if (aJobManager != null && aJobManager.length() > 0) {
 			jobManager = aJobManager;
 			return true;
 		}
-		return false;
+		throw new MyOwnException("Job's manager can't be null or empty string.");
 	}
 	
 	/**
@@ -172,8 +176,9 @@ public class Job implements java.io.Serializable {
 	 * @param aMediumSlot represent a number of medium slots for this job (must be > 0).
 	 * @param aHeavySlot represent a number of heavy slots for this job (must be > 0).
 	 * @return true if number of slots are > 0 and were set successfully, otherwise false.
+	 * @throws MyOwnException 
 	 */		
-	public boolean setJobSlot(int aLightSlot, int aMediumSlot, int aHeavySlot) {	
+	public boolean setJobSlot(int aLightSlot, int aMediumSlot, int aHeavySlot) throws MyOwnException {	
 		totalSlotsAvailable = 0;
 		if ((aLightSlot > 0) || (aMediumSlot > 0) || (aHeavySlot > 0)) {
 			lightSlotsAvailable = aLightSlot;
@@ -184,33 +189,35 @@ public class Job implements java.io.Serializable {
 								+ heavySlotsAvailable;
 			return true;
 		}
-		return false;
+		throw new MyOwnException("All job's slots can't be 0.");
 	}
 	
 	/**
 	 * Set a job's description.
 	 * @param aDescription describes the job (must be > 0 and != null).
 	 * @return true if description was set successfully, otherwise false.
+	 * @throws MyOwnException 
 	 */	
-	public boolean setJobDescription(String aDescription) {
+	public boolean setJobDescription(String aDescription) throws MyOwnException {
 		if (aDescription != null && aDescription.length() > 0) {
 			jobDescription = aDescription;
 			return true;
 		}
-		return false;
+		throw new MyOwnException("Add job's description.");
 	}
 	
 	/**
 	 * Set a job's start time.
 	 * @param aStartTime is time when job will start (must be > 0 and != null).
 	 * @return true if startTime was set successfully, otherwise false.
+	 * @throws MyOwnException 
 	 */	
-	public boolean setStartTime(String aStartTime) {
+	public boolean setStartTime(String aStartTime) throws MyOwnException {
 		if (aStartTime != null && aStartTime.length() > 0) {
 			startTime = aStartTime;
 			return true;
 		}
-		return false;	
+		throw new MyOwnException("Job's start time can't be null or empty string.");
 	}
 	
 	/**
@@ -342,8 +349,9 @@ public class Job implements java.io.Serializable {
 	 * @param newVolunteer must be Volunteer type and != null.
 	 * @param aSlot is a slot name, only 3 options allowed: light, medium, or heavy.
 	 * @return true if volunteer was added to a job, otherwise false.
+	 * @throws MyOwnException 
 	 */
-	public boolean addVolunteer(Volunteer newVolunteer, int aSlot) {		
+	public boolean addVolunteer(Volunteer newVolunteer, int aSlot) throws MyOwnException {		
 		if (newVolunteer != null && aSlot > 0) {
 			switch(aSlot){
 			case 1: //light
@@ -353,8 +361,10 @@ public class Job implements java.io.Serializable {
 			case 3: //heavy
 				return addToSlot(newVolunteer, aSlot, heavySlotsAvailable);
 			}
+		} else if (newVolunteer == null) {
+			throw new MyOwnException("Volunteer object can't be null.");
 		}
-		return false;
+		throw new MyOwnException("All slots are busy for this job.");
 	}	
 	
 	/**
@@ -363,10 +373,11 @@ public class Job implements java.io.Serializable {
 	 * @param dutyType is slot type: 1 - light, 2 - medium, and 3 - heavy
 	 * @param max is a number of available spots for this slot.
 	 * @return true if volunteer was added to a job, otherwise false.
+	 * @throws MyOwnException 
 	 */
-	protected boolean addToSlot(Volunteer newVolunteer, int dutyType, int max){
+	protected boolean addToSlot(Volunteer newVolunteer, int dutyType, int max) throws MyOwnException{
 		if (max == 0){
-			return false;
+			throw new MyOwnException("All slots are busy for this job.");
 		} else {
 			if (dutyType == 1) {
 				if (lightVolunteers == null) {
@@ -397,7 +408,7 @@ public class Job implements java.io.Serializable {
 				return true;								
 			} 
 		}		
-		return false;
+		throw new MyOwnException("Wrong selection for job's slot.");
 	}
 	/**
 	 * Append job's information to a string.

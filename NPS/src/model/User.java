@@ -17,6 +17,13 @@ public interface User {
 	public abstract Collection<Job> viewSumAllJobs(Collection<Job> anAllJobs);
 	
 	/**
+     * Accessor to a specific job.
+     * @param aJobID is a job's ID number.
+     * @return found job, if there is no job with aJobID then return null.
+     */
+	public Job viewJobDetails(int aJobID, Collection<Job> anAllJobs);
+	
+	/**
 	 * Accessor to a user type: manager, UrbanParkStaff, or volunteer.
 	 * @return a user type as a string.
 	 */

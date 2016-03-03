@@ -51,20 +51,8 @@ public final class Manager extends AbstractUser implements Serializable {
 	@Override
 	public String getSimpleName() {
 		return "Park Manager";
-	}
+	}	
 	
-	public ArrayList<String> getEditMenu() {	
-		ArrayList<String>  menuText = new ArrayList<String>();
-		menuText.add("Change Job's Date");
-		menuText.add("Change Job's Location");
-		menuText.add("Change Job's Duration");
-		menuText.add("Change Job's Slots");
-		menuText.add("Change Job's Description");
-		menuText.add("Change Job's Start Time");
-		menuText.add("Exit");
-		return menuText;
-	}		
-
 	/**
 	 * Accessor for all volunteers for a specific job.
 	 * @param allJobs is a list of all Jobs.
@@ -122,10 +110,11 @@ public final class Manager extends AbstractUser implements Serializable {
 	/**
 	 * Edit job's fields.
 	 * @param allJobs is a list of all Jobs.
+	 * @throws MyOwnException 
 	 */
 	public boolean editJob(String aJobLocation, Calendar aJobDate, int aDuration,
 			 int aLightSlot, int aMediumSlot, int aHeavySlot, String aDescription,
-			 String aStartTime, Collection<Job> anAllJobs, int jobID) {
+			 String aStartTime, Collection<Job> anAllJobs, int jobID) throws MyOwnException {
 		
 		Job tempJob = findJob(jobID, anAllJobs);
 		
@@ -181,10 +170,11 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * Create new job.
 	 * @param anAllJobs 
 	 * @param allJobs is a list of all Jobs.
+	 * @throws MyOwnException 
 	 */
 	public boolean submitNewJob(String aJobManager, String aJobLocation, Calendar aJobDate, 
 			int aDuration, int aLightSlot, int aMediumSlot, 
-			int aHeavySlot, String aDescription, String aStartTime, Collection<Job> anAllJobs) {
+			int aHeavySlot, String aDescription, String aStartTime, Collection<Job> anAllJobs) throws MyOwnException {
 			
 		Job newJob = new Job();
 		boolean result = true;

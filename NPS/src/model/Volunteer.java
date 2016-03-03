@@ -41,7 +41,9 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		LinkedList<Job> myJobs = new LinkedList<Job>();
 		if (allJobs != null) {
 			for (Job tempJob : allJobs) {
-				if(matchVolunteer(tempJob.getVolunteers())) myJobs.add(tempJob);
+				if(matchVolunteer(tempJob.getVolunteers())) {
+					myJobs.add(tempJob);
+				}
 			}
 		}
 		return myJobs;
@@ -64,8 +66,9 @@ public final class Volunteer extends AbstractUser implements Serializable {
 	 * @param aJobID is a identification number for a specific job (must be > 0).
 	 * @param aSlot is a slot name for which volunteer want to sign up (must be "light", "medium", or "heavy").
 	 * @return true if volunteer was added to a job, otherwise false.
+	 * @throws MyOwnException 
 	 */
-	public boolean jobSignUp(Collection<Job> allJobs, int aJobID, int aSlot) {
+	public boolean jobSignUp(Collection<Job> allJobs, int aJobID, int aSlot) throws MyOwnException {
 		if (aJobID > 0 && allJobs != null) {			
 			for (Job temp : allJobs) {			
 				if ((temp.getJobID() == aJobID) && dateAvailable(allJobs, temp)){					
@@ -81,8 +84,9 @@ public final class Volunteer extends AbstractUser implements Serializable {
 	 * @param allJobs is a collection of all existing jobs.
 	 * @param theJob is a job for which volunteer want to sign up.
 	 * @return false if volunteer was committed on that day, otherwise true.
+	 * @throws MyOwnException 
 	 */
-	private boolean dateAvailable(Collection<Job> allJobs, Job theJob) {	
+	private boolean dateAvailable(Collection<Job> allJobs, Job theJob) throws MyOwnException {	
 		ArrayList<Integer> myBusyDates = new ArrayList<Integer>();
 		LinkedList<Job> myJobs = viewMyJobs(allJobs);
 		for (Job tempJob : myJobs) {			
@@ -96,7 +100,7 @@ public final class Volunteer extends AbstractUser implements Serializable {
 		int jobDate = theJob.getDate().get(Calendar.DAY_OF_YEAR);
 		for (Integer tempDate : myBusyDates) {
 			if (jobDate == tempDate) {
-				return false;
+				throw new MyOwnException("You already signed up for a job on this day.");
 			}
 		}	
 		return true;		

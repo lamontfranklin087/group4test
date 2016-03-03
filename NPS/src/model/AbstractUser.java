@@ -25,8 +25,6 @@ public abstract class AbstractUser implements User,Serializable{
 	private String lastName;
 	private String email;
 	private String password;
-	//protected Collection<Job> allJobs;
-	//private Collection<User> allUsers;	
 	
 	/**
 	 * Default constructor for a User.

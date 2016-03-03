@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import model.Manager;
+import model.UrbanParksStaff;
 import model.User;
 import model.Volunteer;
 
@@ -11,6 +12,9 @@ public class UI {
 	private Scanner keyboard;
 	/** Number of extra returns to "clear" the screen, in lines. */
 	public static final int CLEAR_SCREEN_HEIGHT = 15;
+	
+	private int staffMenuOffset = 5;
+	private int volunteerMenuOffset = 8;
 	
 	/**
 	 * This class logs the user in and returns the resulting user information.
@@ -58,7 +62,7 @@ public class UI {
 			menuText.add("Exit");	
 			menuSelection = printMenuOptions(menuText);
 			if (menuSelection == 6) {
-				menuSelection = 10; //10 means EXIT
+				menuSelection = 0; //10 means EXIT
 			}
 		} else if (currentUser instanceof Volunteer) {
 			ArrayList<String>  menuText = new ArrayList<String>();
@@ -69,9 +73,11 @@ public class UI {
 			menuText.add("Exit");	
 			menuSelection = printMenuOptions(menuText);
 			if (menuSelection == 5) {
-				menuSelection = 10; //10 means EXIT
+				menuSelection = 0; //10 means EXIT
+			} else {
+				menuSelection = menuSelection + volunteerMenuOffset;
 			}
-		} else if (currentUser.getSimpleName().equalsIgnoreCase("Urban Parks Staff")) {
+		} else if (currentUser instanceof UrbanParksStaff) {
 			ArrayList<String>  menuText = new ArrayList<String>();
 			menuText.add("View a summary of all upcoming jobs");
 			menuText.add("View details of a selected upcoming job");
@@ -79,12 +85,29 @@ public class UI {
 			menuText.add("Exit");	
 			menuSelection = printMenuOptions(menuText);
 			if (menuSelection == 4) {
-				menuSelection = 10; //10 means EXIT
+				menuSelection = 0; //10 means EXIT
+			} else {
+				menuSelection = menuSelection + staffMenuOffset;
 			}
 		} 		
 		return menuSelection;
 	}
-	
+		
+	public int printEditMenu(User currentUser) {
+		clearScreen();
+		menuHeader(currentUser);
+		int menuSelection = 0;
+		ArrayList<String>  menuText = new ArrayList<String>();
+		menuText.add("Change Job's Date");
+		menuText.add("Change Job's Location");
+		menuText.add("Change Job's Duration");
+		menuText.add("Change Job's Slots");
+		menuText.add("Change Job's Description");
+		menuText.add("Change Job's Start Time");
+		menuText.add("Exit");
+		menuSelection = printMenuOptions(menuText);		
+		return menuSelection;
+	}	
 	
 	/**
 	 * Prints the menu options passed in via theMenuOptions, or a simple 
@@ -157,6 +180,10 @@ public class UI {
 		for(int i = 0; i < CLEAR_SCREEN_HEIGHT; i++) {
 			System.out.println();
 		}
+	}
+
+	public String getNextLine() {
+		return keyboard.nextLine();
 	}
 	
 	/**
