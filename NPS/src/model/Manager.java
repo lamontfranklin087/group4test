@@ -74,7 +74,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	 * @param anAllJobs 
 	 * @param allJobs is a collection of all current jobs.
 	 */
-	private void managerJobList(Collection<Job> anAllJobs) {
+	public void managerJobList(Collection<Job> anAllJobs) {
 		if (anAllJobs != null && anAllJobs.size() > 0) {
 			jobsAtMyParks = new LinkedList<Job>();
 			Job temp = anAllJobs.iterator().next();

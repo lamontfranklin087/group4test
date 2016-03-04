@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +30,11 @@ public class ManagerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Job tempJob = new Job();
+		Job tempJob;
 		testJobs = new LinkedList<Job>();
 		for (int i = 1; i <= STARTING_NUM_TEST_JOBS; i++) {
-			//tempJob.setJobSlot(5, 5, 5);
-			tempJob.setJobID(i + 1);
+			tempJob = new Job();
+			tempJob.setJobID(i);
 			tempJob.setJobManager("Test Manager");
 			tempJob.setJobDescription("TestJob#:" + i);
 			testJobs.add(tempJob);
@@ -86,26 +87,29 @@ public class ManagerTest {
 	}
 
 	@Test
-	public void testEditJob() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testDeleteJob() {
 		//check that initial numbers of jobs are correct
 		assertEquals("Number of INITIAL Jobs failed in deleteJob()", STARTING_NUM_TEST_JOBS, testJobs.size());
 		
-		int numToRemove = 3;//must be less than half as test removes every other job
-		
-		//delete the jobs using the method to be tested
-		for(int i = 1; i <= numToRemove; i += 2) {
+		//remove half the jobs
+		int numToRemove = STARTING_NUM_TEST_JOBS / 2;
+		for(int i = 1; i <= numToRemove; i++) {
 			((Manager) testUser).deleteJob(i, testJobs);
 		}
-		System.out.println((STARTING_NUM_TEST_JOBS - numToRemove) + " " + testJobs.size());
+		int actualJobID;
 		//check that that number of jobs was removed
 		assertEquals("Number of RESULTING Jobs failed in deleteJob()", STARTING_NUM_TEST_JOBS - numToRemove, testJobs.size());
+		for(int i = (numToRemove + 1); i < STARTING_NUM_TEST_JOBS; i++) {
+			actualJobID = ((LinkedList<Job>) testJobs).pop().getJobID();
+			assertEquals("A remaining jobs after deletion were incorrect in deleteJob()", i, actualJobID);
+		}
 	}
 
+	@Test
+	public void testManagerJobList() {
+		fail("Not yet implemented");
+	}
+	
 	@Test
 	public void testGetParksList() {
 		fail("Not yet implemented");
