@@ -3,13 +3,16 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import model.AbstractUser;
 import model.Job;
 import model.Manager;
 import model.MyOwnException;
@@ -20,7 +23,7 @@ public class ManagerTest {
 	
 	private final int STARTING_NUM_TEST_JOBS = 10;
 	
-	private final int NUM_OF_TEST_PARKS = 5;
+	private final int NUM_OF_TEST_PARKS = 3;
 	
 	private User testUser = new Volunteer();
 	
@@ -58,7 +61,7 @@ public class ManagerTest {
 	@Test
 	public void testViewSumAllJobs() throws MyOwnException {
 		//number of jobs to make for this manager
-		int testUserJobsExpected = 3;
+		int testUserJobsExpected = NUM_OF_TEST_PARKS;
 		
 		Collection<Job> testUserJobsActual;
 		
@@ -106,18 +109,35 @@ public class ManagerTest {
 	}
 
 	@Test
-	public void testManagerJobList() {
-		fail("Not yet implemented");
+	public void testManagerJobList() throws MyOwnException {
+		//number of jobs to make for this manager
+		int testUserJobsExpected = NUM_OF_TEST_PARKS;
+		
+		Collection<Job> testUserJobsActual;
+		
+		//make jobs for this manager
+		Job tempJob;
+		for (int i = 1; i <= testUserJobsExpected; i++) {
+			tempJob = new Job();
+			//tempJob.setJobSlot(5, 5, 5);
+			tempJob.setJobID(i + STARTING_NUM_TEST_JOBS);
+			tempJob.setJobManager("JUnitTestFirst JUnitTestLast");
+			//tempJob.setJobDescription("TestJob#:" + (i + 1));
+			testJobs.add(tempJob);
+		}
+		
+		//run our method we are testing with those jobs included
+		((Manager) testUser).managerJobList(testJobs);
+		
+		//testUser.viewSumAllJobs(testJobs);
+		
+		//check that we were returned the correct number of jobs
+		assertEquals("Number of Jobs failed in viewSumAllJobs()", STARTING_NUM_TEST_JOBS + testUserJobsExpected, testJobs.size());
+		testUserJobsActual = testUser.viewSumAllJobs(testJobs);
+		//check that they are the correct jobs, this assumes they return in the same order
+		for (int i = 1; i <= testUserJobsExpected; i++) {
+			assertEquals("Actual Jobs failed in viewSumAllJobs()", i + STARTING_NUM_TEST_JOBS,
+					((LinkedList<Job>) testUserJobsActual).pop().getJobID());
+		}
 	}
-	
-	@Test
-	public void testGetParksList() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSubmitNewJob() {
-		fail("Not yet implemented");
-	}
-
 }
