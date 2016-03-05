@@ -76,7 +76,7 @@ public final class Volunteer extends AbstractUser implements Serializable {
 				}			
 			}			
 		}
-		throw new MyOwnException("Job's list is empty.");
+		throw new MyOwnException("There is no such job.");
 	}
 	
 	/**
