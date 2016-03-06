@@ -150,7 +150,8 @@ public final class Manager extends AbstractUser implements Serializable {
 	public boolean deleteJob(int aJobID, Collection<Job> anAllJobs) {
 		if (aJobID > 0) {
 			Job temp = findJob(aJobID, anAllJobs);			
-			if (temp != null) {
+			if (temp != null && temp.getJobManager().equalsIgnoreCase(
+								getFirstName() + " " + getLastName())) {
 				anAllJobs.remove(temp);
 				managerJobList(anAllJobs);
 				return true;

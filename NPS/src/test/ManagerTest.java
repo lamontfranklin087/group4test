@@ -3,7 +3,9 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,134 +14,145 @@ import model.Job;
 import model.Manager;
 import model.MyOwnException;
 import model.User;
-import model.Volunteer;
 
 public class ManagerTest {
 	
-	private final int STARTING_NUM_TEST_JOBS = 10;
+	private final int STARTING_NUM_TEST_JOBS = 5;
 	
-	private final int NUM_OF_TEST_PARKS = 3;
+	private User testUser1;
+	private User testUser2;
 	
-	private User testUser = new Volunteer();
-	
-	private ArrayList<String> testParksManage;
+	private ArrayList<String> testParksManage1;
+	private ArrayList<String> testParksManage2;
 	
 	private Collection<Job> testJobs;
 
+	/**
+	 * Set two different mangers with 5 jobs each.
+	 * @throws Exception
+	 */
 	@Before
-	public void setUp() throws Exception {
-		Job tempJob;
+	public void setUp() throws Exception {					
+		testParksManage1 = new ArrayList<String>();
+		for (int i = 1; i <= 3; i++) {
+			testParksManage1.add("Park#:" + i);
+		}
+		testUser1 = new Manager("JUnitTest1_First", "JUnitTest1_Last",
+					"JUnitTest1_Email", "JUnitTest1_Password", testParksManage1);
+		
+		testParksManage2 = new ArrayList<String>();
+		for (int i = 4; i <= 7; i++) {
+			testParksManage1.add("Park#:" + i);
+		}
+		testUser2 = new Manager("JUnitTest2_First", "JUnitTest2_Last",
+				"JUnitTest2_Email", "JUnitTest2_Password", testParksManage2);
+		
 		testJobs = new LinkedList<Job>();
-		for (int i = 1; i <= STARTING_NUM_TEST_JOBS; i++) {
-			tempJob = new Job();
-			tempJob.setJobID(i);
-			tempJob.setJobManager("Test Manager");
-			tempJob.setJobDescription("TestJob#:" + i);
-			testJobs.add(tempJob);
-		}
 		
-		testParksManage = new ArrayList<String>();
-		for (int i = 1; i <= STARTING_NUM_TEST_JOBS; i++) {
-			testParksManage.add("Park#:" + i);
+		for (int i = 0; i < STARTING_NUM_TEST_JOBS; i++) {			
+			int day = 5 + i;
+			int month = 5;
+			int year = 2016;
+			
+			Calendar jobDate = new GregorianCalendar();			
+			jobDate.set(year, month, day);
+			((Manager)testUser1).submitNewJob("JUnitTest1_First JUnitTest1_Last",
+					"Steel Lake Park", jobDate, 1, 3, 3, 3, "Testing", "8:00AM", testJobs);
+			
+			day = 15 + i;
+			month = 5;
+			year = 2016;
+			jobDate.set(year, month, day);						
+			((Manager)testUser2).submitNewJob("JUnitTest2_First JUnitTest2_Last",
+					"Steel Park", jobDate, 1, 3, 3, 3, "Testing", "8:00AM", testJobs);
 		}
-		
-		testUser = new Manager("JUnitTestFirst", "JUnitTestLast",
-								 "JUnitTestEmail", "JUnitTestPassword", testParksManage);
-
 	}
 
 	@Test
 	public void testGetSimpleName() {
-		assertEquals("getSimpleName() Test failed!", "Park Manager", testUser.getSimpleName());
+		assertEquals("getSimpleName() Test failed!", "Park Manager", testUser1.getSimpleName());
 	}
 
 	@Test
-	public void testViewSumAllJobs() throws MyOwnException {
-		//number of jobs to make for this manager
-		int testUserJobsExpected = NUM_OF_TEST_PARKS;
-		
-		Collection<Job> testUserJobsActual;
-		
-		//make jobs for this manager
-		Job tempJob;
-		for (int i = 1; i <= testUserJobsExpected; i++) {
-			tempJob = new Job();
-			//tempJob.setJobSlot(5, 5, 5);
-			tempJob.setJobID(i + STARTING_NUM_TEST_JOBS);
-			tempJob.setJobManager("JUnitTestFirst JUnitTestLast");
-			//tempJob.setJobDescription("TestJob#:" + (i + 1));
-			testJobs.add(tempJob);
-		}
-		
+	public void testViewSumAllJobsForManagerWithJobs() throws MyOwnException {		
 		//run our method we are testing with those jobs included
-		testUserJobsActual = testUser.viewSumAllJobs(testJobs);
+		LinkedList<Job> testUserJobsActual = (LinkedList<Job>) testUser2.viewSumAllJobs(testJobs);
+		int testUserJobsExpected = STARTING_NUM_TEST_JOBS;
 		
 		//check that we were returned the correct number of jobs
 		assertEquals("Number of Jobs failed in viewSumAllJobs()", testUserJobsExpected, testUserJobsActual.size());
 		
-		//check that they are the correct jobs, this assumes they return in the same order
-		for (int i = 1; i <= testUserJobsExpected; i++) {
-			assertEquals("Actual Jobs failed in viewSumAllJobs()", i + STARTING_NUM_TEST_JOBS,
-						((LinkedList<Job>) testUserJobsActual).pop().getJobID());
+		//check if manager name is correct for specific manager
+		for (int i = 0; i < testUserJobsActual.size(); i++) {
+			assertEquals("Actual Jobs failed in viewSumAllJobs()", testUserJobsActual.get(i).getJobManager(),
+					"JUnitTest2_First JUnitTest2_Last");
 		}
+	}
+	
+	@Test
+	public void testViewSumAllJobsForManagerWithNoJobs() throws MyOwnException {	
+		ArrayList<String> testParksManage3 = new ArrayList<String>();
+		for (int i = 15; i <= 18; i++) {
+			testParksManage3 .add("Park#:" + i);
+		}
+		User testUser3 = new Manager("JUnitTest3_First", "JUnitTest3_Last",
+				"JUnitTest3_Email", "JUnitTest3_Password", testParksManage3);
+		
+		//run our method we are testing with those jobs included
+		LinkedList<Job> testUserJobsActual = (LinkedList<Job>) testUser3.viewSumAllJobs(testJobs);
+		Object testUserJobsExpected = null;
+		
+		//check that we were returned the correct number of jobs
+		assertEquals("Number of Jobs failed in viewSumAllJobs()", testUserJobsExpected, testUserJobsActual);		
 	}
 
 	@Test
 	public void testDeleteJobFromNotEmptyList() {
 		//check that initial numbers of jobs are correct
-		assertEquals("Number of INITIAL Jobs failed in deleteJob()", STARTING_NUM_TEST_JOBS, testJobs.size());
+		assertEquals("Number of INITIAL Jobs failed in deleteJob()", STARTING_NUM_TEST_JOBS, 
+				(testUser1.viewSumAllJobs(testJobs)).size());
 		
 		//remove half the jobs
-		int numToRemove = STARTING_NUM_TEST_JOBS / 2;
-		for(int i = 1; i <= numToRemove; i++) {
-			((Manager) testUser).deleteJob(i, testJobs);
+		int numToRemove = 2;
+		for(int i = 1; i <= numToRemove + 1; i++) {
+			((Manager) testUser1).deleteJob(i, testJobs);
 		}
-		int actualJobID;
+		LinkedList<Job> tempList = (LinkedList<Job>) testUser1.viewSumAllJobs(testJobs);
 		//check that that number of jobs was removed
-		assertEquals("Number of RESULTING Jobs failed in deleteJob()", STARTING_NUM_TEST_JOBS - numToRemove, testJobs.size());
-		for(int i = (numToRemove + 1); i < STARTING_NUM_TEST_JOBS; i++) {
-			actualJobID = ((LinkedList<Job>) testJobs).pop().getJobID();
-			assertEquals("A remaining jobs after deletion were incorrect in deleteJob()", i, actualJobID);
+		assertEquals("Number of RESULTING Jobs failed in deleteJob()", STARTING_NUM_TEST_JOBS - numToRemove, 
+				(testUser1.viewSumAllJobs(testJobs)).size());
+		
+		
+		//check if manager name is correct for specific manager
+		for (int i = 0; i < tempList.size(); i++) {
+			assertEquals("Actual Jobs failed in viewSumAllJobs()", tempList.get(i).getJobManager(),
+							"JUnitTest1_First JUnitTest1_Last");
 		}
 	}
 
 	@Test
 	public void testDeleteJobFromEmptyList() {
 		Collection<Job> tempJob = new LinkedList<Job>();
-		assertFalse(((Manager) testUser).deleteJob(1, tempJob));
+		assertFalse(((Manager) testUser2).deleteJob(1, tempJob));
 		
 	}
 	
 	@Test
-	public void testManagerJobList() throws MyOwnException {
+	public void testManagerJobList() {
 		//number of jobs to make for this manager
-		int testUserJobsExpected = NUM_OF_TEST_PARKS;
-		
-		Collection<Job> testUserJobsActual;
-		
-		//make jobs for this manager
-		Job tempJob;
-		for (int i = 1; i <= testUserJobsExpected; i++) {
-			tempJob = new Job();
-			//tempJob.setJobSlot(5, 5, 5);
-			tempJob.setJobID(i + STARTING_NUM_TEST_JOBS);
-			tempJob.setJobManager("JUnitTestFirst JUnitTestLast");
-			//tempJob.setJobDescription("TestJob#:" + (i + 1));
-			testJobs.add(tempJob);
-		}
-		
+		int testUserJobsExpected = STARTING_NUM_TEST_JOBS;
+								
 		//run our method we are testing with those jobs included
-		((Manager) testUser).managerJobList(testJobs);
-		
-		//testUser.viewSumAllJobs(testJobs);
-		
+		((Manager) testUser2).managerJobList(testJobs);
+				
+		LinkedList<Job> testUserJobsActual = (LinkedList<Job>) testUser2.viewSumAllJobs(testJobs);
 		//check that we were returned the correct number of jobs
-		assertEquals("Number of Jobs failed in viewSumAllJobs()", STARTING_NUM_TEST_JOBS + testUserJobsExpected, testJobs.size());
-		testUserJobsActual = testUser.viewSumAllJobs(testJobs);
-		//check that they are the correct jobs, this assumes they return in the same order
-		for (int i = 1; i <= testUserJobsExpected; i++) {
-			assertEquals("Actual Jobs failed in viewSumAllJobs()", i + STARTING_NUM_TEST_JOBS,
-					((LinkedList<Job>) testUserJobsActual).pop().getJobID());
+		assertEquals("Number of Jobs failed in viewSumAllJobs()", testUserJobsExpected, testUserJobsActual.size());
+				
+		//check if manager name is correct for specific manager
+		for (int i = 0; i < testUserJobsActual.size(); i++) {
+			assertEquals("Actual Jobs failed in viewSumAllJobs()", testUserJobsActual.get(i).getJobManager(),
+							"JUnitTest2_First JUnitTest2_Last");
 		}
 	}
 }
