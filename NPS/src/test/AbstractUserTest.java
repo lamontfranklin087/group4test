@@ -5,12 +5,16 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import model.Job;
-import model.UrbanParksStaff;
+import model.Manager;
+import model.Volunteer;
 
 /**
  * @author Student
@@ -18,28 +22,30 @@ import model.UrbanParksStaff;
  */
 public class AbstractUserTest {
 	
-	private final int STARTING_NUM_TEST_JOBS = 10;	
+	private static int STARTING_NUM_TEST_JOBS = 10;	
 	
-	private final int JOB_ID_DOES_NOT_EXIST = 20;
-	
-	private Collection<Job> testJobs;
-	
-	private UrbanParksStaff testUser = new UrbanParksStaff();
+	private static Collection<Job> testJobs;
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-				
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		ArrayList<String> testParksManage1 = new ArrayList<String>();
+		for (int i = 1; i <= 3; i++) {
+			testParksManage1.add("Park#:" + i);
+		}
+		Manager testUser1 = new Manager("JUnitTest1_First", "JUnitTest1_Last",
+					"JUnitTest1_Email", "JUnitTest1_Password", testParksManage1);		
+		
 		testJobs = new LinkedList<Job>();
-		for (int i = 1; i <= STARTING_NUM_TEST_JOBS; i++) {
-			Job tempJob = new Job();
-			//tempJob.setJobSlot(5, 5, 5);
-			tempJob.setJobID(i);
-			tempJob.setJobManager("Test Manager");
-			tempJob.setJobDescription("TestJob#:" + i);
-			testJobs.add(tempJob);
+		
+		for (int i = 0; i < STARTING_NUM_TEST_JOBS; i++) {			
+			int day = 5 + i;
+			int month = 5;
+			int year = 2016;
+			
+			Calendar jobDate = new GregorianCalendar();			
+			jobDate.set(year, month, day);
+			((Manager)testUser1).submitNewJob("JUnitTest1_First JUnitTest1_Last",
+					"Steel Lake Park", jobDate, 1, 3, 3, 3, "Testing", "8:00AM", testJobs);
 		}
 	}
 
@@ -49,6 +55,7 @@ public class AbstractUserTest {
 	@Test
 	public void testFindJobJobThere() {
 		Job testJob;
+		Volunteer testUser = new Volunteer();
 
 		for(int i = STARTING_NUM_TEST_JOBS; i > 0; i--) {
 			//System.out.println(i);
@@ -65,8 +72,8 @@ public class AbstractUserTest {
 	@Test
 	public void testFindJobJobIsNotThere() {
 		Job testJob;
-
-		for(int i = JOB_ID_DOES_NOT_EXIST; i > STARTING_NUM_TEST_JOBS; i--) {			
+		Volunteer testUser = new Volunteer();
+		for(int i = 80; i > STARTING_NUM_TEST_JOBS; i--) {			
 			testJob = testUser.findJob(i, testJobs);
 			assertTrue(testJob == null);
 		}		

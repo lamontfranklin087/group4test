@@ -5,15 +5,17 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import model.Job;
+import model.Manager;
 import model.UrbanParksStaff;
 import model.User;
 import model.Volunteer;
@@ -24,47 +26,48 @@ import model.Volunteer;
  */
 public class UrbanParksStaffTest {
 
-	private final int NUM_OF_TEST_JOBS = 10;
+	private final static int NUM_OF_TEST_JOBS = 10;
 	
-	private Collection<User> testUsers;
+	private static Collection<User> testUsers;
 	
-	private Collection<Job> testJobs;
+	private static Collection<Job> testJobs;
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@Before
-	public void setUp() throws Exception {
-		Job tempJob;
+	@BeforeClass
+	public static void setUp() throws Exception {
 		Volunteer testUser1 = new Volunteer("JUnitTestFirst1", "JUnitTestLast1",
 								 "JUnitTestEmail1", "JUnitTestPassword1");
 		Volunteer testUser2 = new Volunteer("JUnitTestFirst2", "JUnitTestLast2",
 				 "JUnitTestEmail2", "JUnitTestPassword2");
 		testJobs = new LinkedList<Job>();
 		testUsers = new LinkedList<User>();
-		for (int i = 0; i < NUM_OF_TEST_JOBS; i++) {
-			
+		
+		ArrayList<String> testParksManage1 = new ArrayList<String>();
+		for (int i = 1; i <= 3; i++) {
+			testParksManage1.add("Park#:" + i);
+		}
+		Manager testManager = new Manager("JUnitTest1_First", "JUnitTest1_Last",
+					"JUnitTest1_Email", "JUnitTest1_Password", testParksManage1);		
+		
+		testJobs = new LinkedList<Job>();
+		
+		for (int i = 0; i < NUM_OF_TEST_JOBS; i++) {			
 			int day = 5 + i;
-			int month = 4;
+			int month = 5;
 			int year = 2016;
 			
 			Calendar jobDate = new GregorianCalendar();			
-			jobDate.set(Calendar.YEAR, year);
-			jobDate.set(Calendar.MONTH, month);
-			jobDate.set(Calendar.DAY_OF_MONTH, day);
-			
-			tempJob = new Job();			
-			tempJob.setDate(jobDate);
-			tempJob.setJobDuration(1);
-			tempJob.setJobSlot(5, 5, 5);
-			tempJob.setJobID(i + 1);
-			tempJob.setJobDescription("TestJob#:" + (i + 1));
-			testJobs.add(tempJob);
+			jobDate.set(year, month, day);
+			((Manager)testManager).submitNewJob("JUnitTest1_First JUnitTest1_Last",
+					"Steel Lake Park", jobDate, 1, 3, 3, 3, "Testing", "8:00AM", testJobs);
 		}
+		
 		int desiredJobID = 4;
 		int desiredSlot = 1;
 		((Volunteer)testUser1).jobSignUp(testJobs, desiredJobID, desiredSlot);
 		testUsers.add(testUser1);
-		((Volunteer)testUser1).jobSignUp(testJobs, desiredJobID + 1, desiredSlot);
+		((Volunteer)testUser2).jobSignUp(testJobs, desiredJobID + 1, desiredSlot);
 		testUsers.add(testUser2);
 	}
 

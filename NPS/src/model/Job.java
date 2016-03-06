@@ -99,14 +99,14 @@ public class Job implements java.io.Serializable {
 		totalJobs = nextID;
 	}
 	
-	/**
-	 * Setter for JobId
-	 * 
-	 * @param nextID the new job id.
-	 */
-	public void setJobID(int nextID) {
-		jobID = nextID;
-	}
+//	/**
+//	 * Setter for JobId
+//	 * 
+//	 * @param nextID the new job id.
+//	 */
+//	public void setJobID(int nextID) {
+//		jobID = nextID;
+//	}
 	
 	/**
 	 * Set job's location.
