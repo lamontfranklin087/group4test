@@ -70,7 +70,7 @@ public class CheckBusinessRules {
 	 * @return false if there 5 or more jobs in 7 days, otherwise true.
 	 * @throws MyOwnException 
 	 */
-	protected boolean jobsIn7Days(Collection<Job> allJobs, Calendar mydate) throws MyOwnException {
+	public boolean jobsIn7Days(Collection<Job> allJobs, Calendar mydate) throws MyOwnException {
 		int jobsIn7Days = 0;	
 		int jobDayOfYear = mydate.get(Calendar.DAY_OF_YEAR);		
 		if (allJobs.size() == 0) {

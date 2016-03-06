@@ -175,7 +175,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	public boolean submitNewJob(String aJobManager, String aJobLocation, Calendar aJobDate, 
 			int aDuration, int aLightSlot, int aMediumSlot, 
 			int aHeavySlot, String aDescription, String aStartTime, Collection<Job> anAllJobs) throws MyOwnException {
-			
+		
 		Job newJob = new Job();
 		boolean result = true;
 		result = newJob.setJobLocation(aJobLocation);

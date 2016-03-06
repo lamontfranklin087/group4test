@@ -141,7 +141,7 @@ public class Job implements java.io.Serializable {
 			}		
 			
 		 	int resultDays = jobDayOfYear - curDayOfYear;
-		 	
+//		 	System.out.println(jobDayOfYear + " " + curDayOfYear);
 		 	if (resultDays <= 0) {
 		 		throw new MyOwnException("Job's date can't be past.");
 		 	} else {

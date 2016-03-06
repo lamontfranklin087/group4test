@@ -5,11 +5,20 @@ package test;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
+import controller.CheckBusinessRules;
+import model.Job;
+import model.Manager;
+import model.MyOwnException;
+import model.User;
 
 /**
  * @author Student
@@ -17,56 +26,120 @@ import org.junit.Test;
  */
 public class CheckBusinessRulesTest {
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+	private final int NUM_OF_TEST_JOBS = 5;
+	
+	private User testUser;
+	
+	private Collection<Job> testJobs;
+	int jobDuration = 1;
+	int lightSlot = 3;
+	int mediumSlot = 4;
+	int heavySlot = 5;
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
+		ArrayList<String> parksList = new ArrayList<String>();
+		parksList.add("Steel Lake Park");
+		parksList.add("Auburn Environmental Park");
+		parksList.add("Lake Land North");
+		
+		testUser = new Manager("JUnitTestFirst", "JUnitTestLast",
+					"JUnitTestEmail", "JUnitTestPassword", parksList);
+		
+		testJobs = new LinkedList<Job>();
+		
+		for (int i = 0; i < NUM_OF_TEST_JOBS; i++) {
+			
+			int day = 5 + i;
+			int month = 5;
+			int year = 2016;
+			
+			Calendar jobDate = new GregorianCalendar();			
+			jobDate.set(year, month, day);
+			
+			((Manager)testUser).submitNewJob("JUnitTestFirst JUnitTestLast",
+					"Steel Lake Park", jobDate, 1, 3, 3, 3, "Testing", "8:00AM", testJobs);
+		}
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
-	}
 
 	/**
 	 * Test method for {@link controller.CheckBusinessRules#checkJobDuration(int)}.
 	 */
 	@Test
-	public void testCheckJobDuration() {
-		fail("Not yet implemented");
+	public void testCheckJobDurationZero() {
+		boolean testError = false;
+		try {				
+			Calendar jobDate = new GregorianCalendar();			
+			jobDate.set(2016, 4, 2);
+			jobDuration = 0;
+			((Manager)testUser).submitNewJob("JUnitTestFirst JUnitTestLast", "Auburn Environmental Park", 
+					jobDate, jobDuration, lightSlot, mediumSlot, heavySlot, "Testing", "8:00AM", testJobs);
+		} catch (MyOwnException e) {
+			testError = true;
+		}
+		assertTrue(testError);		
 	}
-
+	
 	/**
-	 * Test method for {@link controller.CheckBusinessRules#checkForPastJobs(java.util.Collection)}.
+	 * Test method for {@link controller.CheckBusinessRules#checkJobDuration(int)}.
 	 */
 	@Test
-	public void testCheckForPastJobs() {
-		fail("Not yet implemented");
+	public void testCheckJobDurationOne() {
+		boolean testError = false;
+		try {				
+			Calendar jobDate = new GregorianCalendar();			
+			jobDate.set(2016, 4, 2);
+			jobDuration = 1;
+			testError = ((Manager)testUser).submitNewJob("JUnitTestFirst JUnitTestLast", "Auburn Environmental Park", 
+					jobDate, jobDuration, lightSlot, mediumSlot, heavySlot, "Testing", "8:00AM", testJobs);
+		} catch (MyOwnException e) {
+			testError = true;
+		}
+		assertTrue(testError);	
 	}
-
+	
+	/**
+	 * Test method for {@link controller.CheckBusinessRules#checkJobDuration(int)}.
+	 */
+	@Test
+	public void testCheckJobDurationTwo() {
+		boolean testError = false;
+		try {				
+			Calendar jobDate = new GregorianCalendar();			
+			jobDate.set(2016, 4, 2);
+			jobDuration = 2;
+			testError = ((Manager)testUser).submitNewJob("JUnitTestFirst JUnitTestLast", "Auburn Environmental Park", 
+					jobDate, jobDuration, lightSlot, mediumSlot, heavySlot, "Testing", "8:00AM", testJobs);
+		} catch (MyOwnException e) {
+			
+		}
+		assertTrue(testError);	
+	}
+	
 	/**
 	 * Test method for {@link controller.CheckBusinessRules#jobsIn7Days(java.util.Collection, java.util.Calendar)}.
 	 */
 	@Test
 	public void testJobsIn7Days() {
-		fail("Not yet implemented");
+		boolean testError = false;
+		CheckBusinessRules check = new CheckBusinessRules();
+		int day = 7;
+		int month = 5;
+		int year = 2016;
+		
+		Calendar jobDate = new GregorianCalendar();			
+		jobDate.set(year, month, day);
+		
+		try {
+			check.jobsIn7Days(testJobs, jobDate);			
+		} catch (MyOwnException e) {
+			testError = true;
+		}
+		assertTrue(testError);
 	}
 
 	/**
@@ -74,7 +147,19 @@ public class CheckBusinessRulesTest {
 	 */
 	@Test
 	public void testCheckForPastDate() {
-		fail("Not yet implemented");
+		boolean testError = false;
+		CheckBusinessRules check = new CheckBusinessRules();
+		Calendar jobDate = new GregorianCalendar();
+		int day = 4;
+		int month = 2;
+		int year = 2016;
+		jobDate.set(year, month, day);
+		try {
+			check.checkForPastDate(jobDate);
+		} catch (MyOwnException e) {
+			testError = true;
+		}
+		assertTrue(testError);
 	}
 
 	/**
@@ -82,7 +167,19 @@ public class CheckBusinessRulesTest {
 	 */
 	@Test
 	public void testCheckForFutureDate() {
-		fail("Not yet implemented");
+		boolean testError = false;
+		CheckBusinessRules check = new CheckBusinessRules();
+		Calendar jobDate = new GregorianCalendar();
+		int day = 4;
+		int month = 5;
+		int year = 2016;
+		jobDate.set(year, month, day);
+		try {
+			check.checkForFutureDate(jobDate);
+		} catch (MyOwnException e) {
+			testError = true;
+		}
+		assertTrue(testError);
 	}
 
 }

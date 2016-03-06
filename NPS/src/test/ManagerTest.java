@@ -3,16 +3,11 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import java.util.Random;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import model.AbstractUser;
 import model.Job;
 import model.Manager;
 import model.MyOwnException;
@@ -90,7 +85,7 @@ public class ManagerTest {
 	}
 
 	@Test
-	public void testDeleteJob() {
+	public void testDeleteJobFromNotEmptyList() {
 		//check that initial numbers of jobs are correct
 		assertEquals("Number of INITIAL Jobs failed in deleteJob()", STARTING_NUM_TEST_JOBS, testJobs.size());
 		
@@ -108,6 +103,13 @@ public class ManagerTest {
 		}
 	}
 
+	@Test
+	public void testDeleteJobFromEmptyList() {
+		Collection<Job> tempJob = new LinkedList<Job>();
+		assertFalse(((Manager) testUser).deleteJob(1, tempJob));
+		
+	}
+	
 	@Test
 	public void testManagerJobList() throws MyOwnException {
 		//number of jobs to make for this manager
