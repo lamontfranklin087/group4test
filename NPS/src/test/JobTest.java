@@ -70,25 +70,6 @@ public class JobTest {
 		//this line should then throw the expected exception
 		testJob.setDate(yesterday);
 	}
-	
-	/**
-	 * Test method for {@link model.Job#setDate(java.util.Calendar)}.
-	 * @throws MyOwnException if job's date equals to null.
-	 */
-	@Test
-	public void testSetDateFuture() throws MyOwnException{
-		//make a calendar set to today
-		Calendar threeMonthsLater = new GregorianCalendar();
-		
-		//roll that forward MAX_FUTURE_DAYS_FOR_NEW_JOBS + 1 days
-		threeMonthsLater.roll(Calendar.DAY_OF_YEAR, 91);
-		
-		Calendar compareDate = new GregorianCalendar();
-		compareDate.roll(Calendar.DAY_OF_YEAR, 91);
-		//this line should then throw the expected exception
-		testJob.setDate(threeMonthsLater);
-		assertEquals("setDate() failed.", compareDate, testJob.getDate());
-	}
 
 	/**
 	 * Test method for {@link model.Job#setJobDuration(int)}.
