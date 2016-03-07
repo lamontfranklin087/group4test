@@ -14,13 +14,7 @@ public class Job implements java.io.Serializable {
 	public final int DUTY_OPTIONS = 4;
 	/** Serial number since job is Serializable.*/
 	private static final long serialVersionUID = 1L;
-	
-	/** The maximum id will be up to, and not including, MAX_ID_VAL*/
-	private static int totalJobs;	
-	
-	/** The maximum id will be up to FIRST_ID_NUM*/
-	private static int FIRST_ID_NUM = 0;
-
+		
 	/** Job id for this job.*/
 	private int jobID;
 	
@@ -70,7 +64,7 @@ public class Job implements java.io.Serializable {
 	 * No parameter job constructor.
 	 */
 	public Job() {
-		jobID = FIRST_ID_NUM + (++totalJobs);
+		jobID = 0;
 		jobManager = null;
 		jobLocation = null;
 		jobDate = null;
@@ -89,12 +83,11 @@ public class Job implements java.io.Serializable {
 	
 
 	/**
-	 * Setter for sequential JobIds
-	 * 
+	 * Setter for sequential JobIds. 
 	 * @param nextID the new job id.
 	 */
 	public void setNextJobID(int nextID) {
-		totalJobs = nextID;
+		jobID = ++nextID;
 	}
 		
 	/**

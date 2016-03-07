@@ -179,8 +179,7 @@ public class ParksProgram {
 			if (jobDate != null) {
 				String jobLocation = getJobLocationFromUser(currentUser);	
 				userInterface.printText("Enter job Duration: ");	 	
-				int jobDuration = getNumber();	
-				checkBusRule.checkJobDuration(jobDuration);				
+				int jobDuration = getNumber();						
 				userInterface.printText("Enter the number of light slots: ");				 	
 				int jobLightSlot = getNumber();
 				userInterface.printText("Enter the number of medium slots: ");
@@ -278,58 +277,56 @@ public class ParksProgram {
 		userInterface.printText("Enter job ID: ");
 		int tempJobID = getNumber();
 		
-		if (currentUser.findJob(tempJobID, allJobs).getTotalVolunteers() <= 0) {
-			userInterface.clearScreen();
-			userInterface.menuHeader(currentUser);
-			int editMenuSelection = userInterface.printEditMenu(currentUser);
-			
-			String aJobLocation = null;
-			Calendar aJobDate = null; 
-			int aDuration = 0;
-			int aLightSlot = 0;
-			int aMediumSlot = 0;
-			int aHeavySlot = 0;
-			String aDescription = null;
-			String aStartTime = null;
-			
-			switch (editMenuSelection) {
-				case 1:
-					aJobDate = getJobDateFromUser();
-					break;
-				case 2:
-					aJobLocation = getJobLocationFromUser(currentUser);
-					break;
-				case 3:
-					userInterface.printText("Enter job Duration: ");	 	
-				 	aDuration = getNumber();
-					break;
-				case 4:
-					userInterface.printText("Enter the number of light slots: ");				 	
-					aLightSlot = getNumber();
-					userInterface.printText("Enter the number of medium slots: ");
-					aMediumSlot = getNumber(); 
-					userInterface.printText("Enter the number of heavy slots: ");
-					aHeavySlot = getNumber();
-					break;
-				case 5:
-					userInterface.printText("Enter job's description: ");
-					aDescription = userInterface.getNextLine();
-					break;
-				case 6:
-					userInterface.printText("Enter job's start time (for example 8:00AM): ");
-					aStartTime = userInterface.getNextLine();
-					break;
-				case 7:
-					break;
-			}				
-			if (currentUser.editJob(aJobLocation, aJobDate, aDuration, 
-				aLightSlot, aMediumSlot, aHeavySlot, aDescription, 
-				aStartTime, allJobs, tempJobID)) {
-				userInterface.printText("\nJob was edited successfully .");
-			}
-		} else {
-			throw new MyOwnException("You can't edit this job because volunteer already signed up for this job.");
+		checkBusRule.isThereVolunteer(currentUser, tempJobID, allJobs);
+		userInterface.clearScreen();
+		userInterface.menuHeader(currentUser);
+		int editMenuSelection = userInterface.printEditMenu(currentUser);
+		
+		String aJobLocation = null;
+		Calendar aJobDate = null; 
+		int aDuration = 0;
+		int aLightSlot = 0;
+		int aMediumSlot = 0;
+		int aHeavySlot = 0;
+		String aDescription = null;
+		String aStartTime = null;
+		
+		switch (editMenuSelection) {
+			case 1:
+				aJobDate = getJobDateFromUser();
+				break;
+			case 2:
+				aJobLocation = getJobLocationFromUser(currentUser);
+				break;
+			case 3:
+				userInterface.printText("Enter job Duration: ");	 	
+			 	aDuration = getNumber();
+				break;
+			case 4:
+				userInterface.printText("Enter the number of light slots: ");				 	
+				aLightSlot = getNumber();
+				userInterface.printText("Enter the number of medium slots: ");
+				aMediumSlot = getNumber(); 
+				userInterface.printText("Enter the number of heavy slots: ");
+				aHeavySlot = getNumber();
+				break;
+			case 5:
+				userInterface.printText("Enter job's description: ");
+				aDescription = userInterface.getNextLine();
+				break;
+			case 6:
+				userInterface.printText("Enter job's start time (for example 8:00AM): ");
+				aStartTime = userInterface.getNextLine();
+				break;
+			case 7:
+				break;
+		}				
+		if (currentUser.editJob(aJobLocation, aJobDate, aDuration, 
+			aLightSlot, aMediumSlot, aHeavySlot, aDescription, 
+			aStartTime, allJobs, tempJobID)) {
+			userInterface.printText("\nJob was edited successfully .");
 		}
+		
 	}
 	
 	/**

@@ -19,6 +19,7 @@ import model.Job;
 import model.Manager;
 import model.MyOwnException;
 import model.User;
+import model.Volunteer;
 
 /**
  * @author Ihar Lavor
@@ -74,20 +75,30 @@ public class CheckBusinessRulesTest {
 
 	/**
 	 * Test method for {@link controller.CheckBusinessRules#checkJobDuration(int)}.
+	 * @throws MyOwnException 
 	 */
-	@Test
-	public void testCheckJobDurationZero() {
-		boolean testError = false;
-		try {				
-			Calendar jobDate = new GregorianCalendar();			
-			jobDate.set(2016, 4, 2);
-			jobDuration = 0;
-			((Manager)testUser).submitNewJob("JUnitTestFirst JUnitTestLast", "Auburn Environmental Park", 
-					jobDate, jobDuration, lightSlot, mediumSlot, heavySlot, "Testing", "8:00AM", testJobs);
-		} catch (MyOwnException e) {
-			testError = true;
-		}
-		assertTrue(testError);		
+	@Test (expected = MyOwnException.class)
+	public void testCheckJobDurationZero() throws MyOwnException {
+		Calendar jobDate = new GregorianCalendar();			
+		jobDate.set(2016, 4, 2);
+		jobDuration = 0;
+		((Manager)testUser).submitNewJob("JUnitTestFirst JUnitTestLast", "Auburn Environmental Park", 
+				jobDate, jobDuration, lightSlot, mediumSlot, heavySlot, "Testing", "8:00AM", testJobs);
+			
+	}
+	
+	/**
+	 * Test method for {@link controller.CheckBusinessRules#checkJobDuration(int)}.
+	 * @throws MyOwnException 
+	 */
+	@Test (expected = MyOwnException.class)
+	public void testCheckJobDurationThree() throws MyOwnException {
+		Calendar jobDate = new GregorianCalendar();			
+		jobDate.set(2016, 4, 2);
+		jobDuration = 3;
+		((Manager)testUser).submitNewJob("JUnitTestFirst JUnitTestLast", "Auburn Environmental Park", 
+				jobDate, jobDuration, lightSlot, mediumSlot, heavySlot, "Testing", "8:00AM", testJobs);
+			
 	}
 	
 	/**
@@ -128,10 +139,10 @@ public class CheckBusinessRulesTest {
 	
 	/**
 	 * Test method for {@link controller.CheckBusinessRules#jobsIn7Days(java.util.Collection, java.util.Calendar)}.
+	 * @throws MyOwnException 
 	 */
-	@Test
-	public void testJobsIn7Days() {
-		boolean testError = false;
+	@Test (expected = MyOwnException.class)
+	public void testJobsIn7Days() throws MyOwnException {
 		CheckBusinessRules check = new CheckBusinessRules();
 		int day = 7;
 		int month = 5;
@@ -139,53 +150,66 @@ public class CheckBusinessRulesTest {
 		
 		Calendar jobDate = new GregorianCalendar();			
 		jobDate.set(year, month, day);
-		
-		try {
-			check.jobsIn7Days(testJobs, jobDate);			
-		} catch (MyOwnException e) {
-			testError = true;
-		}
-		assertTrue(testError);
+		check.jobsIn7Days(testJobs, jobDate);			
 	}
 
 	/**
 	 * Test method for {@link controller.CheckBusinessRules#checkForPastDate(java.util.Calendar)}.
+	 * @throws MyOwnException 
 	 */
-	@Test
-	public void testCheckForPastDate() {
-		boolean testError = false;
+	@Test (expected = MyOwnException.class)
+	public void testCheckForPastDate() throws MyOwnException {
 		CheckBusinessRules check = new CheckBusinessRules();
 		Calendar jobDate = new GregorianCalendar();
-		int day = 4;
-		int month = 2;
-		int year = 2016;
-		jobDate.set(year, month, day);
-		try {
-			check.checkForPastDate(jobDate);
-		} catch (MyOwnException e) {
-			testError = true;
-		}
-		assertTrue(testError);
+		jobDate.add(Calendar.DAY_OF_YEAR, -1);
+		check.checkForPastDate(jobDate);		
 	}
 
 	/**
 	 * Test method for {@link controller.CheckBusinessRules#checkForFutureDate(java.util.Calendar)}.
+	 * @throws MyOwnException 
 	 */
-	@Test
-	public void testCheckForFutureDate() {
-		boolean testError = false;
+	@Test (expected = MyOwnException.class)
+	public void testCheckForFutureDate() throws MyOwnException {
 		CheckBusinessRules check = new CheckBusinessRules();
 		Calendar jobDate = new GregorianCalendar();
-		int day = 4;
-		int month = 5;
-		int year = 2016;
-		jobDate.set(year, month, day);
-		try {
-			check.checkForFutureDate(jobDate);
-		} catch (MyOwnException e) {
-			testError = true;
-		}
-		assertTrue(testError);
+		jobDate.add(Calendar.DAY_OF_YEAR, 91);
+		check.checkForFutureDate(jobDate);		
 	}
-
+	/**
+	 * Test method for {@link controller.CheckBusinessRules#checkForFutureDate(java.util.Calendar)}.
+	 * @throws MyOwnException 
+	 */
+	@Test (expected = MyOwnException.class)
+	public void testCheckForTodayDate() throws MyOwnException {
+		CheckBusinessRules check = new CheckBusinessRules();
+		Calendar jobDate = new GregorianCalendar();
+		jobDate.add(Calendar.DAY_OF_YEAR, 0);
+		check.checkForPastDate(jobDate);		
+	}
+	
+	/**
+	 * Test method for {@link controller.CheckBusinessRules#isThereVolunteer(model.Manager, int, java.util.Collection)}.
+	 * @throws MyOwnException 
+	 */
+	@Test (expected = MyOwnException.class)
+	public void testIsThereVolunteerYes() throws MyOwnException {		
+		CheckBusinessRules check = new CheckBusinessRules();
+		Volunteer tempVolunteer = new Volunteer("testVolFirst", "testVolLast", "testVolEmail", "testVolPassword");
+		tempVolunteer.jobSignUp(testJobs, 2, 1);
+		check.isThereVolunteer(new Manager(), 2, testJobs);		
+	}
+	
+	/**
+	 * Test method for {@link controller.CheckBusinessRules#isThereVolunteer(model.Manager, int, java.util.Collection)}.
+	 * @throws MyOwnException 
+	 */
+	@Test
+	public void testIsThereVolunteerNo() throws MyOwnException {		
+		CheckBusinessRules check = new CheckBusinessRules();
+		Volunteer tempVolunteer = new Volunteer("testVolFirst", "testVolLast", "testVolEmail", "testVolPassword");
+		tempVolunteer.jobSignUp(testJobs, 1, 1);
+		boolean result = check.isThereVolunteer(new Manager(), 2, testJobs);
+		assertTrue(result);
+	}
 }

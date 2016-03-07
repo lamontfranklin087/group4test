@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import controller.CheckBusinessRules;
+
 /**
  * Creates a Manager object for use in the Parks Program.
  * 
@@ -202,6 +204,8 @@ public final class Manager extends AbstractUser implements Serializable {
 		if (!result) return result;
 		result = newJob.setDate(aJobDate);
 		if (!result) return result;
+		CheckBusinessRules tempcheckDuration = new CheckBusinessRules();
+		tempcheckDuration.checkJobDuration(aDuration);		
 		result = newJob.setJobDuration(aDuration);
 		if (!result) return result;
 		result = newJob.setJobSlot(aLightSlot, aMediumSlot, aHeavySlot);

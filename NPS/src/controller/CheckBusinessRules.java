@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import model.Job;
+import model.Manager;
 import model.MyOwnException;
 /**
  * @author Ihar Lavor
@@ -20,6 +21,20 @@ public class CheckBusinessRules {
 		if (aDuration < 1 || aDuration > 2) {
 			throw new MyOwnException("Job's duration can't be less than 0 or greater than 2.");
 		}
+		return true;
+	}
+	
+	/**
+	 * Checks if a volunteer signed up for this job.
+	 * @param currentUser currently logged in user.
+	 * @param tempJobID Job ID to search for.
+	 * @param allJobs list of all available jobs.
+	 * @throws MyOwnException if volunteer signed up for this job.
+	 */
+	public boolean isThereVolunteer(Manager currentUser, int tempJobID, Collection<Job> allJobs) throws MyOwnException {
+		if (currentUser.findJob(tempJobID, allJobs).getTotalVolunteers() > 0) {
+			throw new MyOwnException("You can't edit this job because volunteer already signed up for this job.");			
+		}	
 		return true;
 	}
 	/**
@@ -133,6 +148,6 @@ public class CheckBusinessRules {
 	 	if (resultDays < 90) {
 			return true;
 	 	}
-	 	throw new MyOwnException("You can't enter date more then 90 days ahead. ");	 	
+	 	throw new MyOwnException("You can't enter date more than 90 days ahead. ");
 	}
 }
