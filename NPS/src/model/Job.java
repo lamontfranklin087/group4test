@@ -373,6 +373,8 @@ public class Job implements java.io.Serializable {
 			}
 		} else if (newVolunteer == null) {
 			throw new MyOwnException("Volunteer object can't be null.");
+		} else if (aSlot <= 0 || aSlot > 3) {
+			throw new MyOwnException("Slot can't be less than 0, or equals to 0, or greater than 3.");
 		}
 		throw new MyOwnException("All slots are busy for this job.");
 	}	
@@ -385,7 +387,7 @@ public class Job implements java.io.Serializable {
 	 * @return true if volunteer was added to a job, otherwise false.
 	 * @throws MyOwnException 
 	 */
-	protected boolean addToSlot(Volunteer newVolunteer, int dutyType, int max) throws MyOwnException{
+	private boolean addToSlot(Volunteer newVolunteer, int dutyType, int max) throws MyOwnException{
 		if (max == 0){
 			throw new MyOwnException("All slots are busy for this job.");
 		} else {

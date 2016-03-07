@@ -1,5 +1,6 @@
 /**
- * 
+ * @author Ihar Lavor
+ * @version March/06/2016
  */
 package test;
 
@@ -8,14 +9,12 @@ import static org.junit.Assert.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import model.Job;
 import model.MyOwnException;
+import model.Volunteer;
 
 /**
  * @author Student
@@ -24,27 +23,13 @@ import model.MyOwnException;
 public class JobTest {
 	
 	private Job testJob;
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-	
+		
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
 		testJob = new Job();
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
 	}
 
 	/**
@@ -95,7 +80,7 @@ public class JobTest {
 	 * Test method for {@link model.Job#setDate(java.util.Calendar)}.
 	 * @throws MyOwnException 
 	 */
-	@Test(expected = MyOwnException.class)
+	@Test
 	public void testSetDateFuture() throws MyOwnException{
 		//make a calendar set to today
 		Calendar threeMonthsLater = new GregorianCalendar();
@@ -103,8 +88,11 @@ public class JobTest {
 		//roll that forward MAX_FUTURE_DAYS_FOR_NEW_JOBS + 1 days
 		threeMonthsLater.roll(Calendar.DAY_OF_YEAR, 91);
 		
+		Calendar compareDate = new GregorianCalendar();
+		compareDate.roll(Calendar.DAY_OF_YEAR, 91);
 		//this line should then throw the expected exception
 		testJob.setDate(threeMonthsLater);
+		assertEquals("setDate() failed.", compareDate, testJob.getDate());
 	}
 
 	/**
@@ -140,7 +128,7 @@ public class JobTest {
 	 * Test method for {@link model.Job#setJobManager(java.lang.String)}.
 	 * @throws MyOwnException 
 	 */
-	@Test (expected = MyOwnException.class)
+	@Test
 	public void testSetJobManagerName() throws MyOwnException {
 		testJob.setJobManager("Test Manager");	
 		assertEquals("setJobManager() failed.", "Test Manager", testJob.getJobManager());
@@ -162,7 +150,7 @@ public class JobTest {
 	@Test
 	public void testSetJobSlotNotZeroLightSlots() throws MyOwnException {
 		testJob.setJobSlot(4, 0, 0);
-		assertEquals("setJobSlot() failed.", 5, testJob.getLightSlotsAvailable());
+		assertEquals("setJobSlot() failed.", 4, testJob.getLightSlotsAvailable());
 	}
 	
 	/**
@@ -206,26 +194,55 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#setStartTime(java.lang.String)}.
+	 * @throws MyOwnException 
 	 */
-	@Test
-	public void testSetStartTime() {
-		fail("Not yet implemented");
+	@Test (expected = MyOwnException.class)
+	public void testSetStartTimeNull() throws MyOwnException {
+		testJob.setStartTime(null);
 	}
-
+	
 	/**
-	 * Test method for {@link model.Job#addVolunteer(model.Volunteer, int)}.
+	 * Test method for {@link model.Job#setStartTime(java.lang.String)}.
+	 * @throws MyOwnException 
 	 */
 	@Test
-	public void testAddVolunteer() {
-		fail("Not yet implemented");
+	public void testSetStartTimeNotNull() throws MyOwnException {
+		testJob.setStartTime("8:00AM");
+		assertEquals("setStartTime() failed.", "8:00AM", testJob.getStartTime());
 	}
-
+	
 	/**
 	 * Test method for {@link model.Job#addToSlot(model.Volunteer, int, int)}.
+	 * @throws MyOwnException 
+	 */
+	@Test (expected = MyOwnException.class)
+	public void testAddVolunteerNullWithSlotNotZero() throws MyOwnException {
+		Volunteer newVolunteer = null;
+		int lightSlot = 1;
+		testJob.addVolunteer(newVolunteer, lightSlot);
+	}
+	
+	/**
+	 * Test method for {@link model.Job#addToSlot(model.Volunteer, int, int)}.
+	 * @throws MyOwnException 
+	 */
+	@Test (expected = MyOwnException.class)
+	public void testAddVolunteerNotNullWithSlotZero() throws MyOwnException {
+		Volunteer newVolunteer = new Volunteer("testFirst", "testLast", "testEmail", "testPasword");
+		int lightSlot = 0;
+		testJob.addVolunteer(newVolunteer, lightSlot);
+	}
+	/**
+	 * Test method for {@link model.Job#addToSlot(model.Volunteer, int, int)}.
+	 * @throws MyOwnException 
 	 */
 	@Test
-	public void testAddToSlot() {
-		fail("Not yet implemented");
+	public void testAddVolunteerNotNullWithSlotNotZero() throws MyOwnException {
+		Volunteer newVolunteer = new Volunteer("testFirst", "testLast", "testEmail", "testPasword");
+		int lightSlot = 1;
+		testJob.setJobSlot(3, 2, 1);
+		testJob.addVolunteer(newVolunteer, lightSlot);
+		assertEquals("addVolunteer() failed.", testJob.getTotalVolunteers(), 1);
+		assertEquals("addVolunteer() failed.", testJob.getVolunteers().get(0).getEmail(), "testEmail");
 	}
-
 }
