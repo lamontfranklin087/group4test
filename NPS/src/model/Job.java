@@ -163,7 +163,7 @@ public class Job implements java.io.Serializable {
 			jobDuration = aDuration;
 			return true;
 		} else {
-			throw new MyOwnException("Job's duration can't be less than 0 or greater than 2.");	
+			throw new MyOwnException("Job's duration can't be less than 0.");	
 		}		
 	}
 	

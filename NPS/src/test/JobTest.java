@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import controller.CheckBusinessRules;
 import model.Job;
 import model.MyOwnException;
 
@@ -32,14 +31,7 @@ public class JobTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -75,6 +67,8 @@ public class JobTest {
 	public void testSetDatePresent() throws MyOwnException {
 		Calendar actualDate;
 		Calendar today = new GregorianCalendar();
+		
+		today.roll(Calendar.DATE, true);
 		
 		testJob.setDate(today);
 		actualDate = testJob.getDate();
@@ -115,34 +109,99 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#setJobDuration(int)}.
+	 * @throws MyOwnException 
 	 */
 	@Test
-	public void testSetJobDuration() {
-		fail("Not yet implemented");
+	public void testSetJobDurationGreaterThanZero() throws MyOwnException {
+		testJob.setJobDuration(1);
+		assertEquals("SetJobDuration() failed.", 1, testJob.getJobDuration());		
+	}
+	
+	/**
+	 * Test method for {@link model.Job#setJobDuration(int)}.
+	 * @throws MyOwnException 
+	 */
+	@Test (expected = MyOwnException.class)
+	public void testSetJobDurationLessOrEqualsToZero() throws MyOwnException {
+		testJob.setJobDuration(0);
+		
 	}
 
 	/**
 	 * Test method for {@link model.Job#setJobManager(java.lang.String)}.
+	 * @throws MyOwnException 
 	 */
-	@Test
-	public void testSetJobManager() {
-		fail("Not yet implemented");
+	@Test (expected = MyOwnException.class)
+	public void testSetJobManagerNull() throws MyOwnException {
+		testJob.setJobManager(null);		
+	}
+	
+	/**
+	 * Test method for {@link model.Job#setJobManager(java.lang.String)}.
+	 * @throws MyOwnException 
+	 */
+	@Test (expected = MyOwnException.class)
+	public void testSetJobManagerName() throws MyOwnException {
+		testJob.setJobManager("Test Manager");	
+		assertEquals("setJobManager() failed.", "Test Manager", testJob.getJobManager());
 	}
 
 	/**
 	 * Test method for {@link model.Job#setJobSlot(int, int, int)}.
+	 * @throws MyOwnException 
+	 */
+	@Test (expected = MyOwnException.class)
+	public void testSetJobSlotWithZeroSlots() throws MyOwnException {
+		testJob.setJobSlot(0, 0, 0);
+	}
+	
+	/**
+	 * Test method for {@link model.Job#setJobSlot(int, int, int)}.
+	 * @throws MyOwnException 
 	 */
 	@Test
-	public void testSetJobSlot() {
-		fail("Not yet implemented");
+	public void testSetJobSlotNotZeroLightSlots() throws MyOwnException {
+		testJob.setJobSlot(4, 0, 0);
+		assertEquals("setJobSlot() failed.", 5, testJob.getLightSlotsAvailable());
+	}
+	
+	/**
+	 * Test method for {@link model.Job#setJobSlot(int, int, int)}.
+	 * @throws MyOwnException 
+	 */
+	@Test
+	public void testSetJobSlotNotZeroMediumSlots() throws MyOwnException {
+		testJob.setJobSlot(0, 3, 0);
+		assertEquals("setJobSlot() failed.", 3, testJob.getMediumSlotsAvailable());
 	}
 
 	/**
-	 * Test method for {@link model.Job#setJobDescription(java.lang.String)}.
+	 * Test method for {@link model.Job#setJobSlot(int, int, int)}.
+	 * @throws MyOwnException 
 	 */
 	@Test
-	public void testSetJobDescription() {
-		fail("Not yet implemented");
+	public void testSetJobSlotNotZeroHeavySlots() throws MyOwnException {
+		testJob.setJobSlot(0, 0, 7);
+		assertEquals("setJobSlot() failed.", 7, testJob.getHeavySlotsAvailable());
+	}
+	
+	/**
+	 * Test method for {@link model.Job#setJobDescription(java.lang.String)}.
+	 * @throws MyOwnException 
+	 */
+	@Test
+	public void testSetJobDescriptionNotNull() throws MyOwnException {
+		testJob.setJobDescription("Testing");
+		assertEquals("setJobDescription() failed.", "Testing", testJob.getDescription());
+	}
+	
+	/**
+	 * Test method for {@link model.Job#setJobDescription(java.lang.String)}.
+	 * @throws MyOwnException 
+	 */
+	@Test (expected = MyOwnException.class)
+	public void testSetJobDescriptionNull() throws MyOwnException {
+		testJob.setJobDescription(null);
 	}
 
 	/**
