@@ -1,7 +1,3 @@
-/**
- * @author Ihar Lavor
- * @version March/06/2016
- */
 package test;
 
 import static org.junit.Assert.*;
@@ -15,10 +11,9 @@ import org.junit.Test;
 import model.Job;
 import model.MyOwnException;
 import model.Volunteer;
-
 /**
- * @author Student
- *
+ * @author Ihar Lavor
+ * @version March/04/2016
  */
 public class JobTest {
 	
@@ -34,7 +29,7 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#setJobLocation(java.lang.String)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job location equals to null.
 	 */
 	@Test
 	public void testSetJobLocation() throws MyOwnException {
@@ -46,7 +41,7 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#setDate(java.util.Calendar)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's date equals to null.
 	 */
 	@Test
 	public void testSetDatePresent() throws MyOwnException {
@@ -62,7 +57,7 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#setDate(java.util.Calendar)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's date equals to null or past date.
 	 */
 	@Test(expected = MyOwnException.class)
 	public void testSetDatePast() throws MyOwnException{
@@ -78,7 +73,7 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#setDate(java.util.Calendar)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's date equals to null.
 	 */
 	@Test
 	public void testSetDateFuture() throws MyOwnException{
@@ -97,7 +92,7 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#setJobDuration(int)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's duration <= 0.
 	 */
 	@Test
 	public void testSetJobDurationGreaterThanZero() throws MyOwnException {
@@ -107,7 +102,7 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#setJobDuration(int)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's duration <= 0.
 	 */
 	@Test (expected = MyOwnException.class)
 	public void testSetJobDurationLessOrEqualsToZero() throws MyOwnException {
@@ -117,7 +112,7 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#setJobManager(java.lang.String)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's manager parameter == null.
 	 */
 	@Test (expected = MyOwnException.class)
 	public void testSetJobManagerNull() throws MyOwnException {
@@ -126,7 +121,7 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#setJobManager(java.lang.String)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's manager parameter == null.
 	 */
 	@Test
 	public void testSetJobManagerName() throws MyOwnException {
@@ -136,7 +131,7 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#setJobSlot(int, int, int)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's slots are light = 0, medium = 0, heavy = 0.
 	 */
 	@Test (expected = MyOwnException.class)
 	public void testSetJobSlotWithZeroSlots() throws MyOwnException {
@@ -145,7 +140,7 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#setJobSlot(int, int, int)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's slots are light = 0, medium = 0, heavy = 0.
 	 */
 	@Test
 	public void testSetJobSlotNotZeroLightSlots() throws MyOwnException {
@@ -155,7 +150,7 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#setJobSlot(int, int, int)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's slots are light = 0, medium = 0, heavy = 0.
 	 */
 	@Test
 	public void testSetJobSlotNotZeroMediumSlots() throws MyOwnException {
@@ -165,7 +160,7 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#setJobSlot(int, int, int)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's slots are light = 0, medium = 0, heavy = 0.
 	 */
 	@Test
 	public void testSetJobSlotNotZeroHeavySlots() throws MyOwnException {
@@ -175,7 +170,7 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#setJobDescription(java.lang.String)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's description == null.
 	 */
 	@Test
 	public void testSetJobDescriptionNotNull() throws MyOwnException {
@@ -185,7 +180,7 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#setJobDescription(java.lang.String)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's description == null.
 	 */
 	@Test (expected = MyOwnException.class)
 	public void testSetJobDescriptionNull() throws MyOwnException {
@@ -194,7 +189,7 @@ public class JobTest {
 
 	/**
 	 * Test method for {@link model.Job#setStartTime(java.lang.String)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's start time == null. 
 	 */
 	@Test (expected = MyOwnException.class)
 	public void testSetStartTimeNull() throws MyOwnException {
@@ -203,7 +198,7 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#setStartTime(java.lang.String)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if job's start time == null.
 	 */
 	@Test
 	public void testSetStartTimeNotNull() throws MyOwnException {
@@ -213,7 +208,7 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#addToSlot(model.Volunteer, int, int)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if volunteer == null and/or slot parameter <= 0, and/or slot parameter > 3.
 	 */
 	@Test (expected = MyOwnException.class)
 	public void testAddVolunteerNullWithSlotNotZero() throws MyOwnException {
@@ -224,7 +219,7 @@ public class JobTest {
 	
 	/**
 	 * Test method for {@link model.Job#addToSlot(model.Volunteer, int, int)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if volunteer == null and/or slot parameter <= 0, and/or slot parameter > 3.
 	 */
 	@Test (expected = MyOwnException.class)
 	public void testAddVolunteerNotNullWithSlotZero() throws MyOwnException {
@@ -234,7 +229,7 @@ public class JobTest {
 	}
 	/**
 	 * Test method for {@link model.Job#addToSlot(model.Volunteer, int, int)}.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if volunteer == null and/or slot parameter <= 0, and/or slot parameter > 3.
 	 */
 	@Test
 	public void testAddVolunteerNotNullWithSlotNotZero() throws MyOwnException {

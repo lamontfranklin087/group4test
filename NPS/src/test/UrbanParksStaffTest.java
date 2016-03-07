@@ -21,15 +21,21 @@ import model.User;
 import model.Volunteer;
 
 /**
- * @author Student
- *
+ * @author Ihar Lavor
+ * @version March/04/2016
  */
 public class UrbanParksStaffTest {
-
+	/**
+	 * Number of jobs to be generated.
+	 */
 	private final static int NUM_OF_TEST_JOBS = 10;
-	
+	/**
+	 * Store all generated users.
+	 */
 	private static Collection<User> testUsers;
-	
+	/**
+	 * Store all generated jobs.
+	 */
 	private static Collection<Job> testJobs;
 	/**
 	 * @throws java.lang.Exception

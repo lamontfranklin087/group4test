@@ -12,6 +12,7 @@ public interface User {
 	
 	/**
 	 * Accessor to all currently pending jobs for this User.
+	 * @param anAllJobs list of all jobs.
 	 * @return a list of all jobs for this User, or null if there is no jobs.
 	 */
 	public abstract Collection<Job> viewSumAllJobs(Collection<Job> anAllJobs);
@@ -19,6 +20,7 @@ public interface User {
 	/**
      * Accessor to a specific job.
      * @param aJobID is a job's ID number.
+     * @param anAllJobs list of all jobs.
      * @return found job, if there is no job with aJobID then return null.
      */
 	public Job viewJobDetails(int aJobID, Collection<Job> anAllJobs);

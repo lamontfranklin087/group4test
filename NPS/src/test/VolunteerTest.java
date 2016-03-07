@@ -16,13 +16,22 @@ import model.Job;
 import model.Manager;
 import model.MyOwnException;
 import model.Volunteer;
-
+/**
+ * @author Ihar Lavor
+ * @version March/04/2016
+ */
 public class VolunteerTest {
-	
+	/**
+	 * Number of jobs to be generated.
+	 */
 	private static int STARTING_NUM_TEST_JOBS = 10;
-	
+	/**
+	 * Store all generated jobs.
+	 */
 	private static Collection<Job> testJobs;
-
+	/**
+	 * @throws Exception
+	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		ArrayList<String> testParksManage1 = new ArrayList<String>();
@@ -47,7 +56,7 @@ public class VolunteerTest {
 	}
 
 	/**
-	 * Tests that the correct Simple Name is returned.
+	 * Test method for {@link model.Volunteer#getSimpleName()}.
 	 */
 	@Test
 	public void testGetSimpleName() {
@@ -55,7 +64,10 @@ public class VolunteerTest {
 				"Vol1_Email", "Vol1_Password");
 		assertEquals("getSimpleName() Test failed!", "Volunteer", testVolunteer.getSimpleName());
 	}
-	
+	/**
+	 * Test method for {@link model.Volunteer#viewMyJobs(java.util.Collection)}.
+	 * @throws Exception if there is no jobs.
+	 */
 	@Test
 	public void testviewMyJobsSignedUpForZeroJob() throws MyOwnException {	
 		Volunteer testVolunteer = new Volunteer("Vol1_First", "Vol1_Last",
@@ -63,7 +75,10 @@ public class VolunteerTest {
 		LinkedList<Job> myJobs = testVolunteer.viewMyJobs(testJobs);		
 		assertEquals("myJobs size test failed in testviewMyJobs()", 0, myJobs.size());	
 	}
-	
+	/**
+	 * Test method for {@link model.Volunteer#viewMyJobs(java.util.Collection)}.
+	 * @throws Exception if there is no jobs.
+	 */
 	@Test
 	public void testviewMyJobsSignedUpForOneJob() throws MyOwnException {	
 		int desiredJobID = 4;
@@ -79,7 +94,10 @@ public class VolunteerTest {
 		
 		assertEquals("myJobs size test failed in testviewMyJobs()", 1, myJobs.size());
 	}
-	
+	/**
+	 * Test method for {@link model.Volunteer#viewMyJobs(java.util.Collection)}.
+	 * @throws Exception if there is no jobs.
+	 */
 	@Test
 	public void testviewMyJobsSignedUpForMoreThanOneJob() throws MyOwnException {	
 		int desiredJobID = 4;
@@ -97,7 +115,10 @@ public class VolunteerTest {
 		assertEquals("light job not found in testviewMyJobs()", desiredJobID, myJobs.get(1).getJobID());
 		assertEquals("light job not found in testviewMyJobs()", desiredJobID + 2, myJobs.get(2).getJobID());		
 	}
-	
+	/**
+	 * Test method for {@link model.Volunteer#jobSignUp(java.util.Collection, int, int)}.
+	 * @throws Exception if there is no jobs or wrong Job ID.
+	 */
 	@Test
 	public void testJobSignUp() throws MyOwnException {
 		//Set up a boolean to save jobSignUp() result
@@ -129,6 +150,9 @@ public class VolunteerTest {
 		assertEquals("Correct Volunteer signup test failed in testJobSignUp()", 1, assigend);
 	}
 	
+	/**
+	 *  Test method for {@link model.Volunteer#jobSignUp(java.util.Collection, int, int)}.
+	 */
 	@Test
 	public void testJobSignUpForNotExistingJob() {
 		int desiredJobID = 132;

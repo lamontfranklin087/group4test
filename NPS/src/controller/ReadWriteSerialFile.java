@@ -35,8 +35,8 @@ public class ReadWriteSerialFile {
 	
 	/**
 	 * Writes all jobs and user to a file.
-	 * @param anAllUsers 
-	 * @param anAllJobs 
+	 * @param anAllUsers list of all users
+	 * @param anAllJobs list of all jobs.
 	 */
 	public void writeSerialFile(Collection<Job> anAllJobs, Collection<User> anAllUsers) {
 		if (anAllUsers != null) {

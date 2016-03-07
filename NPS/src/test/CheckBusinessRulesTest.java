@@ -21,20 +21,26 @@ import model.MyOwnException;
 import model.User;
 
 /**
- * @author Student
- *
+ * @author Ihar Lavor
+ * @version March/04/2016
  */
 public class CheckBusinessRulesTest {
-
+	/**
+	 * Number of jobs to be generated.
+	 */
 	private final int NUM_OF_TEST_JOBS = 5;
-	
+	/**
+	 * Store all generated users.
+	 */
 	private User testUser;
-	
+	/**
+	 * Store all generated jobs.
+	 */
 	private Collection<Job> testJobs;
-	int jobDuration = 1;
-	int lightSlot = 3;
-	int mediumSlot = 4;
-	int heavySlot = 5;
+	private int jobDuration = 1;
+	private int lightSlot = 3;
+	private int mediumSlot = 4;
+	private int heavySlot = 5;
 
 	/**
 	 * @throws java.lang.Exception

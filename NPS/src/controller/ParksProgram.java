@@ -27,12 +27,10 @@ public class ParksProgram {
 	private UI userInterface;	
 	private int EXIT = 0;
 		
-	/* The max number of jobs that can be pending for all dates. */
+	/** The max number of jobs that can be pending for all dates. */
 	private final int MAX_NUMBER_JOBS = 30;	
-	//Scanner to receive input from user.
-	//private Scanner keyboard = new Scanner(System.in);
-	
-	CheckBusinessRules checkBusRule = new CheckBusinessRules();
+		
+	private CheckBusinessRules checkBusRule = new CheckBusinessRules();
 
 	/**
 	 * Main driver to run program.
@@ -86,9 +84,8 @@ public class ParksProgram {
 	}
 	
 	/**
-	 * Serving current user until user select EXIT option.
+	 Serving current user until user select EXIT option.
 	 * @param currentUser is user object.
-	 * @throws MyOwnException 
 	 */
 	private void serveCurrentUser(User currentUser) {			
 		int menuSelection = 0;		

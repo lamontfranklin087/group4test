@@ -12,19 +12,35 @@ import org.junit.Test;
 
 import model.Job;
 import model.Manager;
-import model.MyOwnException;
 import model.User;
-
+/**
+ * @author Ihar Lavor
+ * @version March/04/2016
+ */
 public class ManagerTest {
-	
+	/**
+	 * Number of jobs to be generated.
+	 */
 	private final int STARTING_NUM_TEST_JOBS = 5;
-	
+	/**
+	 * Store generated users.
+	 */
 	private User testUser1;
+	/**
+	 * Store generated users.
+	 */
 	private User testUser2;
-	
+	/**
+	 * List of parks for manager 1.
+	 */
 	private ArrayList<String> testParksManage1;
+	/**
+	 * List of parks for manager 2.
+	 */
 	private ArrayList<String> testParksManage2;
-	
+	/**
+	 * Store all generated jobs.
+	 */
 	private Collection<Job> testJobs;
 
 	/**
@@ -67,14 +83,18 @@ public class ManagerTest {
 					"Steel Park", jobDate, 1, 3, 3, 3, "Testing", "8:00AM", testJobs);
 		}
 	}
-
+	/**
+	 * Test method for {@link model.Manager#getSimpleName()}.
+	 */
 	@Test
 	public void testGetSimpleName() {
 		assertEquals("getSimpleName() Test failed!", "Park Manager", testUser1.getSimpleName());
 	}
-
+	/**
+	 * Test method for {@link model.Manager#viewSumAllJobs(java.util.Collection)}.
+	 */
 	@Test
-	public void testViewSumAllJobsForManagerWithJobs() throws MyOwnException {		
+	public void testViewSumAllJobsForManagerWithJobs() {		
 		//run our method we are testing with those jobs included
 		LinkedList<Job> testUserJobsActual = (LinkedList<Job>) testUser2.viewSumAllJobs(testJobs);
 		int testUserJobsExpected = STARTING_NUM_TEST_JOBS;
@@ -88,9 +108,11 @@ public class ManagerTest {
 					"JUnitTest2_First JUnitTest2_Last");
 		}
 	}
-	
+	/**
+	 * Test method for {@link model.Manager#viewSumAllJobs(java.util.Collection)}.
+	 */
 	@Test
-	public void testViewSumAllJobsForManagerWithNoJobs() throws MyOwnException {	
+	public void testViewSumAllJobsForManagerWithNoJobs() {	
 		ArrayList<String> testParksManage3 = new ArrayList<String>();
 		for (int i = 15; i <= 18; i++) {
 			testParksManage3 .add("Park#:" + i);
@@ -105,7 +127,9 @@ public class ManagerTest {
 		//check that we were returned the correct number of jobs
 		assertEquals("Number of Jobs failed in viewSumAllJobs()", testUserJobsExpected, testUserJobsActual);		
 	}
-
+	/**
+	 * Test method for {@link model.Manager#deleteJob(int, java.util.Collection)}.
+	 */
 	@Test
 	public void testDeleteJobFromNotEmptyList() {
 		
@@ -128,14 +152,18 @@ public class ManagerTest {
 							"JUnitTest1_First JUnitTest1_Last");
 		}
 	}
-
+	/**
+	 * Test method for {@link model.Manager#deleteJob(int, java.util.Collection)}.
+	 */
 	@Test
 	public void testDeleteJobFromEmptyList() {
 		Collection<Job> tempJob = new LinkedList<Job>();
 		assertFalse(((Manager) testUser2).deleteJob(1, tempJob));
 		
 	}
-	
+	/**
+	 * Test method for {@link model.Manager#managerJobList(java.util.Collection)}.
+	 */
 	@Test
 	public void testManagerJobList() {
 		//number of jobs to make for this manager

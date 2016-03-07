@@ -141,7 +141,7 @@ public abstract class AbstractUser implements User,Serializable{
 	/**
 	 * Find a job from a list of all jobs.
 	 * @param jobID job's ID.
-	 * @param anAllJobs 
+	 * @param anAllJobs list of all jobs.
 	 * @return found job.
 	 */
 	public Job findJob(int jobID, Collection<Job> anAllJobs) {

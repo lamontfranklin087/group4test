@@ -16,17 +16,19 @@ public final class UrbanParksStaff extends AbstractUser implements Serializable 
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * Default constructor.
+	 */
 	public UrbanParksStaff() {
 		super();
 	}
 	
 	/**
 	 * Parameterized constructor
-	 * @param theFirstName
-	 * @param theLastName
-	 * @param theEmail
-	 * @param thePassword
+	 * @param theFirstName manager's first name.
+	 * @param theLastName manager's last name.
+	 * @param theEmail manager's email address.
+	 * @param thePassword password for manager's email.
 	 */
 	public UrbanParksStaff(String theFirstName, String theLastName,
 			String theEmail, String thePassword) {

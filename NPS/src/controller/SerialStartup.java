@@ -18,17 +18,32 @@ import model.Job;
 import model.Manager;
 import model.UrbanParksStaff;
 import model.Volunteer;
-
-// Author Lamont Franklin 2/8/16
+/**
+ * @author Lamont Franklin 
+ * @version February/08/16
+ * @author Ihar Lavor
+ * @version 02/27/2016 
+ */
 
 public class SerialStartup {
+	/**
+	 * allUsers is a list of all users available to use this program.
+	 */
 	private Collection<User> allUsers;	
-	
+	/**
+	 * Main serial driver to read .txt files with new users
+	 * @param args parameter.
+	 * @throws ParseException if string == null.
+	 * @throws FileNotFoundException if file not found.
+	 */
 	public static void main(String[] args) throws ParseException, FileNotFoundException{
-		// TODO Auto-generated method stub
 		new SerialStartup();
 	}
-	
+	/**
+	 * Write all users from this program to a file.
+	 * @param myUsers is a list of all users available to use this program.
+	 * @throws FileNotFoundException if file not found.
+	 */
 	public static void serialWriteUsers(Collection<User> myUsers)throws FileNotFoundException{
 		try {
 	         FileOutputStream fileOut = new FileOutputStream("users.txt");
@@ -41,7 +56,11 @@ public class SerialStartup {
 	          i.printStackTrace();
 	      }
 	}
-	
+	/**
+	 * Read specified .txt files and upload allUsers into this program.
+	 * @return list of all available users.
+	 * @throws FileNotFoundException if file not found.
+	 */
 	@SuppressWarnings("unchecked")
 	public static Collection<User> serialReadUsers()throws FileNotFoundException{	
 		try {
@@ -61,7 +80,11 @@ public class SerialStartup {
 	        return null;
 	    }
 	}	
-	
+	/**
+	 * Write all jobs from this program to a file.
+	 * @param myJobs list of all available jobs.
+	 * @throws FileNotFoundException if file not found.
+	 */
 	public static void serialWriteJobs(Collection<Job> myJobs)throws FileNotFoundException{
 		try {
 	         FileOutputStream fileOut =
@@ -75,7 +98,11 @@ public class SerialStartup {
 	          i.printStackTrace();
 	      }
 	}
-	
+	/**
+	 * Read specified .txt files and upload allJobs into this program.
+	 * @return list of all available jobs.
+	 * @throws FileNotFoundException if file not found.
+	 */
 	@SuppressWarnings("unchecked")
 	public static Collection<Job> serialReadJobs()throws FileNotFoundException{	
 		try {
@@ -97,7 +124,10 @@ public class SerialStartup {
 	}
 	
 	
-	
+	/**
+	 * Read and write files with serialized objects.
+	 * @throws FileNotFoundException  if file not found.
+	 */
 	@SuppressWarnings("unchecked")
 	public SerialStartup() throws FileNotFoundException {
 		new LinkedList<Job>();

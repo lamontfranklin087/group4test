@@ -7,15 +7,15 @@ import java.util.Iterator;
 
 import model.Job;
 import model.MyOwnException;
-import view.UI;
-
+/**
+ * @author Ihar Lavor
+ * @version 02/27/2016 
+ */
 public class CheckBusinessRules {
 
-	/* The number of maximum allowable jobs to be pending for any 7 day period. */
+	/** The number of maximum allowable jobs to be pending for any 7 day period. */
 	private int MAX_JOBS_IN_7_CONSECUTIVE_DAYS = 5;
-		
-	UI userInterface = new UI();
-	
+			
 	public boolean checkJobDuration(int aDuration) throws MyOwnException {
 		if (aDuration < 1 || aDuration > 2) {
 			throw new MyOwnException("Job's duration can't be less than 0 or greater than 2.");
@@ -24,6 +24,7 @@ public class CheckBusinessRules {
 	}
 	/**
 	 * Check for past jobs and remove them from list before user see them.
+	 * @param allJobs is a list of all available jobs.
 	 */
 	public void checkForPastJobs(Collection<Job> allJobs) {
 		Calendar currentDate = new GregorianCalendar();		
@@ -68,7 +69,7 @@ public class CheckBusinessRules {
 	 * @param allJobs is a list of all Jobs.
 	 * @param mydate is user entered date.
 	 * @return false if there 5 or more jobs in 7 days, otherwise true.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if user are too busy for that week.
 	 */
 	public boolean jobsIn7Days(Collection<Job> allJobs, Calendar mydate) throws MyOwnException {
 		int jobsIn7Days = 0;	
@@ -90,7 +91,12 @@ public class CheckBusinessRules {
 		}		
 		throw new MyOwnException("A job can't be added because you are to busy for that week.");
 	}
-	
+	/**
+	 * Check if user entered date is in past or not.
+	 * @param futureJobDate is a job's date.
+	 * @return true if date is not past, otherwise throw new MyOwnException.
+	 * @throws MyOwnException if entered date is in past.
+	 */
 	public boolean checkForPastDate(Calendar futureJobDate) throws MyOwnException {
 		Calendar currentDate = new GregorianCalendar();
 		
@@ -107,7 +113,12 @@ public class CheckBusinessRules {
 	 	}
 	 	throw new MyOwnException("You can't enter past date. ");
 	}
-	
+	/**
+	 * Check if user entered date is more than 90 days in future or not.
+	 * @param futureJobDate is a job's date.
+	 * @return true if date is not past, otherwise throw new MyOwnException.
+	 * @throws MyOwnException if entered date is more than 90 days in future.
+	 */
 	public boolean checkForFutureDate(Calendar futureJobDate) throws MyOwnException {
 		Calendar currentDate = new GregorianCalendar();
 		

@@ -9,12 +9,14 @@ import java.util.LinkedList;
 /**
  * Create a volunteer object.
  * @author Ihar Lavor
- * @version 02/12/2016 
+ * @version 02/27/2016 
  */
 public final class Volunteer extends AbstractUser implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * Default constructor.
+	 */
 	public Volunteer() {
 		super();
 	}
@@ -63,10 +65,10 @@ public final class Volunteer extends AbstractUser implements Serializable {
 	/**
 	 * Sign up this volunteer for a job.
 	 * @param allJobs is a collection of all existing jobs.
-	 * @param aJobID is a identification number for a specific job (must be > 0).
+	 * @param aJobID is a identification number for a specific job (must be greater 0).
 	 * @param aSlot is a slot name for which volunteer want to sign up (must be "light", "medium", or "heavy").
 	 * @return true if volunteer was added to a job, otherwise false.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if there is no such job.
 	 */
 	public boolean jobSignUp(Collection<Job> allJobs, int aJobID, int aSlot) throws MyOwnException {
 		if (aJobID > 0 && allJobs != null) {			

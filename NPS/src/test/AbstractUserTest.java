@@ -17,15 +17,23 @@ import model.Manager;
 import model.Volunteer;
 
 /**
- * @author Student
- *
+ * @author Ihar Lavor
+ * @version March/04/2016
  */
 public class AbstractUserTest {
-	
+	/**
+	 * Number of jobs to be generated.
+	 */
 	private static int STARTING_NUM_TEST_JOBS = 10;	
 	
+	/**
+	 * Store all generated jobs.
+	 */
 	private static Collection<Job> testJobs;
 
+	/**
+	 * @throws java.lang.Exception
+	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		ArrayList<String> testParksManage1 = new ArrayList<String>();
@@ -58,9 +66,7 @@ public class AbstractUserTest {
 		Volunteer testUser = new Volunteer();
 
 		for(int i = STARTING_NUM_TEST_JOBS; i > 0; i--) {
-			//System.out.println(i);
 			testJob = testUser.findJob(i, testJobs);
-			//System.out.println(i + " " + testJob.getJobID());
 			assertEquals("Job found in findJobs()", i,
 					testJob.getJobID());
 		}		

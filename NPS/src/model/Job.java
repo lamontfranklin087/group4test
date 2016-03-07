@@ -7,9 +7,7 @@ import java.util.LinkedList;
 /**
  * Create a job object.
  * @author Ihar Lavor
- * @version 02/06/2016
- * revision Lamont Franklin 2/10/2016 added duty level functionality
- * @version 02/13/2016
+ * @version 02/26/2016
  */
 public class Job implements java.io.Serializable {
 	
@@ -98,20 +96,12 @@ public class Job implements java.io.Serializable {
 	public void setNextJobID(int nextID) {
 		totalJobs = nextID;
 	}
-	
-//	/**
-//	 * Setter for JobId
-//	 * 
-//	 * @param nextID the new job id.
-//	 */
-//	public void setJobID(int nextID) {
-//		jobID = nextID;
-//	}
-	
+		
 	/**
 	 * Set job's location.
 	 * @param aJobLocation a park name for this job.
-	 * @throws MyOwnException 
+	 * @return treu if job's location was set successfully, otherwise throw new MyOwnException. 
+	 * @throws MyOwnException if aJobLocation parameter equals to null.
 	 */
 	public boolean setJobLocation(String aJobLocation) throws MyOwnException {	
 		if (aJobLocation != null && aJobLocation.length() > 0) {
@@ -141,7 +131,6 @@ public class Job implements java.io.Serializable {
 			}		
 			
 		 	int resultDays = jobDayOfYear - curDayOfYear;
-//		 	System.out.println(jobDayOfYear + " " + curDayOfYear);
 		 	if (resultDays <= 0) {
 		 		throw new MyOwnException("Job's date can't be past.");
 		 	} else {
@@ -156,7 +145,8 @@ public class Job implements java.io.Serializable {
 	/**
 	 * Set job's duration time in days.
 	 * @return true if job duration is 1 or 2 otherwise false.
-	 * @throws MyOwnException 
+	 * @param aDuration is job's duration time, must be greater 0.
+	 * @throws MyOwnException if aDuration parameter less or equals to 0.
 	 */
 	public boolean setJobDuration(int aDuration) throws MyOwnException {
 		if (aDuration > 0) {
@@ -169,8 +159,9 @@ public class Job implements java.io.Serializable {
 	
 	/**
 	 * Set job's manager.
+	 * @param aJobManager manager's first and last name.
 	 * @return true if job's manager was set, otherwise false.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if aJobManager equals to null.
 	 */
 	public boolean setJobManager(String aJobManager) throws MyOwnException {
 		if (aJobManager != null && aJobManager.length() > 0) {
@@ -182,11 +173,11 @@ public class Job implements java.io.Serializable {
 	
 	/**
 	 * Set the number of available slots for each duty level.
-	 * @param aLightSlot represent a number of light slots for this job (must be > 0).
-	 * @param aMediumSlot represent a number of medium slots for this job (must be > 0).
-	 * @param aHeavySlot represent a number of heavy slots for this job (must be > 0).
-	 * @return true if number of slots are > 0 and were set successfully, otherwise false.
-	 * @throws MyOwnException 
+	 * @param aLightSlot represent a number of light slots for this job (must be greater 0).
+	 * @param aMediumSlot represent a number of medium slots for this job (must be greater 0).
+	 * @param aHeavySlot represent a number of heavy slots for this job (must be greater 0).
+	 * @return true if number of slots are greater 0 and were set successfully, otherwise false.
+	 * @throws MyOwnException if all slot parameters less or equals to 0.
 	 */		
 	public boolean setJobSlot(int aLightSlot, int aMediumSlot, int aHeavySlot) throws MyOwnException {	
 		totalSlotsAvailable = 0;
@@ -204,23 +195,23 @@ public class Job implements java.io.Serializable {
 	
 	/**
 	 * Set a job's description.
-	 * @param aDescription describes the job (must be > 0 and != null).
+	 * @param aDescription describes the job (must be greater 0 and not equals to null).
 	 * @return true if description was set successfully, otherwise false.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if aDescription parameter equals to null.
 	 */	
 	public boolean setJobDescription(String aDescription) throws MyOwnException {
 		if (aDescription != null && aDescription.length() > 0) {
 			jobDescription = aDescription;
 			return true;
 		}
-		throw new MyOwnException("Add job's description.");
+		throw new MyOwnException("Job's description can't be null.");
 	}
 	
 	/**
 	 * Set a job's start time.
-	 * @param aStartTime is time when job will start (must be > 0 and != null).
+	 * @param aStartTime is time when job will start (must be greater 0 and not equal to null).
 	 * @return true if startTime was set successfully, otherwise false.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if aStartTime parameter is null or empty string.
 	 */	
 	public boolean setStartTime(String aStartTime) throws MyOwnException {
 		if (aStartTime != null && aStartTime.length() > 0) {
@@ -359,7 +350,8 @@ public class Job implements java.io.Serializable {
 	 * @param newVolunteer must be Volunteer type and != null.
 	 * @param aSlot is a slot name, only 3 options allowed: light, medium, or heavy.
 	 * @return true if volunteer was added to a job, otherwise false.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if slots are full, or newVolunteer parameter equals to null, 
+	 * or aSlot parameter less or equal to 0 or greater than 3.
 	 */
 	public boolean addVolunteer(Volunteer newVolunteer, int aSlot) throws MyOwnException {		
 		if (newVolunteer != null && aSlot > 0) {
@@ -385,7 +377,7 @@ public class Job implements java.io.Serializable {
 	 * @param dutyType is slot type: 1 - light, 2 - medium, and 3 - heavy
 	 * @param max is a number of available spots for this slot.
 	 * @return true if volunteer was added to a job, otherwise false.
-	 * @throws MyOwnException 
+	 * @throws MyOwnException if all slots are busy for this job.
 	 */
 	private boolean addToSlot(Volunteer newVolunteer, int dutyType, int max) throws MyOwnException{
 		if (max == 0){
@@ -460,7 +452,10 @@ public class Job implements java.io.Serializable {
 		jobSummary.append("\n");
 		return jobSummary.toString();
 	}
-
+	/**
+	 * Append job's information to a string.
+	 * @return job's information as a string.
+	 */
 	public String toStringTable() {
 		StringBuilder jobSummary = new StringBuilder(140);
 				

@@ -7,7 +7,10 @@ import model.Manager;
 import model.UrbanParksStaff;
 import model.User;
 import model.Volunteer;
-
+/**
+ * @author Ihar Lavor
+ * @version February/27/2016
+ */
 public class UI {
 	private Scanner keyboard;
 	/** Number of extra returns to "clear" the screen, in lines. */
@@ -47,7 +50,11 @@ public class UI {
 		}
 		return null;
 	}
-	
+	/**
+	 * Print individual user menu and receive an input from user.
+	 * @param currentUser is currently logged in user.
+	 * @return a menu option user selected.
+	 */
 	public int printMenu(User currentUser) {
 		clearScreen();
 		menuHeader(currentUser);
@@ -92,7 +99,11 @@ public class UI {
 		} 		
 		return menuSelection;
 	}
-		
+	/**
+	 * Print edit menu for manager and receive an input from him/her.
+	 * @param currentUser is currently logged in user.
+	 * @return a menu option user selected.
+	 */
 	public int printEditMenu(User currentUser) {
 		clearScreen();
 		menuHeader(currentUser);
@@ -144,14 +155,17 @@ public class UI {
 		}
 		System.out.println();
 	}
-	
+	/**
+	 * Print any other text.
+	 * @param string is any text user want to print.
+	 */
 	public void printText(String string) {
 		System.out.println(string);
 	}
 	
 	/**
 	 * Parse string to integer.
-	 * @param availableMenuOptions 
+	 * @param availableMenuOptions maximum number of menu option.
 	 * @return an integer number from 1 to ...
 	 */
 	protected int getNumber(int availableMenuOptions) {
@@ -181,7 +195,10 @@ public class UI {
 			System.out.println();
 		}
 	}
-
+	/**
+	 * Receive an input from user.
+	 * @return received input from user.
+	 */
 	public String getNextLine() {
 		return keyboard.nextLine();
 	}

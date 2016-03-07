@@ -23,7 +23,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;	
 	private Collection<Job> jobsAtMyParks = new LinkedList<Job>();
-	ArrayList<String> parksManage;
+	private ArrayList<String> parksManage;
 
 	/**
 	 * Default constructor.
@@ -33,11 +33,11 @@ public final class Manager extends AbstractUser implements Serializable {
 	}
 	/**
 	 * Parameterized constructor
-	 * @param theFirstName
-	 * @param theLastName
-	 * @param theEmail
-	 * @param thePassword  
-	 * @param parksList  
+	 * @param theFirstName manager's first name.
+	 * @param theLastName manager's last name.
+	 * @param theEmail manager's email address.
+	 * @param thePassword password for manager's email.
+	 * @param parksList list of parks this manager manages.
 	 */	
 	public Manager(String theFirstName, String theLastName, String theEmail,
 			String thePassword, ArrayList<String> parksList) {
@@ -55,8 +55,8 @@ public final class Manager extends AbstractUser implements Serializable {
 	
 	/**
 	 * Accessor for all volunteers for a specific job.
-	 * @param allJobs is a list of all Jobs.
-	 * @param aJobID is an identification number for a specific job (must be > 0);
+	 * @param anAllJobs is a list of all Jobs.
+	 * @param aJobID is an identification number for a specific job (must be greater 0);
 	 * @return a list of volunteers, if no volunteers return null.
 	 */
 	public LinkedList<Volunteer> viewVolunteers(int aJobID, Collection<Job> anAllJobs) {
@@ -71,8 +71,7 @@ public final class Manager extends AbstractUser implements Serializable {
 	
 	/**
 	 * Create a list of all jobs this manager manages.
-	 * @param anAllJobs 
-	 * @param allJobs is a collection of all current jobs.
+	 * @param anAllJobs list of all jobs.
 	 */
 	public void managerJobList(Collection<Job> anAllJobs) {
 		if (anAllJobs != null && anAllJobs.size() > 0) {
@@ -109,8 +108,18 @@ public final class Manager extends AbstractUser implements Serializable {
 	
 	/**
 	 * Edit job's fields.
-	 * @param allJobs is a list of all Jobs.
-	 * @throws MyOwnException 
+	 * @param aJobLocation job's location - park name.
+	 * @param aJobDate job's date.
+	 * @param aDuration job's duration period.
+	 * @param aLightSlot number of light slots for this job.
+	 * @param aMediumSlot number of medium slots for this job.
+	 * @param aHeavySlot number of heavy slots for this job.
+	 * @param aDescription general description for this job.
+	 * @param aStartTime job's start time.
+	 * @param anAllJobs list of all jobs.
+	 * @param jobID jobs ID number.
+	 * @return true if changes were applied, otherwise false.
+	 * @throws MyOwnException if something wasn't right.
 	 */
 	public boolean editJob(String aJobLocation, Calendar aJobDate, int aDuration,
 			 int aLightSlot, int aMediumSlot, int aHeavySlot, String aDescription,
@@ -143,8 +152,8 @@ public final class Manager extends AbstractUser implements Serializable {
 
 	/**
 	 * Delete requested job.
-	 * @param allJobs is a Collection of all Jobs.
-	 * @param aJobID is an identification number for a specific job (must be > 0);
+	 * @param anAllJobs is a Collection of all Jobs.
+	 * @param aJobID is an identification number for a specific job (must be greater 0);
 	 * @return true if job was deleted, otherwise false.
 	 */
 	public boolean deleteJob(int aJobID, Collection<Job> anAllJobs) {
@@ -167,11 +176,21 @@ public final class Manager extends AbstractUser implements Serializable {
 	public ArrayList<String> getParksList() {
 		return parksManage;
 	}
+	
 	/**
 	 * Create new job.
-	 * @param anAllJobs 
-	 * @param allJobs is a list of all Jobs.
-	 * @throws MyOwnException 
+	 * @param aJobManager first and last name of manger for this job.
+	 * @param aJobLocation job's location - park name.
+	 * @param aJobDate job's date.
+	 * @param aDuration job's duration period.
+	 * @param aLightSlot number of light slots for this job.
+	 * @param aMediumSlot number of medium slots for this job.
+	 * @param aHeavySlot number of heavy slots for this job.
+	 * @param aDescription general description for this job.
+	 * @param aStartTime job's start time.
+	 * @param anAllJobs list of all jobs.
+	 * @return true if changes were applied, otherwise false.
+	 * @throws MyOwnException if something wasn't right.
 	 */
 	public boolean submitNewJob(String aJobManager, String aJobLocation, Calendar aJobDate, 
 			int aDuration, int aLightSlot, int aMediumSlot, 
@@ -201,6 +220,7 @@ public final class Manager extends AbstractUser implements Serializable {
 		
 	/**
 	 * Create String with managers First and Last name, and his status.
+	 * @return string full of data.
 	 */
 	public String toString() {		
 		StringBuilder userSummary = new StringBuilder();
