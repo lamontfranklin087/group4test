@@ -90,8 +90,7 @@ public final class Manager extends AbstractUser implements Serializable {
 										+ " " + this.getLastName())) {
 					jobsAtMyParks.add(temp);
 				}
-			}
-			temp.setNextJobID(maxNumber);
+			}			
 		}
 	}
 	
@@ -198,8 +197,10 @@ public final class Manager extends AbstractUser implements Serializable {
 			int aDuration, int aLightSlot, int aMediumSlot, 
 			int aHeavySlot, String aDescription, String aStartTime, Collection<Job> anAllJobs) throws MyOwnException {
 		
+		int nextID  = findNextJobID(anAllJobs);
 		Job newJob = new Job();
 		boolean result = true;
+		newJob.setNextJobID(nextID);
 		result = newJob.setJobLocation(aJobLocation);
 		if (!result) return result;
 		result = newJob.setDate(aJobDate);
@@ -220,6 +221,18 @@ public final class Manager extends AbstractUser implements Serializable {
 		anAllJobs.add(newJob);
 		managerJobList(anAllJobs);
 		return result;			
+	}
+	
+	private int findNextJobID(Collection<Job> anAllJobs) {
+		int maxNumber = 0;
+		if (anAllJobs != null && anAllJobs.size() > 0) {
+			for (Job temp : anAllJobs) {
+				if (temp.getJobID() > maxNumber) {
+					maxNumber = temp.getJobID();
+				}				
+			}
+		}
+		return maxNumber + 1;
 	}
 		
 	/**

@@ -152,6 +152,7 @@ public class ParksProgram {
 		if (volunteersForJob != null) {
 			for (User tempVolunteer : volunteersForJob) {
 				userInterface.printText(tempVolunteer.toString());
+				userInterface.printText("");
 			}
 		}
 	}
@@ -301,6 +302,7 @@ public class ParksProgram {
 			case 3:
 				userInterface.printText("Enter job Duration: ");	 	
 			 	aDuration = getNumber();
+			 	checkBusRule.checkJobDuration(aDuration);
 				break;
 			case 4:
 				userInterface.printText("Enter the number of light slots: ");				 	
@@ -338,19 +340,22 @@ public class ParksProgram {
 		userInterface.printText("Enter Job's date (format mm/dd/yyyy): ");				
 		String[] mystring = (userInterface.getNextLine()).split("/");
 		Calendar futureJobDate = new GregorianCalendar();		
-		
-		int myDate = Integer.parseInt(mystring[1]);
-		int myYear = Integer.parseInt(mystring[2]);
-		int myMonth = Integer.parseInt(mystring[0]) - 1;
-						
-		futureJobDate.set(Calendar.YEAR, myYear);
-		futureJobDate.set(Calendar.MONTH, myMonth);
-		futureJobDate.set(Calendar.DAY_OF_MONTH, myDate);	
-		
-		checkBusRule.checkForPastDate(futureJobDate);
-		checkBusRule.checkForFutureDate(futureJobDate);
-		checkBusRule.jobsIn7Days(allJobs, futureJobDate);
-		return futureJobDate;		
+		if (mystring.length == 3) {
+			int myDate = Integer.parseInt(mystring[1]);
+			int myYear = Integer.parseInt(mystring[2]);
+			int myMonth = Integer.parseInt(mystring[0]) - 1;
+							
+			futureJobDate.set(Calendar.YEAR, myYear);
+			futureJobDate.set(Calendar.MONTH, myMonth);
+			futureJobDate.set(Calendar.DAY_OF_MONTH, myDate);	
+			
+			checkBusRule.checkForPastDate(futureJobDate);
+			checkBusRule.checkForFutureDate(futureJobDate);
+			checkBusRule.jobsIn7Days(allJobs, futureJobDate);
+			return futureJobDate;
+		} else {
+			throw new MyOwnException("Job's date can't be null.");
+		}		
 	}
 		
 	/**

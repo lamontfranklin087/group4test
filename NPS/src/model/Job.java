@@ -87,7 +87,7 @@ public class Job implements java.io.Serializable {
 	 * @param nextID the new job id.
 	 */
 	public void setNextJobID(int nextID) {
-		jobID = ++nextID;
+		jobID = nextID;
 	}
 		
 	/**
@@ -350,10 +350,19 @@ public class Job implements java.io.Serializable {
 		if (newVolunteer != null && aSlot > 0) {
 			switch(aSlot){
 			case 1: //light
+				if (lightSlotsAvailable < 1) {
+					throw new MyOwnException("Light slots are busy for this job.");
+				}
 				return addToSlot(newVolunteer, aSlot, lightSlotsAvailable);				
 			case 2: //medium
+				if (mediumSlotsAvailable < 1) {
+					throw new MyOwnException("Medium slots are busy for this job.");
+				}
 				return addToSlot(newVolunteer, aSlot, mediumSlotsAvailable);
 			case 3: //heavy
+				if (heavySlotsAvailable < 1) {
+					throw new MyOwnException("Heavy slots are busy for this job.");
+				}
 				return addToSlot(newVolunteer, aSlot, heavySlotsAvailable);
 			}
 		} else if (newVolunteer == null) {
@@ -372,40 +381,36 @@ public class Job implements java.io.Serializable {
 	 * @return true if volunteer was added to a job, otherwise false.
 	 * @throws MyOwnException if all slots are busy for this job.
 	 */
-	private boolean addToSlot(Volunteer newVolunteer, int dutyType, int max) throws MyOwnException{
-		if (max == 0){
-			throw new MyOwnException("All slots are busy for this job.");
-		} else {
-			if (dutyType == 1) {
-				if (lightVolunteers == null) {
-					lightVolunteers = new LinkedList<Volunteer>();					
-				} 
-				lightVolunteers.add(newVolunteer);
-				totalVolunteers = totalVolunteers + 1;
-				totalSlotsAvailable = totalSlotsAvailable - 1;
-				lightSlotsAvailable = lightSlotsAvailable - 1;
-				return true;								
-			} else if (dutyType == 2) {
-				if (mediumVolunteers == null) {
-					mediumVolunteers = new LinkedList<Volunteer>();
-				}
-				mediumVolunteers.add(newVolunteer);
-				totalVolunteers = totalVolunteers + 1;
-				totalSlotsAvailable = totalSlotsAvailable - 1;
-				mediumSlotsAvailable = mediumSlotsAvailable - 1;
-				return true;				
-			} else if (dutyType == 3) {
-				if (heavyVolunteers == null) {
-					heavyVolunteers = new LinkedList<Volunteer>();
-				} 
-				heavyVolunteers.add(newVolunteer);
-				totalVolunteers = totalVolunteers + 1;
-				totalSlotsAvailable = totalSlotsAvailable - 1;
-				heavySlotsAvailable = heavySlotsAvailable - 1;
-				return true;								
+	private boolean addToSlot(Volunteer newVolunteer, int dutyType, int max) {		
+		if (dutyType == 1) {
+			if (lightVolunteers == null) {
+				lightVolunteers = new LinkedList<Volunteer>();					
 			} 
-		}		
-		throw new MyOwnException("Wrong selection for job's slot.");
+			lightVolunteers.add(newVolunteer);
+			totalVolunteers = totalVolunteers + 1;
+			totalSlotsAvailable = totalSlotsAvailable - 1;
+			lightSlotsAvailable = lightSlotsAvailable - 1;
+			return true;								
+		} else if (dutyType == 2) {
+			if (mediumVolunteers == null) {
+				mediumVolunteers = new LinkedList<Volunteer>();
+			}
+			mediumVolunteers.add(newVolunteer);
+			totalVolunteers = totalVolunteers + 1;
+			totalSlotsAvailable = totalSlotsAvailable - 1;
+			mediumSlotsAvailable = mediumSlotsAvailable - 1;
+			return true;				
+		} else if (dutyType == 3) {
+			if (heavyVolunteers == null) {
+				heavyVolunteers = new LinkedList<Volunteer>();
+			} 
+			heavyVolunteers.add(newVolunteer);
+			totalVolunteers = totalVolunteers + 1;
+			totalSlotsAvailable = totalSlotsAvailable - 1;
+			heavySlotsAvailable = heavySlotsAvailable - 1;
+			return true;								
+		}
+		return false;
 	}
 	/**
 	 * Append job's information to a string.
